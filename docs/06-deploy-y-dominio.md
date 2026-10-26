@@ -112,6 +112,7 @@ bloquean con reglas de Apache.
 | PHP | 8.4.27 (`apache2handler`) |
 | Motor de base | MariaDB 11.4.13 |
 | Host MySQL | `sql311.infinityfree.com` |
+| FTP | `ftpupload.net` (usuario `if0_43278720`; contraseña solo en el panel) |
 | Base y usuario | `if0_43278720_rrhr` / `if0_43278720` |
 | Zona horaria de la app | `UTC` |
 
