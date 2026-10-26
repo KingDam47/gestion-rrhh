@@ -64,6 +64,8 @@ Lee HANDOFF.md y sigue desde la sección "Siguiente paso".
   5 candidatos, 6 postulaciones y 5 registros históricos de auditoría.
 - **Versión 1.0.0 publicada:** repositorio privado en
   `https://github.com/KingDam47/gestion-rrhh`, rama `main` y etiqueta `v1.0.0`.
+- **Versión 1.0.1 etiquetada:** incluye el despliegue en InfinityFree, el forzado de
+  HTTPS y la documentación del hosting (`2e1f6d1`).
 - No hay instalación permanente de PHP/MySQL; se usan binarios portátiles en
   `%TEMP%`.
 - **Despliegue completado (2026-10-26):** la aplicación está publicada en
