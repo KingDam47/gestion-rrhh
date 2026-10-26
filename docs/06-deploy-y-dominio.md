@@ -102,6 +102,39 @@ bloquean con reglas de Apache.
 11. Probar login, navegación, permisos, CRUD y reportes.
 12. Descargar un backup de la base y de los archivos.
 
+### Despliegue real (26/10/2026)
+
+| Dato | Valor |
+| ---- | ----- |
+| URL | `https://evolvehr.freehosting.dev` |
+| Hosting | InfinityFree, plan gratuito, subdominio temporal |
+| Document root | `htdocs` con `.htaccess` raíz hacia `public/` |
+| PHP | 8.4.27 (`apache2handler`) |
+| Motor de base | MariaDB 11.4.13 |
+| Host MySQL | `sql311.infinityfree.com` |
+| Base y usuario | `if0_43278720_rrhr` / `if0_43278720` |
+| Zona horaria de la app | `UTC` |
+
+Procedimiento aplicado:
+
+1. Se generó el `.env` de producción en local con `APP_ENV=production`,
+   `APP_DEBUG=false`, `APP_URL=https://evolvehr.freehosting.dev` y
+   `SESSION_SECURE=true`.
+2. Se subieron 139 archivos por FTP a `htdocs` (runtime + `.env`), sin `vendor/`,
+   `tests/`, `docs/`, `scripts/`, `exceso/`, `database/` ni READMEs.
+3. Como el MySQL gratuito no acepta conexiones externas, el esquema y el seed se
+   importaron con un instalador PHP temporal protegido por token. Después se borraron
+   el instalador y los `.sql` del hosting.
+4. Se verificó el bloqueo de `.env`, `src/`, `config/`, `storage/` y `database/`, el
+   forzado de HTTPS y la carga de assets y reportes.
+
+Notas del hosting:
+
+- El primer acceso muestra un reto JavaScript (`aes.js`) y luego carga la aplicación.
+- No hay SSH, Composer CLI, cron ni conexiones MySQL externas.
+- Reimportar `database/seed.sql` devuelve la demo a sus líneas base y a las
+  contraseñas demo.
+
 ### Archivos que no deben subirse
 
 - `.env` de desarrollo.

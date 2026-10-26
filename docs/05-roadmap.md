@@ -67,15 +67,15 @@ Entregables:
 > desactivarse a sí mismo ni dejar el sistema sin administrador activo. Un cambio de
 > rol o una desactivación invalidan la sesión afectada. La metadata de auditoría se
 > limita a `status` y `role`. Probado con PHP 8.4 y MariaDB 11.4; queda pendiente
-> MySQL 8 e InfinityFree.
+> MySQL 8.
 
 ### 1.4 Datos y despliegue
 
 - [x] Script para crear el primer administrador.
 - [x] Datos demo ficticios.
-- [ ] Despliegue en InfinityFree.
-- [ ] Dominio propio y HTTPS.
-- [ ] Prueba de humo en producción.
+- [x] Despliegue en InfinityFree (`evolvehr.freehosting.dev`).
+- [ ] Dominio propio y HTTPS con certificado del dominio definitivo.
+- [x] Prueba de humo en producción.
 
 **Criterio de salida:** login funcional, roles aplicados, layout usable, base de datos
 operativa y aplicación desplegada con dominio y HTTPS.
@@ -100,7 +100,7 @@ operativa y aplicación desplegada con dominio y HTTPS.
 > aserciones) y 75 archivos PHP sin errores de sintaxis. Incluye CSRF, duplicados,
 > coherencia cargo-departamento, reglas de departamento inactivo, reportes, filtros,
 > paginación, roles y auditoría. Probado con PHP 8.4 y MariaDB 11.4; queda pendiente
-> MySQL 8 e InfinityFree.
+> MySQL 8.
 
 ### 2.2 Módulo 02 — Asistencia y permisos (implementado)
 
@@ -119,7 +119,7 @@ operativa y aplicación desplegada con dominio y HTTPS.
 > fechas futuras, horas incoherentes, empleados inactivos, solapamientos, revisión
 > única, reporte por mes/departamento, roles y auditoría sin datos personales. La prueba
 > funcional reutilizable está en `tests/Functional/AttendanceHttpCheck.php`. Probado con
-> PHP 8.4 y MariaDB 11.4; queda pendiente MySQL 8 e InfinityFree.
+> PHP 8.4 y MariaDB 11.4; queda pendiente MySQL 8.
 
 ### 2.3 Módulo 03 — Reclutamiento y selección (implementado)
 
@@ -138,7 +138,7 @@ operativa y aplicación desplegada con dominio y HTTPS.
 > XSS, postulaciones duplicadas, transiciones finales, alta guiada transaccional,
 > filtros, paginación, roles y auditoría con metadata limitada a `status`. La prueba
 > funcional reutilizable está en `tests/Functional/RecruitmentHttpCheck.php`. Probado
-> con PHP 8.4 y MariaDB 11.4; queda pendiente MySQL 8 e InfinityFree.
+> con PHP 8.4 y MariaDB 11.4; queda pendiente MySQL 8.
 
 ### 2.4 Integración
 
@@ -156,7 +156,7 @@ operativa y aplicación desplegada con dominio y HTTPS.
 > accesos rápidos, enlaces operativos, 404 y lectura sin cambios en la base ni en la
 > auditoría. La interfaz se revisó a 1440×900 y 390×844 sin desbordamiento horizontal.
 > La prueba funcional reutilizable está en `tests/Functional/DashboardHttpCheck.php`.
-> Probado con PHP 8.4 y MariaDB 11.4; queda pendiente MySQL 8 e InfinityFree.
+> Probado con PHP 8.4 y MariaDB 11.4; queda pendiente MySQL 8.
 
 **Criterio de salida:** cada módulo cumple sus criterios de aceptación, tiene pruebas y
 fue validado con el usuario.
@@ -177,7 +177,7 @@ fue validado con el usuario.
 - [ ] Documentación técnica actualizada.
 - [ ] Manual de usuario.
 - [ ] Datos demo coherentes.
-- [ ] Prueba completa en InfinityFree con HTTPS.
+- [x] Prueba completa en InfinityFree con HTTPS.
 
 **Criterio de salida:** checklist de seguridad completo, backups probados y sin fallos
 críticos conocidos.
@@ -231,8 +231,10 @@ probarse antes de la fase final, no al último día.
 
 - No hay PHP ni MySQL instalados de forma permanente; se usan binarios portátiles.
   Instalar XAMPP o Laragon para el trabajo diario.
-- El esquema se probó en MariaDB 11.4, todavía no en MySQL 8.
-- No hay cuenta ni dominio configurados en InfinityFree.
-- El document root de InfinityFree es fijo (`htdocs`); se usará `.htaccess` para
-  redirigir a `public/`.
-- El repositorio Git aún no está inicializado ni publicado en GitHub.
+- El esquema se probó en MariaDB 11.4 en local y en InfinityFree; todavía no en MySQL 8.
+- Sitio publicado en `https://evolvehr.freehosting.dev` con el subdominio temporal de
+  InfinityFree; falta comprar y conectar el dominio definitivo.
+- El document root de InfinityFree es fijo (`htdocs`); el `.htaccess` raíz redirige a
+  `public/` y fuerza HTTPS.
+- El repositorio Git está inicializado, etiquetado como `v1.0.0` y publicado en GitHub
+  como repositorio privado.

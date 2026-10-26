@@ -97,7 +97,7 @@ El 2026-10-26 se ejecutaron **108 comprobaciones HTTP** con
 También pasaron 40 pruebas PHPUnit (111 aserciones) del proyecto y la revisión de
 sintaxis de 143 archivos PHP. La interfaz se revisó a 1440×900 y 390×844 sin
 desbordamiento horizontal, y el log no registró errores nuevos. Probado con PHP 8.4 y
-MariaDB 11.4; queda pendiente MySQL 8 e InfinityFree.
+MariaDB 11.4 en local y en el hosting; queda pendiente MySQL 8.
 
 ## 8. Decisiones
 

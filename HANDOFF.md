@@ -65,30 +65,41 @@ Lee HANDOFF.md y sigue desde la sección "Siguiente paso".
 - **Versión 1.0.0 publicada:** repositorio privado en
   `https://github.com/KingDam47/gestion-rrhh`, rama `main` y etiqueta `v1.0.0`.
 - No hay instalación permanente de PHP/MySQL; se usan binarios portátiles en
-  `%TEMP%`. No hay cuenta ni dominio de InfinityFree configurados.
-- El proyecto queda limpio y listo para desplegar en un subdominio temporal de
-  InfinityFree; comprar un dominio propio queda para después de la demo.
+  `%TEMP%`.
+- **Despliegue completado (2026-10-26):** la aplicación está publicada en
+  `https://evolvehr.freehosting.dev` sobre InfinityFree (PHP 8.4.27, MariaDB 11.4.13),
+  con el esquema y el seed importados y verificados. El `.env` de producción vive
+  solo en el hosting. Comprar un dominio propio queda para después de la demo.
 
 ## Siguiente paso
 
-### 1. Desplegar en InfinityFree (subdominio temporal)
+### 1. Despliegue en InfinityFree (completado el 26/10/2026)
 
-- Crear la cuenta y el subdominio temporal; no hace falta comprar un dominio propio.
-- Verificar en el panel la versión de PHP, el motor MySQL/MariaDB, el soporte de
-  `.htaccess` y el certificado SSL.
-- Crear la base de datos y anotar host, nombre, usuario, contraseña y puerto.
-- Importar `database/schema.sql` y, para la demo, `database/seed.sql` mediante
-  phpMyAdmin.
-- Subir por FTP el proyecto sin `exceso/`, `vendor/`, `tests/`, `docs/`, `scripts/`,
-  `.env`, `.phpunit.cache/`, logs ni backups.
-- Crear el `.env` de producción a partir de `.env.example`, con `APP_DEBUG=false`,
-  las credenciales reales de la base y cookies seguras.
-- Comprobar que el `.htaccess` raíz redirige a `public/` y bloquea `src/`, `config/`,
-  `database/`, `storage/`, `tests/`, `docs/`, `scripts/` y `exceso/`.
-- Probar login de `admin` y `hr`, los tres módulos operativos, usuarios/auditoría por
-  rol, cierre de sesión, CSRF, 404 y los reportes.
-- Registrar la URL temporal y cualquier ajuste del hosting en
-  `docs/06-deploy-y-dominio.md`.
+- Cuenta creada con el subdominio temporal `evolvehr.freehosting.dev`.
+- PHP 8.4.27 (`apache2handler`), MariaDB 11.4.13, `pdo_mysql`, `mbstring` y `openssl`
+  disponibles; `storage/logs` con permiso de escritura.
+- Base `if0_43278720_rrhr` creada y cargada con `database/schema.sql` y
+  `database/seed.sql`. Líneas base: 2 usuarios, 5 departamentos, 7 cargos,
+  10 empleados, 15 asistencias, 4 permisos, 3 vacantes, 5 candidatos,
+  6 postulaciones y 5 auditorías.
+- 139 archivos subidos por FTP a `htdocs` (runtime + `.env` de producción), sin
+  `vendor/`, `tests/`, `docs/`, `scripts/`, `exceso/`, `database/` ni READMEs.
+- `.env` de producción: `APP_ENV=production`, `APP_DEBUG=false`,
+  `APP_URL=https://evolvehr.freehosting.dev`, `APP_TIMEZONE=UTC`, `SESSION_SECURE=true`.
+- `.htaccess` raíz: redirección a `public/`, bloqueo de `src/`, `config/`, `database/`,
+  `storage/`, `tests/`, `docs/`, `scripts/`, `exceso/`, `.env` y `.git`, y forzado de
+  HTTPS (`RewriteCond %{HTTPS} !=on`). El hosting termina TLS y reporta `HTTPS=on`.
+- La importación se hizo con un instalador PHP temporal protegido por token, que se
+  eliminó junto con los `.sql`; el MySQL gratuito no admite conexiones externas.
+- Prueba de humo en vivo: login de `admin` y `hr`, Dashboard, Empleados
+  (listado, ficha y reporte), Departamentos, Cargos, Asistencia (listado y reporte),
+  Permisos, Reclutamiento (vacantes, candidatos, postulaciones), Usuarios, Auditoría y
+  Mi cuenta; `hr` recibe 403 en `/users` y `/audit`; CSRF inválido rechazado; 404
+  personalizada; assets con 200; `.env`, `config/`, `src/`, `storage/` y `database/`
+  bloqueados; UTF-8 correcto en el HTML.
+- Escritura verificada en producción: cambio de contraseña de `hr` con ida y vuelta,
+  regeneración de sesión y registro en auditoría. Después se reimportó el seed para
+  dejar la demo en su línea base.
 
 ### 2. Revisar los módulos 01, 02 y 03 con el usuario
 
@@ -323,8 +334,13 @@ Write-Output "PHP revisados: $($files.Count). Fallos: $failed"
 
 ## Pendiente fuera del módulo
 
-- Desplegar en InfinityFree con un subdominio temporal y probar el hosting, incluido
-  MySQL 8 si está disponible.
+- El hosting gratuito no ofrece MySQL 8: se validó con MariaDB 11.4.13 en local y en
+  InfinityFree. Si se migra a MySQL 8, repetir la regresión.
+- InfinityFree aplica un reto JavaScript (`aes.js`) en la primera visita y no acepta
+  conexiones MySQL externas; la importación debe hacerse desde phpMyAdmin o con un
+  instalador PHP temporal, que hay que borrar al terminar.
+- Las contraseñas demo siguen siendo `password123` en el sitio publicado. Cambiarlas
+  antes de compartir la URL fuera del círculo de la demo.
 - Instalar XAMPP o Laragon de forma permanente.
 - Revisar en móvil los módulos 01, 02 y 03.
 - Revisar accesibilidad (teclado, contraste, etiquetas) y estilos de impresión.

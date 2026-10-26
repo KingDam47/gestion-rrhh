@@ -9,10 +9,12 @@ actividades de Gestión Humana: **gestión de empleados**, **asistencia y permis
 >
 > **Estado:** Fundaciones, módulos 01 (Empleados), 02 (Asistencia y permisos),
 > 03 (Reclutamiento y selección), Dashboard y separación de roles `admin`/`hr`
-> implementados y verificados en local con PHP 8.4 y MariaDB 11.4. La interfaz se revisó
-> en escritorio y el Dashboard también en móvil. El entorno permanente de desarrollo
-> (XAMPP/Laragon) y el despliegue en InfinityFree están pendientes. La verificación se
-> hizo con binarios portátiles.
+> implementados y verificados con PHP 8.4 y MariaDB 11.4. La interfaz se revisó en
+> escritorio y el Dashboard también en móvil.
+>
+> **Demo en vivo:** <https://evolvehr.freehosting.dev> (InfinityFree, PHP 8.4.27 y
+> MariaDB 11.4.13). El entorno permanente de desarrollo (XAMPP/Laragon) y el dominio
+> propio siguen pendientes.
 
 ## Módulos
 
@@ -38,7 +40,7 @@ y [`Dashboard`](src/Modules/Dashboard/README.md) (panel de inicio).
 | Autorización | Roles `admin` y `hr` definidos en PHP |
 | Validación | PHP en servidor y JavaScript en el navegador |
 | Testing | PHPUnit y pruebas funcionales HTTP |
-| Hosting | InfinityFree con dominio propio y HTTPS |
+| Hosting | InfinityFree (demo en vivo) y dominio propio con HTTPS a futuro |
 | Control de versiones | Git y GitHub |
 
 La justificación y las consecuencias del stack están en el
@@ -147,7 +149,8 @@ La arquitectura y las reglas de dependencia están en
 - [x] Limpiar el proyecto, retirar código y artefactos no usados y actualizar la
   documentación.
 - [x] Ejecutar la regresión final: lint, PHPUnit y pruebas HTTP de los cuatro recorridos.
-- [ ] Desplegar en InfinityFree con un subdominio temporal y probar el esquema en MySQL 8.
+- [x] Desplegar en InfinityFree con el subdominio temporal `evolvehr.freehosting.dev`.
+- [ ] Probar el esquema en MySQL 8 (el hosting gratuito usa MariaDB 11.4).
 - [ ] Revisar en móvil los módulos 01, 02 y 03.
 - [ ] Confirmar con el usuario los detalles pendientes de formato de documento, fecha de
   salida, reporte mensual y reporte de Reclutamiento.
@@ -164,8 +167,7 @@ cubrieron altas, duplicados, coherencia cargo-departamento, CSRF, edición,
 desactivación/reactivación, reglas de departamentos inactivos, reportes, filtros,
 paginación, rol RR. HH. y auditoría. También pasaron 16 pruebas de PHPUnit (21
 aserciones) en ese momento y la revisión de sintaxis de 75 archivos PHP. La base se
-restauró con `database/seed.sql` al terminar. Queda pendiente la revisión en móvil y la
-prueba en MySQL 8/InfinityFree.
+restauró con `database/seed.sql` al terminar. Queda pendiente la revisión en móvil.
 
 ## Verificación del módulo 02
 
@@ -177,7 +179,7 @@ personales. También pasaron 23 pruebas PHPUnit (45 aserciones) en ese momento y
 revisión de sintaxis de 96 archivos PHP. La prueba funcional reutilizable está en
 [`tests/Functional/AttendanceHttpCheck.php`](tests/Functional/AttendanceHttpCheck.php).
 La base se restauró con `database/seed.sql` al terminar. Queda pendiente la revisión
-en móvil y la prueba en MySQL 8/InfinityFree.
+en móvil.
 
 ## Verificación del módulo 03
 
@@ -190,7 +192,7 @@ aserciones) del proyecto y la revisión de sintaxis de 143 archivos PHP. La prue
 reutilizable está en
 [`tests/Functional/RecruitmentHttpCheck.php`](tests/Functional/RecruitmentHttpCheck.php).
 La base se restauró con `database/seed.sql` al terminar. Queda pendiente la revisión
-en móvil y la prueba en MySQL 8/InfinityFree.
+en móvil.
 
 ## Verificación del Dashboard
 
@@ -203,7 +205,7 @@ También pasaron 40 pruebas PHPUnit (111 aserciones) del proyecto y la revisión
 de 143 archivos PHP. La interfaz se revisó a 1440×900 y 390×844 sin desbordamiento
 horizontal, y el log no registró errores nuevos. Como regresión final también pasaron
 304/304 comprobaciones de Asistencia y 535/535 de Reclutamiento. Queda pendiente la
-prueba en MySQL 8/InfinityFree.
+prueba en MySQL 8.
 
 ## Verificación de separación de roles
 
@@ -224,8 +226,23 @@ verificó que:
 También pasaron 40 pruebas PHPUnit (111 aserciones) y la revisión de sintaxis de 143
 archivos PHP. Como regresión se repitieron Dashboard (108/108), Asistencia (304/304) y
 Reclutamiento (535/535). La base se restauró con `database/seed.sql` al terminar:
-2 usuarios, 5 auditorías y 10 empleados. Queda pendiente la prueba en MySQL
-8/InfinityFree.
+2 usuarios, 5 auditorías y 10 empleados. Queda pendiente la prueba en MySQL 8.
+
+## Verificación del despliegue
+
+El 2026-10-26 se publicó la aplicación en <https://evolvehr.freehosting.dev>
+(InfinityFree, PHP 8.4.27, MariaDB 11.4.13). Se cargaron el esquema y el seed con las
+líneas base de la demo y se ejecutaron 23 comprobaciones HTTP contra el sitio:
+
+- login de `admin` y `hr`, Dashboard, Empleados (listado, ficha y reporte),
+  Departamentos, Cargos, Asistencia (listado y reporte), Permisos, Reclutamiento
+  (vacantes, candidatos y postulaciones), Usuarios, Auditoría y Mi cuenta;
+- `hr` recibe 403 en `/users` y `/audit` y conserva los módulos operativos;
+- CSRF inválido rechazado, 404 personalizada, assets con 200 y UTF-8 correcto;
+- `.env`, `config/`, `src/`, `storage/` y `database/` bloqueados por Apache;
+- HTTP redirige a HTTPS y las cookies de sesión viajan solo por HTTPS;
+- escritura real verificada con un cambio de contraseña de ida y vuelta; el seed se
+  reimportó después para dejar la demo en su línea base.
 
 > El dominio se compra aparte. InfinityFree no permite Node.js ni cambiar el
 > document root, por lo que el proyecto se despliega con PHP y una regla de

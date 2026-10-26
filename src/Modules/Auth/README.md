@@ -149,4 +149,4 @@ Attendance lo usa para mostrar el nombre de quien revisó una solicitud de permi
 - `tests/Unit/UserDataTest.php` y `tests/Unit/AuditLabelTest.php`: normalización y
   etiquetas de auditoría.
 - PHPUnit del proyecto: 40 pruebas y 111 aserciones correctas.
-- Probado con PHP 8.4 y MariaDB 11.4; queda pendiente MySQL 8 e InfinityFree.
+- Probado con PHP 8.4 y MariaDB 11.4 en local y en InfinityFree; queda pendiente MySQL 8.

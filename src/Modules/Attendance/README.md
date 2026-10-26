@@ -29,7 +29,7 @@ Implementado en `src/Modules/Attendance`:
 Verificado el 2026-10-26 con PHP 8.4 y MariaDB 11.4: 304 comprobaciones HTTP, 23
 pruebas PHPUnit (45 aserciones) y 96 archivos PHP sin errores de sintaxis. La prueba
 funcional reutilizable está en `tests/Functional/AttendanceHttpCheck.php`. Pendiente:
-revisión visual responsive, prueba en MySQL 8 y despliegue en InfinityFree.
+revisión visual responsive y prueba en MySQL 8.
 
 ## 1. Objetivo
 
@@ -255,4 +255,4 @@ src/Modules/Attendance/
 - **Sintaxis:** 96 archivos PHP sin errores.
 - **Datos:** `database/seed.sql` restaurado al terminar las pruebas.
 - **Prueba reutilizable:** `tests/Functional/AttendanceHttpCheck.php`.
-- **Pendiente:** revisión visual responsive, MySQL 8 e InfinityFree.
+- **Pendiente:** revisión visual responsive y MySQL 8.

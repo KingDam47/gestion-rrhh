@@ -19,7 +19,7 @@ Implementado en `src/Modules/Employees`:
 - Navegación y panel de inicio conectados al módulo.
 
 Verificado el 2026-10-26 con PHP 8.4 y MariaDB 11.4. Pendiente: revisión visual
-responsive, prueba en MySQL 8 y despliegue en InfinityFree.
+responsive y prueba en MySQL 8.
 
 ## 1. Objetivo
 
@@ -204,4 +204,4 @@ src/Modules/Employees/
 - **PHPUnit:** 16 pruebas, 21 aserciones correctas.
 - **Sintaxis:** 75 archivos PHP sin errores.
 - **Datos:** `database/seed.sql` restaurado al terminar las pruebas.
-- **Pendiente:** revisión visual responsive, MySQL 8 e InfinityFree.
+- **Pendiente:** revisión visual responsive y MySQL 8.

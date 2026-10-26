@@ -5,6 +5,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Forzar HTTPS (el hosting termina TLS y reporta HTTPS=on).
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
     # Bloquear archivos y carpetas sensibles.
     RewriteRule ^\.env - [F,L]
     RewriteRule ^\.git - [F,L]

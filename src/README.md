@@ -64,6 +64,7 @@ Todo archivo PHP declara `strict_types=1` y usa indentación de 4 espacios.
 ## Estado
 
 El MVP está implementado: núcleo, autenticación, separación de roles, Empleados,
-Asistencia, Reclutamiento, Dashboard y pruebas unitarias/funcionales. Queda pendiente
-la prueba en MySQL 8, el despliegue en InfinityFree y la revisión móvil de los módulos
-01, 02 y 03. La verificación se hizo con PHP 8.4 y MariaDB 11.4 portátiles.
+Asistencia, Reclutamiento, Dashboard y pruebas unitarias/funcionales. Está desplegado en
+`https://evolvehr.freehosting.dev`. Quedan pendientes la prueba en MySQL 8 y la revisión
+móvil de los módulos 01, 02 y 03. La verificación se hizo con PHP 8.4 y MariaDB 11.4
+portátiles y también en el hosting (PHP 8.4.27 y MariaDB 11.4.13).
