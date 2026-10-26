@@ -103,6 +103,22 @@ Lee HANDOFF.md y sigue desde la sección "Siguiente paso".
   regeneración de sesión y registro en auditoría. Después se reimportó el seed para
   dejar la demo en su línea base.
 
+#### Cómo volver a desplegar
+
+- Las credenciales FTP y MySQL solo están en el panel de InfinityFree; no se guardan en
+  el equipo ni en el repositorio. Hay que volver a pedirlas o copiarlas del panel.
+- Paquete a subir: `.htaccess` raíz + `public/`, `src/`, `config/` y `storage/`
+  (sin READMEs). Son 138 archivos, unos 640 KB.
+- Destino FTP: `ftpupload.net`, usuario `if0_43278720`, carpeta `htdocs`. El `.env` de
+  producción ya vive en el hosting: no sobrescribirlo con el `.env` local.
+- Un cambio solo de archivos no requiere tocar la base. Si cambia el esquema, se aplica
+  desde phpMyAdmin o con un instalador PHP temporal por token que se borra al terminar
+  (el MySQL gratuito no acepta conexiones externas).
+- Comprobación rápida tras subir: `https://evolvehr.freehosting.dev/login`, login de
+  `admin` y `hr`, `/users` con 403 para `hr` y un reporte.
+- El primer acceso desde un navegador nuevo muestra el reto JavaScript (`aes.js`) del
+  hosting; no es un error de la aplicación.
+
 ### 2. Revisar los módulos 01, 02 y 03 con el usuario
 
 - Mostrar el recorrido completo: login, empleados, departamentos, cargos,
@@ -333,6 +349,10 @@ Write-Output "PHP revisados: $($files.Count). Fallos: $failed"
 - "Pendientes de alta" cuenta postulaciones `selected` sin `employee_id`. El acceso
   rápido "Ver candidatos seleccionados" abre el listado `selected`, punto de partida
   del alta guiada.
+- Por decisión del usuario (2026-10-26), la demo publicada conserva las contraseñas
+  `password123` del seed. Son datos ficticios y la URL no se comparte fuera del círculo
+  de la demo; si eso cambia, rotar las dos cuentas desde Mi cuenta o con el
+  restablecimiento del administrador.
 
 ## Pendiente fuera del módulo
 
