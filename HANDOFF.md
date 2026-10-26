@@ -9,6 +9,9 @@
 
 ## Cómo reanudar
 
+- **Código de sesión:** `ses_e8b3d5f59ffemGPaYOZaXrvB2w`
+- **Título en el historial:** «Gestion RRHH - demo publicada v1.0.1»
+
 Abrir PowerShell en `C:\Users\KingD` y ejecutar:
 
 ```powershell
@@ -26,7 +29,9 @@ Al entrar, pegar este mensaje:
 
 ```text
 Continúa el proyecto de C:\Users\KingD\OneDrive\Desktop\gestion-rrhh.
-Lee HANDOFF.md y sigue desde la sección "Siguiente paso".
+Lee HANDOFF.md. El despliegue en InfinityFree ya está hecho
+(https://evolvehr.freehosting.dev, etiqueta v1.0.1); sigue con el backup,
+la revisión móvil de los módulos y el dominio definitivo.
 ```
 
 ## Estado actual
