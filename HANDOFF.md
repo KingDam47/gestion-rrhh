@@ -1,0 +1,335 @@
+# Traspaso de sesión — Gestión RR. HH.
+
+> **Fecha:** 26/10/2026
+> **Sesión de OpenCode:** `ses_e8b3d5f59ffemGPaYOZaXrvB2w`
+> **Proyecto:** `C:\Users\KingD\OneDrive\Desktop\gestion-rrhh`
+>
+> Este archivo es temporal. Sirve para retomar el trabajo después de apagar el
+> equipo. Actualizarlo al cerrar cada sesión.
+
+## Cómo reanudar
+
+Abrir PowerShell en `C:\Users\KingD` y ejecutar:
+
+```powershell
+opencode --session ses_e8b3d5f59ffemGPaYOZaXrvB2w
+```
+
+Si el comando anterior no funciona, abrir OpenCode y usar el historial de
+sesiones, o ejecutar:
+
+```powershell
+opencode --continue
+```
+
+Al entrar, pegar este mensaje:
+
+```text
+Continúa el proyecto de C:\Users\KingD\OneDrive\Desktop\gestion-rrhh.
+Lee HANDOFF.md y sigue desde la sección "Siguiente paso".
+```
+
+## Estado actual
+
+- Fase 0 completada: requisitos, arquitectura, modelo de datos, documentación y ADRs.
+- Fase 1 (núcleo) completada: front controller, router, PDO, sesiones, login, logout,
+  roles `admin`/`hr`, CSRF, layout Bootstrap 5, panel de inicio, 404/403 y logs.
+- **Módulo 01 (Empleados) completado y verificado:** empleados, departamentos,
+  cargos, búsqueda, filtros, paginación, ficha, edición, desactivación/reactivación,
+  reporte imprimible y auditoría.
+- **Módulo 02 (Asistencia y permisos) completado y verificado:** registros diarios,
+  correcciones, tardanzas, ausencias, solicitudes, revisión, solapamientos, reporte
+  mensual imprimible y auditoría.
+- **Módulo 03 (Reclutamiento y selección) completado y verificado:** vacantes,
+  candidatos, postulaciones, filtros, transiciones de estado, resumen y alta guiada
+  transaccional de empleado.
+- **Dashboard completado y verificado:** indicadores de personal, asistencia, permisos,
+  vacantes, candidatos y postulaciones; accesos rápidos y enlaces operativos para
+  `admin` y `hr`.
+- **Separación de roles completada y verificada:** RR. HH. conserva toda la operación,
+  pero no administra usuarios ni consulta la auditoría. El administrador gestiona
+  cuentas, contraseñas y auditoría; el último administrador activo está protegido.
+- La navegación muestra Empleados, Asistencia y Reclutamiento para ambos roles. Solo el
+  administrador ve Usuarios y Auditoría; ambos ven Mi cuenta en el menú de usuario.
+- **Limpieza final completada:** la plantilla histórica se conserva en `exceso/` fuera
+  del runtime; se retiraron directorios vacíos, pruebas no usadas, caché, imágenes no
+  usadas y APIs muertas. La documentación quedó alineada. `exceso/`, `vendor/`,
+  `tests/`, `docs/`, `scripts/`, `.env` y la caché de PHPUnit no se despliegan.
+- **Regresión final completada:** lint de 143 archivos PHP sin errores, PHPUnit con
+  40 pruebas y 111 aserciones, y pruebas HTTP de Dashboard (108), Asistencia (304),
+  Reclutamiento (535) y Roles (183), todas correctas.
+- La base `gestion_rrhh` quedó restaurada con `database/seed.sql` al terminar la
+  regresión: 2 usuarios activos, 10 empleados (8 activos), 5 departamentos, 7 cargos,
+  15 registros de asistencia, 4 solicitudes de permiso, 3 vacantes (2 abiertas),
+  5 candidatos, 6 postulaciones y 5 registros históricos de auditoría.
+- **Versión 1.0.0 publicada:** repositorio privado en
+  `https://github.com/KingDam47/gestion-rrhh`, rama `main` y etiqueta `v1.0.0`.
+- No hay instalación permanente de PHP/MySQL; se usan binarios portátiles en
+  `%TEMP%`. No hay cuenta ni dominio de InfinityFree configurados.
+- El proyecto queda limpio y listo para desplegar en un subdominio temporal de
+  InfinityFree; comprar un dominio propio queda para después de la demo.
+
+## Siguiente paso
+
+### 1. Desplegar en InfinityFree (subdominio temporal)
+
+- Crear la cuenta y el subdominio temporal; no hace falta comprar un dominio propio.
+- Verificar en el panel la versión de PHP, el motor MySQL/MariaDB, el soporte de
+  `.htaccess` y el certificado SSL.
+- Crear la base de datos y anotar host, nombre, usuario, contraseña y puerto.
+- Importar `database/schema.sql` y, para la demo, `database/seed.sql` mediante
+  phpMyAdmin.
+- Subir por FTP el proyecto sin `exceso/`, `vendor/`, `tests/`, `docs/`, `scripts/`,
+  `.env`, `.phpunit.cache/`, logs ni backups.
+- Crear el `.env` de producción a partir de `.env.example`, con `APP_DEBUG=false`,
+  las credenciales reales de la base y cookies seguras.
+- Comprobar que el `.htaccess` raíz redirige a `public/` y bloquea `src/`, `config/`,
+  `database/`, `storage/`, `tests/`, `docs/`, `scripts/` y `exceso/`.
+- Probar login de `admin` y `hr`, los tres módulos operativos, usuarios/auditoría por
+  rol, cierre de sesión, CSRF, 404 y los reportes.
+- Registrar la URL temporal y cualquier ajuste del hosting en
+  `docs/06-deploy-y-dominio.md`.
+
+### 2. Revisar los módulos 01, 02 y 03 con el usuario
+
+- Mostrar el recorrido completo: login, empleados, departamentos, cargos,
+  asistencia, permisos, reporte mensual, reclutamiento y alta guiada.
+- Revisar la interfaz en escritorio (confirmada) y en móvil (pendiente para los módulos
+  01, 02 y 03; el Dashboard ya se revisó).
+- Confirmar decisiones pendientes:
+  - formato y longitud del documento;
+  - si se requiere fecha de salida/cese;
+  - formato visual final del reporte mensual;
+  - si Reclutamiento necesita un reporte imprimible específico.
+
+### 3. Cerrar detalles no productivos
+
+- Revisar en móvil los módulos 01, 02 y 03.
+- Confirmar las decisiones pendientes: formato del documento, fecha de salida, formato
+  final del reporte mensual y necesidad de un reporte imprimible de Reclutamiento.
+- Revisar accesibilidad (teclado, contraste, etiquetas) y estilos de impresión.
+
+### 4. Endurecimiento y entrega
+
+- Revisar seguridad, estados vacíos y mensajes de error.
+- Probar en MySQL 8 (local o en el hosting) y cerrar la cuenta temporal.
+- Mantener el repositorio y etiquetar nuevas versiones cuando corresponda.
+- Completar manual de usuario, guion de demo y backup final.
+- Comprar y conectar el dominio definitivo con HTTPS.
+
+## Entorno local
+
+Los binarios son portátiles y viven en `%TEMP%`. Si Windows limpia la carpeta
+temporal, habrá que descargarlos otra vez o instalar XAMPP/Laragon.
+
+### MariaDB
+
+```powershell
+$mdb = "$env:TEMP\opencode\mariadb\mariadb-11.4.13-winx64"
+& "$mdb\bin\mariadbd.exe" "--datadir=$mdb\data" "--port=3307" "--console"
+```
+
+Comprobar:
+
+```powershell
+& "$mdb\bin\mariadb-admin.exe" --no-defaults -h 127.0.0.1 -P 3307 -u root ping
+```
+
+- Host: `127.0.0.1`
+- Puerto: `3307`
+- Usuario: `root`
+- Contraseña: vacía
+- Base: `gestion_rrhh`
+
+Reimportar el seed (destructivo):
+
+```powershell
+$mdb = "$env:TEMP\opencode\mariadb\mariadb-11.4.13-winx64"
+& "$mdb\bin\mariadb.exe" --no-defaults -h 127.0.0.1 -P 3307 -u root gestion_rrhh `
+  -e "source C:/Users/KingD/OneDrive/Desktop/gestion-rrhh/database/seed.sql"
+```
+
+### Servidor PHP
+
+Desde la carpeta del proyecto:
+
+```powershell
+& "$env:TEMP\opencode\php84\php.exe" -S 127.0.0.1:8099 -t public public/index.php
+```
+
+Abrir `http://127.0.0.1:8099`.
+
+### Pruebas
+
+```powershell
+& "$env:TEMP\opencode\php84\php.exe" vendor\phpunit\phpunit\phpunit
+```
+
+Pruebas funcionales HTTP (restaurar el seed antes de cada una; las de escritura también
+lo requieren al terminar):
+
+```powershell
+# Solo lectura; requiere el seed restaurado.
+& "$env:TEMP\opencode\php84\php.exe" tests\Functional\DashboardHttpCheck.php
+
+# Escritura: restaurar el seed antes y después.
+& "$env:TEMP\opencode\php84\php.exe" tests\Functional\AttendanceHttpCheck.php
+& "$env:TEMP\opencode\php84\php.exe" tests\Functional\RecruitmentHttpCheck.php
+& "$env:TEMP\opencode\php84\php.exe" tests\Functional\RolesHttpCheck.php
+```
+
+Para revisar sintaxis de todos los archivos PHP:
+
+```powershell
+$php = "$env:TEMP\opencode\php84\php.exe"
+$base = "C:\Users\KingD\OneDrive\Desktop\gestion-rrhh"
+$files = Get-ChildItem -LiteralPath $base -Recurse -Filter *.php -File |
+  Where-Object { $_.FullName -notmatch '\\vendor\\' }
+$failed = 0
+foreach ($file in $files) {
+  & $php -l $file.FullName > $null 2>&1
+  if ($LASTEXITCODE -ne 0) { $failed++; Write-Output "FAIL $($file.FullName)" }
+}
+Write-Output "PHP revisados: $($files.Count). Fallos: $failed"
+```
+
+### Credenciales demo
+
+- Administrador: `admin@gestion-rrhh.test` / `password123`
+- RR. HH.: `rrhh@gestion-rrhh.test` / `password123`
+
+## Comprobaciones que ya pasaron
+
+- **Regresión final tras la limpieza (2026-10-26):** PHP lint de 143 archivos sin
+  errores, PHPUnit con 40 pruebas y 111 aserciones, y pruebas HTTP completas:
+  Dashboard 108/108, Asistencia 304/304, Reclutamiento 535/535 y Roles 183/183.
+  El seed se restauró antes y después de cada prueba de escritura.
+- **Roles (2026-10-26):** 183 comprobaciones HTTP correctas sobre PHP 8.4 y
+  MariaDB 11.4:
+  - acceso anónimo a rutas administrativas y de cuenta;
+  - RR. HH.: 403 en `/users*` y `/audit`, menú sin esos enlaces y operación completa;
+  - administrador: listado, filtros, alta, edición, contraseña, estado y auditoría;
+  - protección del último administrador y de la propia cuenta;
+  - cambio de contraseña propia y cierre de sesión por cambio de rol/estado;
+  - CSRF, 404 y metadata limitada a `status`/`role`.
+- **Dashboard (2026-10-26):** 108 comprobaciones HTTP correctas sobre PHP 8.4 y
+  MariaDB 11.4:
+  - líneas base de la base demo y acceso anónimo;
+  - login de `admin` y `hr`, saludo e insignia de rol;
+  - cifras y detalles de empleados, asistencia, permisos, vacantes y reclutamiento;
+  - accesos rápidos, destinos y todos los enlaces operativos del panel;
+  - rutas inexistentes y `POST /dashboard` con 404;
+  - lectura estable sin cambios en la base ni en `audit_logs`.
+- **Módulo 03 (2026-10-26):** 535 comprobaciones HTTP correctas sobre PHP 8.4 y
+  MariaDB 11.4:
+  - acceso anónimo, login de `admin` y `hr`, navegación y resumen;
+  - CRUD de vacantes, filtros, paginación y cierre final;
+  - candidatos, correo único, edición posterior a la postulación y XSS escapado;
+  - postulaciones, duplicados, vacante abierta, transiciones válidas y finales;
+  - alta guiada con validaciones, transacción, vínculo con el empleado y alta única;
+  - CSRF, 404, roles y auditoría con metadata limitada a `status`.
+- **Módulo 02 (2026-10-26):** 304 comprobaciones HTTP correctas:
+  - login de `admin` y `hr`, acceso anónimo, 404 y CSRF;
+  - altas, correcciones, filtros, paginación y reporte;
+  - registro único, fechas futuras, horas incoherentes y ausencias;
+  - empleados inactivos: alta bloqueada, historial editable y revisión pendiente;
+  - creación de permisos, solapamientos, revisión única y observaciones;
+  - reporte por mes y departamento, XSS escapado y auditoría sin datos personales.
+- **Módulo 01 (histórico):** 165 comprobaciones HTTP; 16 pruebas PHPUnit y 21
+  aserciones en ese momento; auditoría con solo el estado.
+- **PHPUnit:** 40 pruebas y 111 aserciones correctas (2026-10-26), incluidas
+  `ApplicationStatusTest`, `RecruitmentDataTest`, `UserDataTest` y `AuditLabelTest`.
+- **Sintaxis:** 143 archivos PHP sin errores, sin contar `vendor/`.
+- Seed restaurado al terminar las pruebas: 2 usuarios activos, 10 empleados (8 activos),
+  5 departamentos, 7 cargos, 15 asistencias, 4 permisos, 3 vacantes, 5 candidatos,
+  6 postulaciones y 5 auditorías.
+- `storage/logs/` quedó limpio (solo `.gitkeep`) y `.phpunit.cache/` se eliminó después
+  de las pruebas. No quedan logs, cachés ni artefactos generados en el proyecto.
+
+## Decisiones y notas
+
+- `admin` conserva toda la operación y además administra cuentas y consulta la
+  auditoría. `hr` conserva toda la operación, pero recibe 403 en `/users*` y `/audit` y
+  no ve esos enlaces en el menú.
+- Los usuarios solo se crean desde el módulo Auth; no hay autorregistro. Las cuentas se
+  desactivan, nunca se eliminan.
+- Un administrador no puede desactivar su propia cuenta. El último administrador activo
+  no puede desactivarse ni degradarse; la comprobación se hace en una transacción con
+  bloqueo de los administradores activos.
+- Un cambio de rol o una desactivación invalidan la sesión afectada en la siguiente
+  petición, con aviso en el login.
+- Ambos roles cambian su propia contraseña en `/account/password`; se exige la
+  contraseña actual y que la nueva sea distinta.
+- La auditoría es solo para `admin`. Su metadata se limita a `status` y `role`, nunca
+  nombres, correos, contraseñas ni hashes. El MVP no registra automáticamente cada
+  login/logout ni los intentos fallidos.
+- No hay borrado físico de empleados, departamentos ni cargos: solo activación y
+  desactivación.
+- El documento se normaliza sin espacios y en mayúsculas.
+- El correo se guarda en minúsculas y es único cuando se informa.
+- El cargo es opcional y debe pertenecer al departamento del empleado.
+- Un cargo con empleados no puede cambiar de departamento.
+- No se puede reactivar un empleado o cargo si su departamento está inactivo.
+- La paginación de empleados usa 8 registros por página.
+- Las acciones de estado se registran en `audit_logs` sin datos personales.
+- `EmployeeLookup` es el contrato que consumen Attendance, Recruitment y Dashboard.
+  Expone `find`, `findMany`, `stats`, `activeEmployees`, `directory`, `departments` y
+  `positions`; no se eliminaron operaciones que la aplicación siga usando.
+- `EmployeeOnboarding` es el caso de uso público de Employees que usa Recruitment para
+  el alta guiada; no se accede a `EmployeeRepository` ni a tablas de Employees.
+- El formulario de empleado crea siempre en estado `active`; el estado se cambia
+  desde la ficha.
+- Asistencia usa 10 registros por página.
+- Reclutamiento usa 10 registros por página en vacantes, candidatos y postulaciones.
+- Una vacante cerrada es final: no se reabre ni acepta nuevas postulaciones. Un
+  candidato sí puede editarse después de postular y conserva sus postulaciones.
+- Las transiciones de postulación son `received → screening|rejected`,
+  `screening → interview|rejected`, `interview → selected|rejected`; `selected` y
+  `rejected` son finales y no se reabren.
+- La auditoría de Reclutamiento registra `vacancy.closed`, `application.created`,
+  `application.status_changed` y `application.hired`; la metadata guarda solo `status`.
+- El alta guiada solo se permite desde una postulación `selected` sin empleado asociado.
+  Se ejecuta en una transacción, crea un empleado activo mediante `EmployeeOnboarding`
+  y vincula `applications.employee_id`; si falla, revierte todo. No se dispara
+  automáticamente al marcar `selected`.
+- El historial de estados no tiene pantalla propia: queda en `audit_logs`.
+- Solo se registran altas de asistencia para empleados activos. Un empleado inactivo
+  conserva su historial y sus registros existentes pueden corregirse.
+- Un registro por empleado y fecha; sin fechas futuras. `present`/`late` requieren
+  entrada y salida opcional no anterior; `absent` no lleva horas y exige observación.
+- Al editar una asistencia no se cambia el empleado. `AttendanceService::update` envía
+  solo `work_date`, `check_in`, `check_out`, `status`, `notes` y `updated_by`; enviar
+  `employee_id` a ese `UPDATE` provoca `HY093`.
+- Los permisos nacen en `pending`; solo los pendientes se aprueban o rechazan y no se
+  reabren. Se bloquean solapamientos con solicitudes `pending` o `approved`.
+- El reporte mensual cuenta los permisos por `start_date` dentro del mes y usa el
+  directorio completo de empleados; el filtro por departamento es opcional.
+- La auditoría de asistencia y permisos guarda solo `status` como metadata.
+- La coherencia de `leave_requests` se valida en el servicio, no con `CHECK`. No
+  reintroducir `CHECK chk_leave_requests_review` en MariaDB: falla con `ERROR 1901`.
+- El Dashboard es una capa de composición de solo lectura. `DashboardSummaryService`
+  usa `EmployeeLookup::stats()`, `AttendanceService::summary()`,
+  `LeaveRequestService::summary()`, `VacancyService::stats()`,
+  `CandidateService::stats()` y `ApplicationService::stats()`; no tiene SQL ni
+  repositorios propios.
+- Ambos roles (`admin` y `hr`) ven los mismos indicadores del Dashboard y los accesos a
+  los tres módulos operativos. Los accesos de administración (Usuarios y Auditoría) son
+  exclusivos de `admin`.
+- La asistencia del mes y del día se calculan con la fecha del servidor. El seed demo
+  concentra los registros en octubre de 2026; por eso la tarjeta puede mostrar 0 hoy.
+- "Pendientes de alta" cuenta postulaciones `selected` sin `employee_id`. El acceso
+  rápido "Ver candidatos seleccionados" abre el listado `selected`, punto de partida
+  del alta guiada.
+
+## Pendiente fuera del módulo
+
+- Desplegar en InfinityFree con un subdominio temporal y probar el hosting, incluido
+  MySQL 8 si está disponible.
+- Instalar XAMPP o Laragon de forma permanente.
+- Revisar en móvil los módulos 01, 02 y 03.
+- Revisar accesibilidad (teclado, contraste, etiquetas) y estilos de impresión.
+- Confirmar formato de documento, fecha de salida, reporte mensual y reporte de
+  Reclutamiento.
+- Decidir si el repositorio debe pasar de privado a público.
+- Comprar y conectar el dominio definitivo con HTTPS.
+- Completar manual de usuario, guion de demo y backup final.

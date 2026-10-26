@@ -1,0 +1,6 @@
+# Normaliza saltos de línea para todo el proyecto.
+* text=auto eol=lf
+
+# Scripts de Windows, si se añaden en el futuro.
+*.bat text eol=crlf
+*.cmd text eol=crlf

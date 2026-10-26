@@ -1,0 +1,20 @@
+# InfinityFree no permite cambiar el document root.
+# Este archivo redirige las peticiones a public/ y bloquea rutas internas.
+# En local se recomienda configurar Apache con document root en public/.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquear archivos y carpetas sensibles.
+    RewriteRule ^\.env - [F,L]
+    RewriteRule ^\.git - [F,L]
+    RewriteRule ^(src|config|database|storage|tests|docs|scripts|exceso|\.github)(/|$) - [F,L]
+
+    # Evitar reescribir lo que ya está dentro de public/.
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
