@@ -79,8 +79,9 @@ sigue con el backup, la revisión móvil de los módulos y la prueba en MySQL 8.
 - **Dominio propio (2026-10-29):** `evolvehr.cloud`, comprado en IONOS, quedó como
   dominio canónico. Los nameservers apuntan a `ns1/ns2.infinityfree.com`, el dominio
   está aparcado sobre `evolvehr.freehosting.dev` (misma `htdocs`) y el subdominio
-  temporal responde con 301. Certificado Sectigo DV válido hasta 27/04/2027 que cubre
-  `evolvehr.cloud` y `*.evolvehr.cloud`.
+  temporal responde con 301. Certificado Let's Encrypt (`CN=evolvehr.cloud`) activo
+  desde el 29/10/2026 y válido hasta el 27/01/2027, con `evolvehr.cloud` y
+  `*.evolvehr.cloud` en el SAN.
 
 ## Siguiente paso
 
@@ -133,6 +134,10 @@ sigue con el backup, la revisión móvil de los módulos y la prueba en MySQL 8.
   hacia `https://errors.infinityfree.net/errors/403/`, y los archivos que empiezan por
   punto (`.env`, `.htaccess`, `.git/`) cortan la conexión. Nunca se sirve su contenido;
   el `[F,L]` del `.htaccess` queda como segunda barrera si se migra de hosting.
+- `curl` de Windows no sirve para probar este hosting: aunque el certificado sea válido,
+  la renegociación TLS del proxy de InfinityFree termina en `000` («server closed
+  abruptly»). Para verificación estricta se usa un cliente .NET sobre `SslStream` con
+  validación activada (`strict-check.ps1` en `%TEMP%`), o un navegador real.
 
 ### 2. Revisar los módulos 01, 02 y 03 con el usuario
 

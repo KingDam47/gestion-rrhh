@@ -148,7 +148,7 @@ sin mover archivos.
 | Nameservers | `ns1.infinityfree.com` / `ns2.infinityfree.com` |
 | Tipo en el panel | dominio aparcado (alias) de `evolvehr.freehosting.dev` |
 | Registro `A` | `185.27.134.98` (TTL 86400) |
-| Certificado | Sectigo DV, `evolvehr.cloud` y `*.evolvehr.cloud`, 29/10/2026 → 27/04/2027 |
+| Certificado | Let's Encrypt (`CN=evolvehr.cloud`), `evolvehr.cloud` y `*.evolvehr.cloud`, 29/10/2026 → 27/01/2027 |
 
 Pasos aplicados:
 
@@ -178,6 +178,25 @@ RewriteRule ^ https://evolvehr.cloud%{REQUEST_URI} [R=301,L]
 - Van antes del `RewriteCond %{HTTPS} !=on`, así que un acceso por `http` al
   subdominio viejo salta al dominio nuevo en un solo salto.
 - `www.evolvehr.cloud` queda cubierto por el certificado y redirige al ápice.
+
+Verificación del 29/10/2026, con validación estricta de TLS (sin excepciones):
+
+| Comprobación | Resultado |
+| ---- | ----- |
+| Cadena del certificado en Windows | válida, TLS 1.3 |
+| `GET /login` | 200 con el formulario y el reto resuelto |
+| Login de `admin` | 302 a `/dashboard` |
+| `admin`: `/dashboard`, `/employees`, `/users`, `/audit` | 200 |
+| Login de `hr` | 302 a `/dashboard` |
+| `hr`: `/users` y `/audit` | 403 |
+| Cookie de sesión | `secure; HttpOnly; SameSite=Lax` |
+| 301 del subdominio temporal (ruta con query) | `https://evolvehr.cloud/employees?page=2&q=ana` |
+| 301 de `www` | `https://evolvehr.cloud/login` |
+
+Nota: `curl` de Windows falla contra este hosting (`000`, «server closed abruptly»)
+por la renegociación TLS de su proxy, incluso con el certificado válido. Las
+comprobaciones se hicieron con un cliente .NET sobre `SslStream` con validación
+activada, no con `curl -k`.
 
 ### Archivos que no deben subirse
 
