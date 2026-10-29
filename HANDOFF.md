@@ -128,6 +128,11 @@ sigue con el backup, la revisión móvil de los módulos y la prueba en MySQL 8.
   `admin` y `hr`, `/users` con 403 para `hr` y un reporte.
 - El primer acceso desde un navegador nuevo muestra el reto JavaScript (`aes.js`) del
   hosting; no es un error de la aplicación.
+- InfinityFree intercepta antes que Apache las rutas sensibles: `src/`, `config/`,
+  `storage/`, `database/`, `tests/`, `docs/`, `scripts/` y `exceso/` responden **302**
+  hacia `https://errors.infinityfree.net/errors/403/`, y los archivos que empiezan por
+  punto (`.env`, `.htaccess`, `.git/`) cortan la conexión. Nunca se sirve su contenido;
+  el `[F,L]` del `.htaccess` queda como segunda barrera si se migra de hosting.
 
 ### 2. Revisar los módulos 01, 02 y 03 con el usuario
 
