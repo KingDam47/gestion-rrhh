@@ -35,3 +35,6 @@ desktop.ini
 # Temporales
 *.tmp
 *.bak
+
+# Artefactos de herramientas de análisis
+/.ua/

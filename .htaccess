@@ -5,6 +5,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Dominio canonico: la URL publica es siempre https://evolvehr.cloud.
+    # El subdominio temporal y el prefijo www redirigen con 301 conservando ruta y query.
+    RewriteCond %{HTTP_HOST} ^(www\.)?evolvehr\.freehosting\.dev$ [NC,OR]
+    RewriteCond %{HTTP_HOST} ^www\.evolvehr\.cloud$ [NC]
+    RewriteRule ^ https://evolvehr.cloud%{REQUEST_URI} [R=301,L]
+
     # Forzar HTTPS (el hosting termina TLS y reporta HTTPS=on).
     RewriteCond %{HTTPS} !=on
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]

@@ -106,8 +106,9 @@ bloquean con reglas de Apache.
 
 | Dato | Valor |
 | ---- | ----- |
-| URL | `https://evolvehr.freehosting.dev` |
-| Hosting | InfinityFree, plan gratuito, subdominio temporal |
+| URL canónica | `https://evolvehr.cloud` |
+| URL anterior | `https://evolvehr.freehosting.dev` (301 al dominio canónico) |
+| Hosting | InfinityFree, plan gratuito, dominio propio aparcado |
 | Document root | `htdocs` con `.htaccess` raíz hacia `public/` |
 | PHP | 8.4.27 (`apache2handler`) |
 | Motor de base | MariaDB 11.4.13 |
@@ -119,7 +120,7 @@ bloquean con reglas de Apache.
 Procedimiento aplicado:
 
 1. Se generó el `.env` de producción en local con `APP_ENV=production`,
-   `APP_DEBUG=false`, `APP_URL=https://evolvehr.freehosting.dev` y
+   `APP_DEBUG=false`, `APP_URL=https://evolvehr.cloud` y
    `SESSION_SECURE=true`.
 2. Se subieron 139 archivos por FTP a `htdocs` (runtime + `.env`), sin `vendor/`,
    `tests/`, `docs/`, `scripts/`, `exceso/`, `database/` ni READMEs.
@@ -135,6 +136,48 @@ Notas del hosting:
 - No hay SSH, Composer CLI, cron ni conexiones MySQL externas.
 - Reimportar `database/seed.sql` devuelve la demo a sus líneas base y a las
   contraseñas demo.
+
+### Dominio propio (29/10/2026)
+
+`evolvehr.cloud` se registró en IONOS y se publicó sobre la misma cuenta de hosting,
+sin mover archivos.
+
+| Dato | Valor |
+| ---- | ----- |
+| Registrador | IONOS (`evolvehr.cloud`, incluye `www`) |
+| Nameservers | `ns1.infinityfree.com` / `ns2.infinityfree.com` |
+| Tipo en el panel | dominio aparcado (alias) de `evolvehr.freehosting.dev` |
+| Registro `A` | `185.27.134.98` (TTL 86400) |
+| Certificado | Sectigo DV, `evolvehr.cloud` y `*.evolvehr.cloud`, 29/10/2026 → 27/04/2027 |
+
+Pasos aplicados:
+
+1. En IONOS se sustituyeron los nameservers de IONOS por los de InfinityFree. Al
+   delegar la zona completa se evita mantener a mano el `AAAA` de parking de IONOS,
+   que provocaba fallos intermitentes.
+2. La propagación tardó unas horas porque el `A` anterior de IONOS tenía TTL de 24 h:
+   los resolvers públicos seguían devolviendo `74.208.236.130` aunque la zona
+   autoritativa de InfinityFree ya respondía `185.27.134.98`. Se comprueba con
+   `Resolve-DnsName evolvehr.cloud -Server ns1.infinityfree.com -Type A`.
+3. El dominio se añadió como **alias** de `evolvehr.freehosting.dev`, no como addon
+   domain: así comparte `htdocs` y no hay que mover los archivos.
+4. El SSL se emitió con la herramienta gratuita de InfinityFree. El certificado de
+   IONOS no se usa porque habría que instalar clave y cadena a mano en el panel.
+5. En el `.htaccess` raíz se añadió el 301 canónico antes del forzado de HTTPS.
+
+Reglas canónicas del `.htaccess`:
+
+```apache
+RewriteCond %{HTTP_HOST} ^(www\.)?evolvehr\.freehosting\.dev$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^www\.evolvehr\.cloud$ [NC]
+RewriteRule ^ https://evolvehr.cloud%{REQUEST_URI} [R=301,L]
+```
+
+- `%{REQUEST_URI}` conserva ruta y query sin duplicarla, porque ya incluye la cadena
+  de consulta.
+- Van antes del `RewriteCond %{HTTPS} !=on`, así que un acceso por `http` al
+  subdominio viejo salta al dominio nuevo en un solo salto.
+- `www.evolvehr.cloud` queda cubierto por el certificado y redirige al ápice.
 
 ### Archivos que no deben subirse
 

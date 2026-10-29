@@ -12,9 +12,10 @@ actividades de Gestión Humana: **gestión de empleados**, **asistencia y permis
 > implementados y verificados con PHP 8.4 y MariaDB 11.4. La interfaz se revisó en
 > escritorio y el Dashboard también en móvil.
 >
-> **Demo en vivo:** <https://evolvehr.freehosting.dev> (InfinityFree, PHP 8.4.27 y
-> MariaDB 11.4.13). El entorno permanente de desarrollo (XAMPP/Laragon) y el dominio
-> propio siguen pendientes.
+> **Demo en vivo:** <https://evolvehr.cloud> (InfinityFree, PHP 8.4.27 y
+> MariaDB 11.4.13). El subdominio temporal `evolvehr.freehosting.dev` redirige con
+> 301 al dominio definitivo. El entorno permanente de desarrollo (XAMPP/Laragon)
+> sigue pendiente.
 
 ## Módulos
 
@@ -150,6 +151,7 @@ La arquitectura y las reglas de dependencia están en
   documentación.
 - [x] Ejecutar la regresión final: lint, PHPUnit y pruebas HTTP de los cuatro recorridos.
 - [x] Desplegar en InfinityFree con el subdominio temporal `evolvehr.freehosting.dev`.
+- [x] Publicar en el dominio propio `evolvehr.cloud` con el subdominio temporal en 301.
 - [ ] Probar el esquema en MySQL 8 (el hosting gratuito usa MariaDB 11.4).
 - [ ] Revisar en móvil los módulos 01, 02 y 03.
 - [ ] Confirmar con el usuario los detalles pendientes de formato de documento, fecha de
@@ -231,8 +233,9 @@ Reclutamiento (535/535). La base se restauró con `database/seed.sql` al termina
 ## Verificación del despliegue
 
 El 2026-10-26 se publicó la aplicación en <https://evolvehr.freehosting.dev>
-(InfinityFree, PHP 8.4.27, MariaDB 11.4.13). Se cargaron el esquema y el seed con las
-líneas base de la demo y se ejecutaron 23 comprobaciones HTTP contra el sitio:
+(InfinityFree, PHP 8.4.27, MariaDB 11.4.13); el 2026-10-29 pasó a
+<https://evolvehr.cloud> como dominio canónico. Se cargaron el esquema y el seed con
+las líneas base de la demo y se ejecutaron 23 comprobaciones HTTP contra el sitio:
 
 - login de `admin` y `hr`, Dashboard, Empleados (listado, ficha y reporte),
   Departamentos, Cargos, Asistencia (listado y reporte), Permisos, Reclutamiento

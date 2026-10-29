@@ -29,9 +29,8 @@ Al entrar, pegar este mensaje:
 
 ```text
 Continúa el proyecto de C:\Users\KingD\OneDrive\Desktop\gestion-rrhh.
-Lee HANDOFF.md. El despliegue en InfinityFree ya está hecho
-(https://evolvehr.freehosting.dev, etiqueta v1.0.1); sigue con el backup,
-la revisión móvil de los módulos y el dominio definitivo.
+Lee HANDOFF.md. La demo está publicada en https://evolvehr.cloud (etiqueta v1.0.2);
+sigue con el backup, la revisión móvil de los módulos y la prueba en MySQL 8.
 ```
 
 ## Estado actual
@@ -74,9 +73,14 @@ la revisión móvil de los módulos y el dominio definitivo.
 - No hay instalación permanente de PHP/MySQL; se usan binarios portátiles en
   `%TEMP%`.
 - **Despliegue completado (2026-10-26):** la aplicación está publicada en
-  `https://evolvehr.freehosting.dev` sobre InfinityFree (PHP 8.4.27, MariaDB 11.4.13),
-  con el esquema y el seed importados y verificados. El `.env` de producción vive
-  solo en el hosting. Comprar un dominio propio queda para después de la demo.
+  `https://evolvehr.cloud` sobre InfinityFree (PHP 8.4.27, MariaDB 11.4.13), con el
+  esquema y el seed importados y verificados. El `.env` de producción vive solo en el
+  hosting.
+- **Dominio propio (2026-10-29):** `evolvehr.cloud`, comprado en IONOS, quedó como
+  dominio canónico. Los nameservers apuntan a `ns1/ns2.infinityfree.com`, el dominio
+  está aparcado sobre `evolvehr.freehosting.dev` (misma `htdocs`) y el subdominio
+  temporal responde con 301. Certificado Sectigo DV válido hasta 27/04/2027 que cubre
+  `evolvehr.cloud` y `*.evolvehr.cloud`.
 
 ## Siguiente paso
 
@@ -92,8 +96,9 @@ la revisión móvil de los módulos y el dominio definitivo.
 - 139 archivos subidos por FTP a `htdocs` (runtime + `.env` de producción), sin
   `vendor/`, `tests/`, `docs/`, `scripts/`, `exceso/`, `database/` ni READMEs.
 - `.env` de producción: `APP_ENV=production`, `APP_DEBUG=false`,
-  `APP_URL=https://evolvehr.freehosting.dev`, `APP_TIMEZONE=UTC`, `SESSION_SECURE=true`.
-- `.htaccess` raíz: redirección a `public/`, bloqueo de `src/`, `config/`, `database/`,
+  `APP_URL=https://evolvehr.cloud`, `APP_TIMEZONE=UTC`, `SESSION_SECURE=true`.
+- `.htaccess` raíz: 301 canónico hacia `https://evolvehr.cloud`, redirección a
+  `public/`, bloqueo de `src/`, `config/`, `database/`,
   `storage/`, `tests/`, `docs/`, `scripts/`, `exceso/`, `.env` y `.git`, y forzado de
   HTTPS (`RewriteCond %{HTTPS} !=on`). El hosting termina TLS y reporta `HTTPS=on`.
 - La importación se hizo con un instalador PHP temporal protegido por token, que se
@@ -119,7 +124,7 @@ la revisión móvil de los módulos y el dominio definitivo.
 - Un cambio solo de archivos no requiere tocar la base. Si cambia el esquema, se aplica
   desde phpMyAdmin o con un instalador PHP temporal por token que se borra al terminar
   (el MySQL gratuito no acepta conexiones externas).
-- Comprobación rápida tras subir: `https://evolvehr.freehosting.dev/login`, login de
+- Comprobación rápida tras subir: `https://evolvehr.cloud/login`, login de
   `admin` y `hr`, `/users` con 403 para `hr` y un reporte.
 - El primer acceso desde un navegador nuevo muestra el reto JavaScript (`aes.js`) del
   hosting; no es un error de la aplicación.
