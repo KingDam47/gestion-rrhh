@@ -1,7 +1,7 @@
 # Traspaso de sesión — Gestión RR. HH.
 
-> **Fecha:** 26/10/2026
-> **Sesión de OpenCode:** `ses_e8b3d5f59ffemGPaYOZaXrvB2w`
+> **Fecha:** 29/10/2026
+> **Sesión de OpenCode:** `ses_e76ab7c1effezSW5NDVJORsXS7`
 > **Proyecto:** `C:\Users\KingD\OneDrive\Desktop\gestion-rrhh`
 >
 > Este archivo es temporal. Sirve para retomar el trabajo después de apagar el
@@ -9,13 +9,15 @@
 
 ## Cómo reanudar
 
-- **Código de sesión:** `ses_e8b3d5f59ffemGPaYOZaXrvB2w`
-- **Título en el historial:** «Gestion RRHH - demo publicada v1.0.1»
+- **Código de sesión activo:** `ses_e76ab7c1effezSW5NDVJORsXS7`
+- **Título en el historial:** «Analisis del proyecto Gestion RRHH»
+- **Sesión anterior (cerrada):** `ses_e8b3d5f59ffemGPaYOZaXrvB2w`,
+  «Gestion RRHH - dominio y TLS v1.0.2»
 
 Abrir PowerShell en `C:\Users\KingD` y ejecutar:
 
 ```powershell
-opencode --session ses_e8b3d5f59ffemGPaYOZaXrvB2w
+opencode --session ses_e76ab7c1effezSW5NDVJORsXS7
 ```
 
 Si el comando anterior no funciona, abrir OpenCode y usar el historial de
@@ -28,9 +30,10 @@ opencode --continue
 Al entrar, pegar este mensaje:
 
 ```text
-Continúa el proyecto de C:\Users\KingD\OneDrive\Desktop\gestion-rrhh.
-Lee HANDOFF.md. La demo está publicada en https://evolvehr.cloud (etiqueta v1.0.2);
-sigue con el backup, la revisión móvil de los módulos y la prueba en MySQL 8.
+Analiza el proyecto de C:\Users\KingD\OneDrive\Desktop\gestion-rrhh.
+Lee HANDOFF.md y el README. La aplicación está publicada en
+https://evolvehr.cloud (etiqueta v1.0.2) y el backup ya está hecho.
+El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
 ```
 
 ## Estado actual
@@ -84,6 +87,18 @@ sigue con el backup, la revisión móvil de los módulos y la prueba en MySQL 8.
   `*.evolvehr.cloud` en el SAN.
 
 ## Siguiente paso
+
+### 0. Revisión del proyecto (sesión del 29/10/2026)
+
+- El despliegue y el dominio quedaron cerrados: `https://evolvehr.cloud` con TLS
+  válido y `v1.0.2` publicada.
+- El backup de base y archivos ya lo hizo el usuario desde el panel.
+- La sesión activa se dedica a **analizar** el proyecto (arquitectura, módulos,
+  deuda técnica), no a desplegar. Punto de partida: `README.md`, `docs/` y este
+  archivo.
+- Pendientes de producto que siguen abiertos: revisión en móvil de los módulos 01,
+  02 y 03, prueba del esquema en MySQL 8 y confirmación de los detalles de formato
+  de documento, fecha de salida y reportes.
 
 ### 1. Despliegue en InfinityFree (completado el 26/10/2026)
 
