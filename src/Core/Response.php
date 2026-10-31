@@ -58,16 +58,45 @@ final class Response
      */
     private function securityHeaders(): array
     {
-        return [
+        $headers = [
             'X-Content-Type-Options' => 'nosniff',
             'X-Frame-Options' => 'DENY',
             'Referrer-Policy' => 'strict-origin-when-cross-origin',
+            'Permissions-Policy' => 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+            'Cache-Control' => 'no-store, private',
+            'Pragma' => 'no-cache',
             'Content-Security-Policy' => "default-src 'self'; "
                 . "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
                 . "script-src 'self' https://cdn.jsdelivr.net; "
                 . "font-src 'self' https://cdn.jsdelivr.net; "
                 . "img-src 'self' data:; "
-                . "base-uri 'self'; form-action 'self'",
+                . "base-uri 'self'; form-action 'self'; "
+                . "frame-ancestors 'none'; object-src 'none'",
         ];
+
+        if ($this->isHttps()) {
+            $headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+        }
+
+        return $headers;
+    }
+
+    private function isHttps(): bool
+    {
+        $https = $_SERVER['HTTPS'] ?? null;
+
+        if (is_string($https) && $https !== '' && mb_strtolower($https) !== 'off') {
+            return true;
+        }
+
+        $forwarded = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? null;
+
+        if (is_string($forwarded)) {
+            $first = explode(',', $forwarded)[0];
+
+            return mb_strtolower(trim($first)) === 'https';
+        }
+
+        return false;
     }
 }

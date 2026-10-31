@@ -37,7 +37,7 @@ final class ProfileController
         ];
 
         try {
-            $this->users->changeOwnPassword((int) Auth::id(), $input);
+            $changedAt = $this->users->changeOwnPassword((int) Auth::id(), $input);
         } catch (ValidationException $exception) {
             return $this->render([
                 'errors' => $exception->errors(),
@@ -46,6 +46,7 @@ final class ProfileController
         }
 
         Session::regenerate();
+        Auth::refreshPasswordChangedAt($changedAt);
 
         $this->audit->record(
             Auth::id(),

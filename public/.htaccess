@@ -17,7 +17,10 @@
 </IfModule>
 
 <IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-Frame-Options "DENY"
-    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    # Las respuestas dinámicas ya envían estas cabeceras desde Response.php.
+    # Se limitan a los assets para no duplicarlas en el mismo response.
+    <FilesMatch "\.(css|js|mjs|png|jpe?g|gif|svg|ico|webp|woff2?|ttf|eot)$">
+        Header always set X-Content-Type-Options "nosniff"
+        Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    </FilesMatch>
 </IfModule>

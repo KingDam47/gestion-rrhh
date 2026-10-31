@@ -218,7 +218,10 @@ final class UserService
         return $user;
     }
 
-    public function changeOwnPassword(int $id, array $input): void
+    /**
+     * @return string|null Fecha UTC del cambio para refrescar la sesión actual.
+     */
+    public function changeOwnPassword(int $id, array $input): ?string
     {
         $user = $this->users->findWithHash($id);
 
@@ -265,10 +268,12 @@ final class UserService
         }
 
         try {
-            $this->users->updatePasswordHash($id, password_hash($password, PASSWORD_DEFAULT));
+            $changedAt = $this->users->updatePasswordHash($id, password_hash($password, PASSWORD_DEFAULT));
         } catch (PDOException $exception) {
             throw $this->saveError($exception, null);
         }
+
+        return $changedAt;
     }
 
     /**

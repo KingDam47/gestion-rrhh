@@ -46,6 +46,20 @@ final class ActiveUserMiddleware implements Middleware
             return Response::redirect('/login');
         }
 
+        $currentPasswordChangedAt = $currentUser['password_changed_at'] !== null
+            ? (string) $currentUser['password_changed_at']
+            : '';
+        $sessionPasswordChangedAt = isset($sessionUser['password_changed_at'])
+            ? (string) $sessionUser['password_changed_at']
+            : '';
+
+        if ($currentPasswordChangedAt !== $sessionPasswordChangedAt) {
+            Auth::logout();
+            Flash::warning('Tu contraseña cambió. Inicia sesión de nuevo.');
+
+            return Response::redirect('/login');
+        }
+
         Auth::refresh($currentUser);
 
         return $next($request);

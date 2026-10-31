@@ -13,6 +13,10 @@ composer.phar
 !/storage/logs/.gitkeep
 *.log
 
+# Limitador de login (solo contadores; no versionar)
+/storage/rate-limits/*
+!/storage/rate-limits/.gitkeep
+
 # Backups y paquetes
 /backups/
 /dist/

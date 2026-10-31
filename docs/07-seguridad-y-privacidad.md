@@ -61,9 +61,13 @@ Reglas:
 - Rehash automático si `password_needs_rehash()` lo indica.
 - Longitud mínima de contraseña: 10 caracteres.
 - No mostrar si el correo existe o no en un login fallido.
-- Rate limiting básico por sesión/IP y retraso progresivo tras varios intentos.
+- Rate limiting compartido entre peticiones: 5 fallos por correo y 20 por IP en una
+  ventana de 15 minutos. El contador se guarda en `storage/rate-limits/` y falla
+  abierto si el almacenamiento no está disponible.
 - `session_regenerate_id(true)` al iniciar sesión. Un cambio de rol cierra la sesión y
   obliga a iniciar de nuevo.
+- Un cambio o restablecimiento de contraseña invalida las demás sesiones de la cuenta;
+  la sesión que realizó el cambio se conserva.
 - Cookies de sesión:
   - `HttpOnly = true`
   - `Secure = true` en producción
@@ -183,10 +187,11 @@ Configurar en producción:
 - HTTPS obligatorio y redirección desde HTTP.
 - `Strict-Transport-Security` cuando el dominio esté estable.
 - `X-Content-Type-Options: nosniff`.
-- `X-Frame-Options: DENY` o CSP `frame-ancestors 'none'`.
+- `X-Frame-Options: DENY` y CSP `frame-ancestors 'none'`.
 - `Referrer-Policy: strict-origin-when-cross-origin`.
-- `Content-Security-Policy` adaptada a los assets reales.
-- `Cache-Control: no-store` en respuestas autenticadas sensibles.
+- `Permissions-Policy` restrictiva para cámara, micrófono, geolocalización, pagos y USB.
+- `Content-Security-Policy` adaptada a los assets reales, con `object-src 'none'`.
+- `Cache-Control: no-store, private` en respuestas dinámicas con datos de la aplicación.
 
 InfinityFree ofrece SSL gratuito; verificar que el certificado esté activo antes de la
 entrega.

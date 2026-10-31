@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(120) NOT NULL,
     email VARCHAR(190) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    password_changed_at DATETIME(6) NULL,
     role ENUM('admin', 'hr') NOT NULL DEFAULT 'hr',
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     last_login_at DATETIME NULL,

@@ -19,7 +19,7 @@ final class UserRepository
     public function findByEmail(string $email): ?array
     {
         $statement = $this->database->connection()->prepare(
-            'SELECT id, name, email, password_hash, role, is_active
+            'SELECT id, name, email, password_hash, role, is_active, password_changed_at
              FROM users
              WHERE email = :email
              LIMIT 1'
@@ -37,7 +37,7 @@ final class UserRepository
     public function find(int $userId): ?array
     {
         $statement = $this->database->connection()->prepare(
-            'SELECT id, name, email, role, is_active, last_login_at, created_at, updated_at
+            'SELECT id, name, email, role, is_active, last_login_at, password_changed_at, created_at, updated_at
              FROM users
              WHERE id = :id
              LIMIT 1'
@@ -55,7 +55,7 @@ final class UserRepository
     public function findWithHash(int $userId): ?array
     {
         $statement = $this->database->connection()->prepare(
-            'SELECT id, name, email, password_hash, role, is_active
+            'SELECT id, name, email, password_hash, role, is_active, password_changed_at
              FROM users
              WHERE id = :id
              LIMIT 1'
@@ -102,7 +102,7 @@ final class UserRepository
     public function findActiveById(int $userId): ?array
     {
         $statement = $this->database->connection()->prepare(
-            'SELECT id, name, email, role
+            'SELECT id, name, email, role, password_changed_at
              FROM users
              WHERE id = :id AND is_active = 1
              LIMIT 1'
@@ -269,12 +269,33 @@ final class UserRepository
         );
     }
 
-    public function updatePasswordHash(int $userId, string $hash): void
+    /**
+     * Actualiza el hash y, por defecto, marca la contraseña como cambiada para
+     * invalidar las sesiones abiertas con la contraseña anterior.
+     *
+     * @return string|null Fecha UTC del cambio, o null si no se marcó.
+     */
+    public function updatePasswordHash(int $userId, string $hash, bool $markChanged = true): ?string
     {
-        $statement = $this->database->connection()->prepare(
-            'UPDATE users SET password_hash = :hash WHERE id = :id'
-        );
-        $statement->execute(['hash' => $hash, 'id' => $userId]);
+        $changedAt = $markChanged ? gmdate('Y-m-d H:i:s.u') : null;
+        $sql = 'UPDATE users SET password_hash = :hash';
+
+        if ($changedAt !== null) {
+            $sql .= ', password_changed_at = :changed_at';
+        }
+
+        $sql .= ' WHERE id = :id';
+
+        $parameters = ['hash' => $hash, 'id' => $userId];
+
+        if ($changedAt !== null) {
+            $parameters['changed_at'] = $changedAt;
+        }
+
+        $statement = $this->database->connection()->prepare($sql);
+        $statement->execute($parameters);
+
+        return $changedAt;
     }
 
     public function touchLastLogin(int $userId): void

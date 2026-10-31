@@ -46,6 +46,7 @@ No incluye:
 | `name` | Obligatorio, máximo 120 caracteres. |
 | `email` | Obligatorio, único, normalizado a minúsculas, máximo 190 caracteres. |
 | `password_hash` | Generado con `password_hash()`. Nunca texto plano. |
+| `password_changed_at` | Se actualiza al cambiar o restablecer la contraseña. Invalida las sesiones abiertas con la contraseña anterior. |
 | `role` | `admin` o `hr`. |
 | `is_active` | Los usuarios inactivos no pueden iniciar sesión. |
 | `last_login_at` | Se actualiza al iniciar sesión. |
@@ -66,13 +67,15 @@ No incluye:
   siguiente petición.
 - Un cambio de rol también invalida la sesión de la cuenta afectada en la siguiente
   petición.
+- Un cambio o restablecimiento de contraseña invalida las demás sesiones de esa cuenta
+  en la siguiente petición. La sesión que hizo el cambio se conserva y se refresca.
 - Los usuarios no se eliminan si tienen historial; se desactivan.
 - Se auditan el alta, la edición, la activación/desactivación, el restablecimiento de
   contraseña y el cambio de contraseña propia.
 - La metadata de auditoría se limita a `status` y `role`; nunca guarda nombres, correos,
   contraseñas ni hashes.
-- La sesión se regenera al iniciar sesión. Tras varios intentos fallidos se aplica un
-  retraso progresivo.
+- La sesión se regenera al iniciar sesión. El login se limita por correo (5 fallos) y
+  por IP (20 fallos) en una ventana de 15 minutos, compartida entre peticiones.
 
 ## 5. Pantallas
 
@@ -92,7 +95,10 @@ No incluye:
 - Token CSRF en login, logout y todos los formularios de usuario y cuenta.
 - Mensaje genérico en login fallido (no revelar si el correo existe).
 - `password_verify()` y `password_hash()` con `PASSWORD_DEFAULT`.
-- Rate limiting básico por sesión.
+- Rate limiting por correo (5 fallos) e IP (20 fallos) por ventana de 15 minutos,
+  compartido entre peticiones mediante archivos con bloqueo en
+  `storage/rate-limits/`.
+- Un cambio o restablecimiento de contraseña invalida las demás sesiones de la cuenta.
 - Rutas `/users*` y `/audit` protegidas con `role:admin`; `/account/password` disponible
   para ambos roles.
 - Los permisos se validan en el servidor, no solo ocultando enlaces.
@@ -111,6 +117,8 @@ No incluye:
 - [x] No se puede dejar el sistema sin administrador activo.
 - [x] Los formularios validan CSRF.
 - [x] Los cambios sensibles quedan auditados con metadata limitada.
+- [x] El login se bloquea tras 5 fallos por correo o 20 fallos por IP en 15 minutos.
+- [x] Un cambio de contraseña invalida las demás sesiones de la cuenta.
 
 ## 8. Estructura de implementación
 
@@ -118,7 +126,7 @@ No incluye:
 src/Modules/Auth/
 ├── Contracts/        # UserLookup para otros módulos
 ├── Controllers/      # AuthController, UserController, ProfileController, AuditController
-├── Services/         # AuthService, UserLookupService, UserService, AuditLogService
+├── Services/         # AuthService, LoginThrottle, UserLookupService, UserService, AuditLogService
 ├── Repositories/     # UserRepository, AuditLogRepository
 ├── Middleware/       # ActiveUserMiddleware
 ├── Support/          # UserData (normalización de entradas)

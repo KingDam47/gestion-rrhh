@@ -88,7 +88,29 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
 
 ## Siguiente paso
 
-### 0. Revisión del proyecto (sesión del 29/10/2026)
+### 0. Despliegue de la Fase 2 (31/10/2026)
+
+- Se creó el backup `backup/pre-fase2-20261031` y la etiqueta
+  `v1.0.2-prod-20261031` sobre el último commit estable antes de los cambios.
+- Backup previo de producción: archivos completos de `htdocs` y dump SQL de la
+  base, guardados fuera del repositorio. La restauración del dump se probó en una
+  base temporal local (10 tablas, 3 usuarios, 11 empleados, 16 auditorías).
+- Migración `202610292100_add_password_changed_at_to_users.sql` aplicada sobre la
+  base de producción existente. No se reimportó el seed y no se borraron datos.
+- Se subieron 14 archivos de runtime por FTP (13 cambios + `.gitkeep` del
+  limitador). No se subieron `.env`, `database/`, `tests/`, `docs/`, `scripts/`,
+  `vendor/` ni credenciales. El `.env` de producción quedó intacto.
+- `storage/rate-limits/` se creó en producción y se confirmó que es escribible.
+- Verificación en vivo: cabeceras de seguridad sin duplicados, HSTS, redirección
+  HTTP→HTTPS y `www`→ápice, login de `admin` y `hr`, `hr` con 403 en `/users` y
+  `/audit`, bloqueo del sexto intento de login y cambio de contraseña que invalida
+  la otra sesión sin cerrar la sesión que hizo el cambio.
+- El usuario temporal usado para la prueba se eliminó. La línea base quedó en
+  3 usuarios, 11 empleados y 16 auditorías; las contraseñas demo no se cambiaron.
+- El script temporal de migración/backup se eliminó del hosting y se verificó que
+  su URL devuelve 404.
+
+### 0.1 Revisión del proyecto (sesión del 29/10/2026)
 
 - El despliegue y el dominio quedaron cerrados: `https://evolvehr.cloud` con TLS
   válido y `v1.0.2` publicada.
@@ -322,6 +344,19 @@ Write-Output "PHP revisados: $($files.Count). Fallos: $failed"
   bloqueo de los administradores activos.
 - Un cambio de rol o una desactivación invalidan la sesión afectada en la siguiente
   petición, con aviso en el login.
+- Un cambio o restablecimiento de contraseña invalida las demás sesiones de la cuenta;
+  la sesión que hizo el cambio se conserva. La marca se guarda en
+  `users.password_changed_at`.
+- El login se limita por correo (5 fallos) y por IP (20 fallos) en una ventana de 15
+  minutos. El contador vive en `storage/rate-limits/` y falla abierto si no se puede
+  escribir.
+- Las respuestas dinámicas envían `Cache-Control: no-store, private`,
+  `Permissions-Policy` y CSP con `frame-ancestors 'none'` y `object-src 'none'`.
+  HSTS se envía solo bajo HTTPS.
+- `ErrorHandler` activa `log_errors` y registra errores fatales en
+  `storage/logs/php-error.log` y en el log de la aplicación.
+- `EmployeeRepository::valueExists()` solo acepta `document` y `email`; cualquier otra
+  columna lanza una excepción.
 - Ambos roles cambian su propia contraseña en `/account/password`; se exige la
   contraseña actual y que la nueva sea distinta.
 - La auditoría es solo para `admin`. Su metadata se limita a `status` y `role`, nunca

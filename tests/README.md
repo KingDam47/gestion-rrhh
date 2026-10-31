@@ -138,6 +138,19 @@ La prueba de roles ejecuta **183 comprobaciones** y cubre:
 - cierre de sesión tras cambio de rol o desactivación, y aviso en el login;
 - CSRF, 404, paginación de usuarios y auditoría con metadata limitada a `status`/`role`.
 
+La prueba de seguridad de la fase 2 ejecuta **29 comprobaciones** y cubre:
+
+- `Cache-Control: no-store, private`, `Permissions-Policy`, CSP con
+  `frame-ancestors 'none'`/`object-src 'none'` y HSTS bajo HTTPS;
+- bloqueo del login tras 5 fallos del mismo correo y independencia de otros correos
+  desde la misma IP;
+- invalidación de la segunda sesión tras cambiar la contraseña, conservación de la
+  sesión que hizo el cambio y restauración de la contraseña demo.
+
+> La prueba de seguridad se niega a ejecutarse si `APP_URL` o `DB_DSN` no apuntan a
+> `127.0.0.1`/`localhost` con `dbname=gestion_rrhh`, para evitar cambios accidentales
+> en producción.
+
 ## Flujos funcionales mínimos
 
 - Login, logout y acceso denegado.
@@ -150,11 +163,12 @@ La prueba de roles ejecuta **183 comprobaciones** y cubre:
 
 ## Estado actual
 
-- **PHPUnit:** 40 pruebas, 111 aserciones correctas (2026-10-26).
+- **PHPUnit:** 47 pruebas, 128 aserciones correctas (2026-10-29).
 - **Funcional Dashboard:** 108/108 comprobaciones correctas (2026-10-26).
 - **Funcional Asistencia:** 304/304 comprobaciones correctas (2026-10-26).
 - **Funcional Reclutamiento:** 535/535 comprobaciones correctas (2026-10-26).
-- **Funcional Roles:** 183/183 comprobaciones correctas (2026-10-26).
-- **Sintaxis:** 143 archivos PHP sin errores, sin contar `vendor/`.
+- **Funcional Roles:** 183/183 comprobaciones correctas (2026-10-29).
+- **Funcional Seguridad fase 2:** 29/29 comprobaciones correctas (2026-10-29).
+- **Sintaxis:** 146 archivos PHP sin errores, sin contar `vendor/`.
 - **Datos:** seed restaurado al terminar las pruebas (2 usuarios, 10 empleados,
   3 vacantes, 5 candidatos, 6 postulaciones, 5 auditorías).

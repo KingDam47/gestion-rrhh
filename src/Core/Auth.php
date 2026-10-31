@@ -13,7 +13,7 @@ final class Auth
     private const SESSION_KEY = '_auth_user';
 
     /**
-     * @param array{id: int|string, name: string, email: string, role: string} $user
+     * @param array{id: int|string, name: string, email: string, role: string, password_changed_at?: string|null} $user
      */
     public static function login(array $user): void
     {
@@ -23,12 +23,21 @@ final class Auth
             'name' => (string) $user['name'],
             'email' => (string) $user['email'],
             'role' => (string) $user['role'],
+            'password_changed_at' => isset($user['password_changed_at'])
+                ? (string) $user['password_changed_at']
+                : null,
         ]);
         Csrf::rotate();
     }
 
     /**
-     * @return array{id: int, name: string, email: string, role: string}|null
+     * @return array{
+     *     id: int,
+     *     name: string,
+     *     email: string,
+     *     role: string,
+     *     password_changed_at?: string|null
+     * }|null
      */
     public static function user(): ?array
     {
@@ -45,11 +54,19 @@ final class Auth
     /**
      * Actualiza nombre y correo desde la base sin rotar la sesión.
      *
-     * @param array{id: int|string, name: string, email: string, role: string} $user
+     * @param array{
+     *     id: int|string,
+     *     name: string,
+     *     email: string,
+     *     role: string,
+     *     password_changed_at?: string|null
+     * } $user
      */
     public static function refresh(array $user): void
     {
-        if (!self::check()) {
+        $current = self::user();
+
+        if ($current === null) {
             return;
         }
 
@@ -58,7 +75,26 @@ final class Auth
             'name' => (string) $user['name'],
             'email' => (string) $user['email'],
             'role' => (string) $user['role'],
+            'password_changed_at' => array_key_exists('password_changed_at', $user)
+                ? ($user['password_changed_at'] !== null ? (string) $user['password_changed_at'] : null)
+                : ($current['password_changed_at'] ?? null),
         ]);
+    }
+
+    /**
+     * Conserva la sesión actual tras un cambio de contraseña propio, para que
+     * el usuario que la cambió no tenga que volver a iniciar sesión.
+     */
+    public static function refreshPasswordChangedAt(?string $changedAt): void
+    {
+        $user = self::user();
+
+        if ($user === null) {
+            return;
+        }
+
+        $user['password_changed_at'] = $changedAt;
+        Session::put(self::SESSION_KEY, $user);
     }
 
     public static function id(): ?int

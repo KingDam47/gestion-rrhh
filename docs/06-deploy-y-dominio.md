@@ -137,6 +137,24 @@ Notas del hosting:
 - Reimportar `database/seed.sql` devuelve la demo a sus líneas base y a las
   contraseñas demo.
 
+### Despliegue Fase 2 (31/10/2026)
+
+Se desplegó el endurecimiento de autenticación y cabeceras sobre la base de
+producción existente, sin reimportar el seed:
+
+1. Backup completo de `htdocs` y dump SQL de la base, guardados fuera del
+   repositorio; la restauración del dump se probó en una base temporal local.
+2. Migración `202610292100_add_password_changed_at_to_users.sql` aplicada
+   primero, mediante una herramienta PHP temporal protegida por token.
+3. Subida por FTP de 14 archivos de runtime (13 cambios + `.gitkeep` del
+   limitador), sin tocar el `.env` de producción.
+4. Creación de `storage/rate-limits/` y verificación de escritura.
+5. Verificación en vivo: cabeceras sin duplicados, HSTS, redirecciones
+   canónicas, login de ambos roles, 403 de `hr` en Usuarios/Auditoría, bloqueo
+   del sexto intento y cambio de contraseña con invalidación de la otra sesión.
+6. Eliminación del usuario temporal y de la herramienta de despliegue; la línea
+   base quedó en 3 usuarios, 11 empleados y 16 auditorías.
+
 ### Dominio propio (29/10/2026)
 
 `evolvehr.cloud` se registró en IONOS y se publicó sobre la misma cuenta de hosting,

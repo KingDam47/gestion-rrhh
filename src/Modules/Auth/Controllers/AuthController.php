@@ -55,7 +55,7 @@ final class AuthController
             ], 'layouts.guest'), 422);
         }
 
-        $result = $this->authService->attempt($email, $password);
+        $result = $this->authService->attempt($email, $password, $request->ip());
 
         if ($result === LoginResult::Success) {
             Flash::success('Bienvenido de nuevo.');
@@ -65,7 +65,7 @@ final class AuthController
         OldInput::put(['email' => $email]);
 
         $generalError = $result === LoginResult::TooManyAttempts
-            ? 'Demasiados intentos fallidos. Espera un minuto antes de volver a intentarlo.'
+            ? 'Demasiados intentos fallidos. Espera 15 minutos antes de volver a intentarlo.'
             : 'Las credenciales no son válidas.';
 
         return Response::html($this->view->render('auth::login', [

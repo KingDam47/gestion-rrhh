@@ -59,6 +59,9 @@ producción.
 - Probar en una base limpia antes de aplicarla.
 - Documentar el rollback en la cabecera.
 - En InfinityFree se aplican manualmente desde phpMyAdmin.
+- En una base existente, aplicar
+  `migrations/202610292100_add_password_changed_at_to_users.sql` antes de desplegar
+  el código que invalida sesiones por cambio de contraseña.
 
 ## Reglas
 

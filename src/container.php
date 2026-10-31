@@ -16,6 +16,7 @@ use App\Modules\Auth\Repositories\AuditLogRepository;
 use App\Modules\Auth\Repositories\UserRepository;
 use App\Modules\Auth\Services\AuditLogService;
 use App\Modules\Auth\Services\AuthService;
+use App\Modules\Auth\Services\LoginThrottle;
 use App\Modules\Auth\Services\UserLookupService;
 use App\Modules\Auth\Services\UserService;
 use App\Modules\Attendance\Controllers\AttendanceController;
@@ -71,8 +72,13 @@ $container->set(UserRepository::class, static fn (Container $c): UserRepository 
     $c->get(Database::class)
 ));
 
+$container->set(LoginThrottle::class, static fn (Container $c): LoginThrottle => new LoginThrottle(
+    (string) Config::get('paths.storage') . '/rate-limits'
+));
+
 $container->set(AuthService::class, static fn (Container $c): AuthService => new AuthService(
-    $c->get(UserRepository::class)
+    $c->get(UserRepository::class),
+    $c->get(LoginThrottle::class)
 ));
 
 $container->set(UserLookup::class, static fn (Container $c): UserLookup => new UserLookupService(

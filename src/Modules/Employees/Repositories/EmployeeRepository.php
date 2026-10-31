@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Modules\Employees\Repositories;
 
 use App\Core\Database;
+use InvalidArgumentException;
 use PDO;
 
 final class EmployeeRepository
 {
+    private const EXISTS_COLUMNS = ['document', 'email'];
+
     public function __construct(private readonly Database $database)
     {
     }
@@ -301,6 +304,10 @@ final class EmployeeRepository
 
     private function valueExists(string $column, string $value, ?int $exceptId): bool
     {
+        if (!in_array($column, self::EXISTS_COLUMNS, true)) {
+            throw new InvalidArgumentException(sprintf('Columna no permitida para comprobar duplicados: %s.', $column));
+        }
+
         $sql = sprintf('SELECT 1 FROM employees WHERE %s = :value', $column);
         $parameters = ['value' => $value];
 

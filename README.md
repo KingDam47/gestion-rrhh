@@ -250,3 +250,39 @@ las líneas base de la demo y se ejecutaron 23 comprobaciones HTTP contra el sit
 > El dominio se compra aparte. InfinityFree no permite Node.js ni cambiar el
 > document root, por lo que el proyecto se despliega con PHP y una regla de
 > reescritura hacia `public/`.
+
+## Endurecimiento fase 2 (2026-10-29)
+
+Se implementaron y verificaron en local:
+
+- limitador de login por correo (5 fallos) e IP (20 fallos) en ventanas de 15
+  minutos, compartido entre peticiones y almacenado en `storage/rate-limits/`;
+- invalidación de las demás sesiones al cambiar o restablecer la contraseña,
+  mediante `users.password_changed_at`;
+- cabeceras `Cache-Control: no-store, private`, `Permissions-Policy`, CSP con
+  `frame-ancestors 'none'`/`object-src 'none'` y HSTS bajo HTTPS;
+- `log_errors=1`, `error_log` en `storage/logs/php-error.log` y registro de
+  errores fatales;
+- lista blanca de columnas en `EmployeeRepository::valueExists()`.
+
+Verificación local: **47 pruebas PHPUnit (128 aserciones)**, **29/29**
+comprobaciones de seguridad, **183/183** comprobaciones de roles, **146 archivos
+PHP** sin errores de sintaxis y creación correcta del esquema en una base limpia
+(10 tablas). La migración
+`202610292100_add_password_changed_at_to_users.sql` se aplicó en la base local.
+
+**Desplegado en producción el 2026-10-31** en <https://evolvehr.cloud>:
+
+- migración `password_changed_at` aplicada sobre la base existente, sin borrar
+  datos ni reimportar el seed;
+- 14 archivos de runtime subidos por FTP (13 cambios + `storage/rate-limits/.gitkeep`);
+- `storage/rate-limits/` creado y verificable como escribible;
+- cabeceras de seguridad verificadas por HTTPS sin duplicados, HSTS activo,
+  redirección HTTP→HTTPS y `www`→ápice;
+- login de `admin` y `hr`, roles (`hr` recibe 403 en `/users` y `/audit`),
+  bloqueo del sexto intento de login y cambio de contraseña con invalidación de
+  la otra sesión verificados en vivo;
+- usuario temporal de prueba eliminado y línea base restaurada: 3 usuarios,
+  11 empleados y 16 registros de auditoría;
+- backup previo de archivos y base guardado fuera del repositorio y restauración
+  probada en una base temporal local.
