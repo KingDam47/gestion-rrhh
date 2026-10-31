@@ -38,6 +38,10 @@ final class Session
         ini_set('session.use_strict_mode', '1');
         ini_set('session.use_only_cookies', '1');
         ini_set('session.gc_maxlifetime', (string) max(60, ((int) ($config['lifetime'] ?? 120)) * 60));
+        // En InfinityFree el recolector de PHP intenta limpiar /php_sessions y
+        // recibe Permission denied. La aplicación ya controla la inactividad y
+        // el hosting limpia sus propios archivos de sesión.
+        ini_set('session.gc_probability', '0');
 
         session_start();
 

@@ -97,10 +97,14 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
   base temporal local (10 tablas, 3 usuarios, 11 empleados, 16 auditorías).
 - Migración `202610292100_add_password_changed_at_to_users.sql` aplicada sobre la
   base de producción existente. No se reimportó el seed y no se borraron datos.
-- Se subieron 14 archivos de runtime por FTP (13 cambios + `.gitkeep` del
+- Se subieron 15 archivos de runtime por FTP (14 cambios + `.gitkeep` del
   limitador). No se subieron `.env`, `database/`, `tests/`, `docs/`, `scripts/`,
   `vendor/` ni credenciales. El `.env` de producción quedó intacto.
 - `storage/rate-limits/` se creó en producción y se confirmó que es escribible.
+- Se desactivó el recolector de sesiones de PHP (`session.gc_probability=0`) para
+  evitar el aviso `ps_files_cleanup_dir` de InfinityFree; la expiración por
+  inactividad sigue controlada por `Session`. El log no registró errores nuevos
+  después del cambio.
 - Verificación en vivo: cabeceras de seguridad sin duplicados, HSTS, redirección
   HTTP→HTTPS y `www`→ápice, login de `admin` y `hr`, `hr` con 403 en `/users` y
   `/audit`, bloqueo del sexto intento de login y cambio de contraseña que invalida

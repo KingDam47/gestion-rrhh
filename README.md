@@ -275,8 +275,10 @@ PHP** sin errores de sintaxis y creación correcta del esquema en una base limpi
 
 - migración `password_changed_at` aplicada sobre la base existente, sin borrar
   datos ni reimportar el seed;
-- 14 archivos de runtime subidos por FTP (13 cambios + `storage/rate-limits/.gitkeep`);
+- 15 archivos de runtime subidos por FTP (14 cambios + `storage/rate-limits/.gitkeep`);
 - `storage/rate-limits/` creado y verificable como escribible;
+- recolector de sesiones de PHP desactivado en producción para evitar el aviso
+  `ps_files_cleanup_dir` de InfinityFree; la inactividad sigue controlada por la app;
 - cabeceras de seguridad verificadas por HTTPS sin duplicados, HSTS activo,
   redirección HTTP→HTTPS y `www`→ápice;
 - login de `admin` y `hr`, roles (`hr` recibe 403 en `/users` y `/audit`),

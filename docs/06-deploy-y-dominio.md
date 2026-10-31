@@ -146,9 +146,11 @@ producción existente, sin reimportar el seed:
    repositorio; la restauración del dump se probó en una base temporal local.
 2. Migración `202610292100_add_password_changed_at_to_users.sql` aplicada
    primero, mediante una herramienta PHP temporal protegida por token.
-3. Subida por FTP de 14 archivos de runtime (13 cambios + `.gitkeep` del
+3. Subida por FTP de 15 archivos de runtime (14 cambios + `.gitkeep` del
    limitador), sin tocar el `.env` de producción.
-4. Creación de `storage/rate-limits/` y verificación de escritura.
+4. Creación de `storage/rate-limits/`, verificación de escritura y desactivación
+   del recolector de sesiones de PHP para evitar el aviso `ps_files_cleanup_dir`
+   de InfinityFree.
 5. Verificación en vivo: cabeceras sin duplicados, HSTS, redirecciones
    canónicas, login de ambos roles, 403 de `hr` en Usuarios/Auditoría, bloqueo
    del sexto intento y cambio de contraseña con invalidación de la otra sesión.
