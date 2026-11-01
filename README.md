@@ -10,8 +10,8 @@ actividades de Gestión Humana: **gestión de empleados**, **asistencia y permis
 > **Estado:** Fundaciones, módulos 01 (Empleados), 02 (Asistencia y permisos),
 > 03 (Reclutamiento y selección), Dashboard y separación de roles `admin`/`hr`
 > implementados y verificados con PHP 8.4 y MariaDB 11.4. La Fase 3 de endurecimiento
-> (seguridad, base de datos, accesibilidad, impresión y manual) está completada en local
-> en la rama `fase-3`; el despliegue a producción queda pendiente de autorización.
+> (seguridad, base de datos, accesibilidad, impresión y manual) está completada y
+> desplegada en producción desde el 2026-10-31 (versión `v1.0.3-prod-20261031`).
 >
 > **Demo en vivo:** <https://evolvehr.cloud> (InfinityFree, PHP 8.4.27 y
 > MariaDB 11.4.13). El subdominio temporal `evolvehr.freehosting.dev` redirige con
@@ -293,7 +293,8 @@ PHP** sin errores de sintaxis y creación correcta del esquema en una base limpi
 
 ## Endurecimiento fase 3 (2026-10-31)
 
-Cambios en la rama `fase-3`, **aún no desplegados**:
+Cambios desplegados en producción el 2026-10-31 (rama `fase-3`, versión
+`v1.0.3-prod-20261031`):
 
 - auditoría de `auth.login`, `auth.login_failed` y `auth.login_blocked` sin PII;
 - verificación con hash ficticio para reducir diferencias de tiempo entre un correo
@@ -317,3 +318,11 @@ Cambios en la rama `fase-3`, **aún no desplegados**:
 Regresión local: **49/49 PHPUnit (137 aserciones)**, **29/29** seguridad, **187/187**
 roles, **304/304** asistencia, **535/535** reclutamiento, **108/108** Dashboard y lint
 sin errores. La base local se restaura con `database/seed.sql` al terminar.
+
+Verificación en producción (2026-10-31): **40/40** comprobaciones en vivo (cabeceras,
+HSTS sin `includeSubDomains`, redirecciones HTTP→HTTPS, `www` y dominio antiguo al ápice,
+bloqueo de `.env` y `src/`, login de ambos roles, 403 de `hr` en Usuarios/Auditoría,
+CSRF, revisión de permiso sin decisión, bloqueo del sexto intento, auditoría de login sin
+PII y reporte imprimible). La migración de índices se aplicó dos veces para comprobar su
+idempotencia. Los datos de negocio no cambiaron: 3 usuarios, 11 empleados, 5 permisos y
+7 postulaciones.

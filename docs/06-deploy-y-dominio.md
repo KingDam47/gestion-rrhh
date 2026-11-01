@@ -157,24 +157,30 @@ producción existente, sin reimportar el seed:
 6. Eliminación del usuario temporal y de la herramienta de despliegue; la línea
    base quedó en 3 usuarios, 11 empleados y 16 auditorías.
 
-### Fase 3 (pendiente de autorización)
+### Despliegue Fase 3 (31/10/2026)
 
-Los cambios de la rama `fase-3` están verificados en local pero **no se han desplegado**.
-Cuando el usuario autorice:
+Se desplegó el endurecimiento de seguridad, base de datos y accesibilidad sobre la base
+de producción existente, sin reimportar el seed:
 
-1. Crear un backup nuevo de `htdocs` y un dump SQL de producción.
-2. Aplicar `database/migrations/202610311200_add_phase3_indexes.sql` desde phpMyAdmin o
-   con una herramienta PHP temporal protegida por token. Es idempotente: comprueba
-   `information_schema` antes de crear cada índice.
-3. Subir por FTP los archivos de runtime modificados: `.htaccess`, `config/app.php`,
-   `src/Core/*`, `src/Modules/*`, `src/Shared/*`, `src/container.php` y
-   `public/assets/css/app.css`. No subir `.env`, `database/`, `tests/`, `docs/`,
-   `scripts/`, `vendor/` ni credenciales.
-4. Verificar en vivo: login de ambos roles, 403 de `hr` en Usuarios/Auditoría, cabeceras,
-   HSTS sin `includeSubDomains`, host canónico, bloqueo del sexto intento, auditoría de
-   login, revisión de permisos sin decisión y un reporte imprimible.
-5. Restaurar la línea base de producción si se usaron datos temporales y eliminar
-   cualquier herramienta de despliegue.
+1. Backup completo de `htdocs` (144 archivos) y dump SQL de producción, guardados fuera
+   del repositorio en `backups/gestion-rrhh-prod-phase3-20261031/`, con `SHA256SUMS.txt`
+   y zip. El dump se restauró en una base local temporal para comprobar su integridad.
+2. Migración `202610311200_add_phase3_indexes.sql` aplicada con una herramienta PHP
+   temporal protegida por token. Se ejecutó dos veces: la segunda no creó índices
+   duplicados. Los conteos de usuarios, empleados y auditorías no cambiaron.
+3. Subida por FTP de 55 archivos de runtime (`.htaccess`, `config/app.php`, `public/` y
+   `src/`), sin tocar el `.env` de producción ni subir `database/`, `tests/`, `docs/`,
+   `scripts/` o `vendor/`. Se verificó por hash SHA-256 que los archivos remotos coinciden
+   con el commit `7836c6e`.
+4. Verificación en vivo: **40/40** comprobaciones (cabeceras sin duplicados, HSTS
+   `max-age=31536000` sin `includeSubDomains`, HTTP→HTTPS, `www` y dominio antiguo al
+   ápice, `.env` cortado y `src/` bloqueado, login de ambos roles, 403 de `hr` en
+   Usuarios/Auditoría, CSRF, revisión de permiso sin decisión, bloqueo del sexto intento,
+   auditoría `auth.*` sin PII y reporte imprimible).
+5. Limpieza: se eliminaron las herramientas temporales (sus URL devuelven 404) y los
+   contadores del limitador usados en la prueba. Los datos de negocio quedaron intactos
+   (3 usuarios, 11 empleados, 5 permisos, 7 postulaciones); las 16 auditorías nuevas
+   corresponden a los inicios de sesión reales de la verificación.
 
 > La migración de índices es aditiva. No elimina columnas, tablas ni datos. No reimportar
 > `database/seed.sql` en producción.

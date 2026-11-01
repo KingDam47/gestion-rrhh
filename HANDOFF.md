@@ -62,8 +62,9 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
   del runtime; se retiraron directorios vacíos, pruebas no usadas, caché, imágenes no
   usadas y APIs muertas. La documentación quedó alineada. `exceso/`, `vendor/`,
   `tests/`, `docs/`, `scripts/`, `.env` y la caché de PHPUnit no se despliegan.
-- **Fase 3 (endurecimiento) completada en local, sin desplegar:** rama `fase-3` creada
-  desde `main` (`138fe17`). Auditorías de seguridad, base de datos y accesibilidad sin
+- **Fase 3 (endurecimiento) completada y desplegada en producción (2026-10-31):** rama
+  `fase-3` creada desde `main` (`138fe17`), commit `7836c6e`, etiqueta
+  `v1.0.3-prod-20261031`. Auditorías de seguridad, base de datos y accesibilidad sin
   hallazgos críticos ni altos. Se añadieron auditoría de login, ecualización de tiempos,
   alertas del limitador, `TRUST_PROXY`, host canónico, SRI, CSRF para métodos mutables,
   validación de redirecciones, política de contraseña, cabeceras de respaldo, migración
@@ -124,10 +125,10 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
 - El script temporal de migración/backup se eliminó del hosting y se verificó que
   su URL devuelve 404.
 
-### 0.2 Fase 3 en local (31/10/2026)
+### 0.2 Fase 3 desplegada (31/10/2026)
 
-- Rama `fase-3` creada desde `main` en `138fe17`; los cambios están en el árbol de
-  trabajo y **no se han desplegado**.
+- Rama `fase-3` creada desde `main` en `138fe17`, commit `7836c6e`, fusionada en `main`
+  y etiquetada como `v1.0.3-prod-20261031`.
 - Seguridad: auditoría de login sin PII, hash ficticio para igualar tiempos, alertas del
   limitador, `TRUST_PROXY`, host canónico, validación de redirecciones, CSRF en todos los
   métodos mutables, SRI, HSTS sin `includeSubDomains` y cabeceras de respaldo. El seed y
@@ -143,9 +144,16 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
   `docs/09-manual-de-usuario.md`.
 - Regresión: PHPUnit 49/49 (137 aserciones), Seguridad 29/29, Roles 187/187,
   Asistencia 304/304, Reclutamiento 535/535, Dashboard 108/108 y lint sin errores.
-- **Siguiente acción:** revisar el diff, commit en `fase-3`, push y pedir autorización
-  expresa antes de desplegar a producción. La migración de índices debe aplicarse en
-  producción antes o junto con el código que la usa.
+- **Despliegue en producción:** backup completo de `htdocs` (144 archivos) y dump SQL en
+  `backups/gestion-rrhh-prod-phase3-20261031/`, con hashes y restauración de prueba. La
+  migración de índices se aplicó dos veces sin duplicar índices. Se subieron 55 archivos
+  de runtime por FTP y se comprobó su SHA-256 contra el commit. Verificación en vivo:
+  40/40 (cabeceras, HSTS sin `includeSubDomains`, redirecciones canónicas, bloqueo de
+  `.env` y `src/`, login de ambos roles, 403 de `hr`, CSRF, revisión sin decisión,
+  bloqueo del sexto intento, auditoría sin PII y reporte imprimible).
+- Datos de producción intactos: 3 usuarios, 11 empleados, 5 permisos y 7 postulaciones.
+  Las 16 auditorías nuevas son los eventos reales de login de la verificación; no se
+  borraron registros de auditoría. Herramientas temporales eliminadas (URL 404).
 
 ### 0.1 Revisión del proyecto (sesión del 29/10/2026)
 

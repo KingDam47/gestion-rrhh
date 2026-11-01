@@ -179,8 +179,9 @@ fue validado con el usuario.
 - [x] Datos demo coherentes.
 - [x] Prueba completa en InfinityFree con HTTPS.
 
-> **Fase 3 verificada en local el 2026-10-31 (rama `fase-3`):** auditoría de seguridad,
-> base de datos y accesibilidad sin hallazgos críticos ni altos. Se añadieron auditoría
+> **Fase 3 desplegada en producción el 2026-10-31 (rama `fase-3`, etiqueta
+> `v1.0.3-prod-20261031`):** auditoría de seguridad, base de datos y accesibilidad sin
+> hallazgos críticos ni altos. Se añadieron auditoría
 > de login, ecualización de tiempos, alertas del limitador, `TRUST_PROXY`, host canónico,
 > SRI, CSRF para todos los métodos mutables, validación de redirecciones, política de
 > contraseña y cabeceras de respaldo. El hash ficticio de tiempos y el seed usan coste
@@ -192,8 +193,10 @@ fue validado con el usuario.
 > etiquetas de tablas, iconos decorativos, paginación accesible y estilos de impresión.
 > Regresión: PHPUnit 49/49 (137 aserciones), Seguridad 29/29, Roles 187/187, Asistencia
 > 304/304, Reclutamiento 535/535, Dashboard 108/108 y lint de todos los PHP sin errores.
-> El manual de usuario está en `docs/09-manual-de-usuario.md`. El despliegue a producción
-> queda pendiente de autorización expresa.
+> El manual de usuario está en `docs/09-manual-de-usuario.md`. Verificación en producción:
+> 40/40 comprobaciones (cabeceras, redirecciones canónicas, roles, CSRF, limitador,
+> auditoría sin PII y reporte imprimible). Backup previo de archivos y base de datos
+> conservado fuera del repositorio.
 
 **Criterio de salida:** checklist de seguridad completo, backups probados y sin fallos
 críticos conocidos.
