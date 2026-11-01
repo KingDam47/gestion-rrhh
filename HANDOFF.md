@@ -64,7 +64,7 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
   `tests/`, `docs/`, `scripts/`, `.env` y la caché de PHPUnit no se despliegan.
 - **Fase 3 (endurecimiento) completada y desplegada en producción (2026-10-31):** rama
   `fase-3` creada desde `main` (`138fe17`), commit `7836c6e`, etiqueta
-  `v1.0.3-prod-20261031`. Auditorías de seguridad, base de datos y accesibilidad sin
+  `v1.0.5`. Auditorías de seguridad, base de datos y accesibilidad sin
   hallazgos críticos ni altos. Se añadieron auditoría de login, ecualización de tiempos,
   alertas del limitador, `TRUST_PROXY`, host canónico, SRI, CSRF para métodos mutables,
   validación de redirecciones, política de contraseña, cabeceras de respaldo, migración
@@ -128,7 +128,8 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
 ### 0.2 Fase 3 desplegada (31/10/2026)
 
 - Rama `fase-3` creada desde `main` en `138fe17`, commit `7836c6e`, fusionada en `main`
-  y etiquetada como `v1.0.3-prod-20261031`.
+  y etiquetada como `v1.0.5`. La versión estable anterior queda preservada en la rama
+  `backup/pre-fase3-20261031` y la etiqueta `v1.0.4-prod-20261031`.
 - Seguridad: auditoría de login sin PII, hash ficticio para igualar tiempos, alertas del
   limitador, `TRUST_PROXY`, host canónico, validación de redirecciones, CSRF en todos los
   métodos mutables, SRI, HSTS sin `includeSubDomains` y cabeceras de respaldo. El seed y

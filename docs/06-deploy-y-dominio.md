@@ -165,6 +165,8 @@ de producción existente, sin reimportar el seed:
 1. Backup completo de `htdocs` (144 archivos) y dump SQL de producción, guardados fuera
    del repositorio en `backups/gestion-rrhh-prod-phase3-20261031/`, con `SHA256SUMS.txt`
    y zip. El dump se restauró en una base local temporal para comprobar su integridad.
+   La versión estable anterior queda preservada en la rama `backup/pre-fase3-20261031` y
+   la etiqueta `v1.0.4-prod-20261031`.
 2. Migración `202610311200_add_phase3_indexes.sql` aplicada con una herramienta PHP
    temporal protegida por token. Se ejecutó dos veces: la segunda no creó índices
    duplicados. Los conteos de usuarios, empleados y auditorías no cambiaron.

@@ -180,7 +180,7 @@ fue validado con el usuario.
 - [x] Prueba completa en InfinityFree con HTTPS.
 
 > **Fase 3 desplegada en producción el 2026-10-31 (rama `fase-3`, etiqueta
-> `v1.0.3-prod-20261031`):** auditoría de seguridad, base de datos y accesibilidad sin
+> `v1.0.5`):** auditoría de seguridad, base de datos y accesibilidad sin
 > hallazgos críticos ni altos. Se añadieron auditoría
 > de login, ecualización de tiempos, alertas del limitador, `TRUST_PROXY`, host canónico,
 > SRI, CSRF para todos los métodos mutables, validación de redirecciones, política de

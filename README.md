@@ -11,7 +11,7 @@ actividades de Gestión Humana: **gestión de empleados**, **asistencia y permis
 > 03 (Reclutamiento y selección), Dashboard y separación de roles `admin`/`hr`
 > implementados y verificados con PHP 8.4 y MariaDB 11.4. La Fase 3 de endurecimiento
 > (seguridad, base de datos, accesibilidad, impresión y manual) está completada y
-> desplegada en producción desde el 2026-10-31 (versión `v1.0.3-prod-20261031`).
+> desplegada en producción desde el 2026-10-31 (versión `v1.0.5`).
 >
 > **Demo en vivo:** <https://evolvehr.cloud> (InfinityFree, PHP 8.4.27 y
 > MariaDB 11.4.13). El subdominio temporal `evolvehr.freehosting.dev` redirige con
@@ -294,7 +294,7 @@ PHP** sin errores de sintaxis y creación correcta del esquema en una base limpi
 ## Endurecimiento fase 3 (2026-10-31)
 
 Cambios desplegados en producción el 2026-10-31 (rama `fase-3`, versión
-`v1.0.3-prod-20261031`):
+`v1.0.5`):
 
 - auditoría de `auth.login`, `auth.login_failed` y `auth.login_blocked` sin PII;
 - verificación con hash ficticio para reducir diferencias de tiempo entre un correo
