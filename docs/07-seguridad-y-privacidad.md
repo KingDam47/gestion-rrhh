@@ -49,8 +49,8 @@ Reglas:
   activos.
 - Un cambio de rol o una desactivación invalidan la sesión de la cuenta afectada en la
   siguiente petición.
-- Los cambios de rol, estado y contraseña se auditan; la metadata se limita a `status` y
-  `role`.
+- Los cambios de rol, estado y contraseña se auditan; la metadata se limita a `status`,
+  `role` y, en eventos de autenticación, `reason`.
 - Las cuentas se desactivan; no se eliminan si tienen historial.
 
 ## 3. Autenticación
@@ -59,8 +59,14 @@ Reglas:
 - Contraseñas con `password_hash($password, PASSWORD_DEFAULT)`.
 - Verificación con `password_verify()`.
 - Rehash automático si `password_needs_rehash()` lo indica.
-- Longitud mínima de contraseña: 10 caracteres.
-- No mostrar si el correo existe o no en un login fallido.
+- Longitud mínima de contraseña: 10 caracteres, con al menos una letra y un número.
+- No mostrar si el correo existe o no en un login fallido. Cuando el correo no existe se
+  verifica igualmente un hash ficticio con el mismo coste bcrypt que las contraseñas
+  almacenadas para reducir la diferencia de tiempo.
+- Se auditan `auth.login`, `auth.login_failed` y `auth.login_blocked` sin correo,
+  contraseña ni otros datos personales.
+- La IP del cliente se toma de `REMOTE_ADDR`. Solo si `TRUST_PROXY=true` se aceptan
+  `CF-Connecting-IP` o `X-Forwarded-For`; nunca se confía en esas cabeceras por defecto.
 - Rate limiting compartido entre peticiones: 5 fallos por correo y 20 por IP en una
   ventana de 15 minutos. El contador se guarda en `storage/rate-limits/` y falla
   abierto si el almacenamiento no está disponible.
@@ -158,9 +164,11 @@ Registrar en `audit_logs`:
 - cierre de vacantes;
 - alta de postulaciones, cambios de estado y alta guiada.
 
-El MVP no registra automáticamente cada inicio de sesión ni los intentos fallidos; la
-tabla demo conserva un registro de ejemplo. La metadata de las acciones nuevas se limita
-a `status` y `role`.
+Desde la Fase 3 se registran también los inicios de sesión correctos, los fallidos y los
+bloqueos por límite de intentos. Estos eventos no guardan el correo ni la contraseña:
+solo el identificador interno cuando existe, el motivo (`unknown_user`, `inactive_user`,
+`bad_password` o `throttle`) y la IP tratada como dato personal. La metadata del resto de
+acciones se limita a `status` y `role`.
 
 Campos:
 
@@ -185,12 +193,16 @@ La auditoría es de solo escritura para la aplicación y su consulta está restr
 Configurar en producción:
 
 - HTTPS obligatorio y redirección desde HTTP.
-- `Strict-Transport-Security` cuando el dominio esté estable.
+- `Strict-Transport-Security` cuando el dominio esté estable, sin `includeSubDomains`
+  mientras solo estén confirmados el dominio ápice y `www`.
 - `X-Content-Type-Options: nosniff`.
 - `X-Frame-Options: DENY` y CSP `frame-ancestors 'none'`.
 - `Referrer-Policy: strict-origin-when-cross-origin`.
 - `Permissions-Policy` restrictiva para cámara, micrófono, geolocalización, pagos y USB.
 - `Content-Security-Policy` adaptada a los assets reales, con `object-src 'none'`.
+- Subresource Integrity (SRI) en Bootstrap CSS/JS y Bootstrap Icons cargados desde CDN.
+- Host canónico fijo: cualquier `Host` distinto de `evolvehr.cloud` redirige a ese
+  dominio, evitando redirecciones basadas en cabeceras manipulables.
 - `Cache-Control: no-store, private` en respuestas dinámicas con datos de la aplicación.
 
 InfinityFree ofrece SSL gratuito; verificar que el certificado esté activo antes de la
@@ -218,20 +230,21 @@ entrega.
 
 ## 14. Checklist antes de la demo
 
-- [ ] Login, logout y expiración de sesión.
-- [ ] Cookies `HttpOnly`, `SameSite` y `Secure` en producción.
-- [ ] CSRF en todos los formularios.
-- [ ] Salida escapada en todas las vistas.
-- [ ] Consultas preparadas en todos los repositorios.
-- [ ] Permisos de admin y RR. HH. probados.
-- [ ] Accesos directos por URL denegados cuando corresponde.
-- [ ] Sin credenciales por defecto en producción.
-- [ ] `.env` fuera de `public/` y no versionado.
-- [ ] HTTPS y cabeceras configuradas.
-- [ ] Backups exportados y restauración probada.
-- [ ] Logs sin contraseñas ni PII.
-- [ ] Datos de demostración ficticios.
-- [ ] Documentación y manual actualizados.
+- [x] Login, logout y expiración de sesión.
+- [x] Cookies `HttpOnly`, `SameSite` y `Secure` en producción.
+- [x] CSRF en todos los formularios y métodos mutables.
+- [x] Salida escapada en todas las vistas.
+- [x] Consultas preparadas en todos los repositorios.
+- [x] Permisos de admin y RR. HH. probados.
+- [x] Accesos directos por URL denegados cuando corresponde.
+- [ ] Sin credenciales por defecto en producción: se conservan a propósito las cuentas
+  demo `password123` por decisión del usuario para la demostración.
+- [x] `.env` fuera de `public/` y no versionado.
+- [x] HTTPS y cabeceras configuradas.
+- [x] Backups exportados y restauración probada.
+- [x] Logs sin contraseñas ni PII.
+- [x] Datos de demostración ficticios.
+- [x] Documentación y manual actualizados.
 
 ## 15. Referencias
 

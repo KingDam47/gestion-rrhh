@@ -20,10 +20,10 @@ declare(strict_types=1);
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/employees" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
         </a>
         <button type="button" class="btn btn-primary" data-print>
-            <i class="bi bi-printer"></i> Imprimir
+            <i class="bi bi-printer" aria-hidden="true"></i> Imprimir
         </button>
     </div>
 </div>
@@ -64,7 +64,7 @@ declare(strict_types=1);
             </div>
             <div class="col-12 col-lg-3 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-funnel"></i> Aplicar
+                    <i class="bi bi-funnel" aria-hidden="true"></i> Aplicar
                 </button>
                 <a href="/employees/report" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -101,7 +101,7 @@ declare(strict_types=1);
 
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white">
-        <h2 class="h5 mb-0"><i class="bi bi-table text-primary"></i> Detalle de empleados</h2>
+        <h2 class="h5 mb-0"><i class="bi bi-table text-primary" aria-hidden="true"></i> Detalle de empleados</h2>
     </div>
     <?php if ($report['rows'] === []): ?>
         <div class="card-body py-4 text-center text-body-secondary">
@@ -109,7 +109,7 @@ declare(strict_types=1);
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-sm table-striped align-middle mb-0">
+            <table aria-label="Detalle de empleados" class="table table-sm table-striped align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Documento</th>
@@ -139,10 +139,10 @@ declare(strict_types=1);
 
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white">
-        <h2 class="h5 mb-0"><i class="bi bi-diagram-3 text-primary"></i> Resumen general por departamento</h2>
+        <h2 class="h5 mb-0"><i class="bi bi-diagram-3 text-primary" aria-hidden="true"></i> Resumen general por departamento</h2>
     </div>
     <div class="table-responsive">
-        <table class="table table-sm align-middle mb-0">
+        <table aria-label="Resumen por departamento" class="table table-sm align-middle mb-0">
             <thead class="table-light">
             <tr>
                 <th scope="col">Departamento</th>

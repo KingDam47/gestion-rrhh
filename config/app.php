@@ -10,6 +10,9 @@ return [
     'debug' => Env::bool('APP_DEBUG', false),
     'url' => rtrim(Env::get('APP_URL', 'http://localhost'), '/'),
     'timezone' => Env::get('APP_TIMEZONE', 'UTC'),
+    // Activar solo si la aplicación está detrás de un proxy de confianza que
+    // sobrescribe X-Forwarded-For / CF-Connecting-IP. Si no, se usa REMOTE_ADDR.
+    'trust_proxy' => Env::bool('TRUST_PROXY', false),
     'session' => [
         'name' => Env::get('SESSION_NAME', 'gestion_rrhh_session'),
         'lifetime' => (int) Env::get('SESSION_LIFETIME', '120'),

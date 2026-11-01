@@ -157,6 +157,28 @@ producción existente, sin reimportar el seed:
 6. Eliminación del usuario temporal y de la herramienta de despliegue; la línea
    base quedó en 3 usuarios, 11 empleados y 16 auditorías.
 
+### Fase 3 (pendiente de autorización)
+
+Los cambios de la rama `fase-3` están verificados en local pero **no se han desplegado**.
+Cuando el usuario autorice:
+
+1. Crear un backup nuevo de `htdocs` y un dump SQL de producción.
+2. Aplicar `database/migrations/202610311200_add_phase3_indexes.sql` desde phpMyAdmin o
+   con una herramienta PHP temporal protegida por token. Es idempotente: comprueba
+   `information_schema` antes de crear cada índice.
+3. Subir por FTP los archivos de runtime modificados: `.htaccess`, `config/app.php`,
+   `src/Core/*`, `src/Modules/*`, `src/Shared/*`, `src/container.php` y
+   `public/assets/css/app.css`. No subir `.env`, `database/`, `tests/`, `docs/`,
+   `scripts/`, `vendor/` ni credenciales.
+4. Verificar en vivo: login de ambos roles, 403 de `hr` en Usuarios/Auditoría, cabeceras,
+   HSTS sin `includeSubDomains`, host canónico, bloqueo del sexto intento, auditoría de
+   login, revisión de permisos sin decisión y un reporte imprimible.
+5. Restaurar la línea base de producción si se usaron datos temporales y eliminar
+   cualquier herramienta de despliegue.
+
+> La migración de índices es aditiva. No elimina columnas, tablas ni datos. No reimportar
+> `database/seed.sql` en producción.
+
 ### Dominio propio (29/10/2026)
 
 `evolvehr.cloud` se registró en IONOS y se publicó sobre la misma cuenta de hosting,

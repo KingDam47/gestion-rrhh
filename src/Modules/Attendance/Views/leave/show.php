@@ -28,19 +28,19 @@ $isPending = $status === 'pending';
         </p>
     </div>
     <a href="/leave-requests" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Volver
+        <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
     </a>
 </div>
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
 <?php if ((string) ($leave['employee_status'] ?? '') !== 'active'): ?>
     <div class="alert alert-warning" role="alert">
-        <i class="bi bi-exclamation-triangle"></i>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
         El empleado está inactivo. La solicitud conserva su historial y puede revisarse si sigue pendiente.
     </div>
 <?php endif; ?>
@@ -49,7 +49,7 @@ $isPending = $status === 'pending';
     <div class="col-12 col-lg-7">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-calendar2-week text-primary"></i> Datos de la solicitud</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-calendar2-week text-primary" aria-hidden="true"></i> Datos de la solicitud</h2>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
@@ -92,39 +92,47 @@ $isPending = $status === 'pending';
     <div class="col-12 col-lg-5">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-clipboard-check text-primary"></i> Revisión</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-clipboard-check text-primary" aria-hidden="true"></i> Revisión</h2>
             </div>
             <div class="card-body">
                 <?php if ($isPending): ?>
                     <p class="text-body-secondary">
                         Esta solicitud está pendiente. Registra una decisión; no podrá modificarse después.
                     </p>
-                    <form method="post" action="/leave-requests/<?= (int) $leave['id'] ?>/review" novalidate>
+                    <form method="post" action="/leave-requests/<?= (int) $leave['id'] ?>/review"
+                          data-confirm="¿Registrar la revisión? Esta acción no se puede deshacer.">
                         <?= csrf_field() ?>
 
                         <div class="mb-3">
-                            <label for="status" class="form-label">Decisión <span class="text-danger">*</span></label>
-                            <select class="form-select"
-                                    id="status" name="status" required>
+                            <label for="status" class="form-label">Decisión <span class="text-danger" aria-hidden="true">*</span></label>
+                            <select class="form-select <?= isset($errors['status']) ? 'is-invalid' : '' ?>"
+                                    id="status" name="status" required
+                                    aria-required="true"
+                                    <?= isset($errors['status']) ? 'aria-invalid="true" aria-describedby="status-error"' : '' ?>>
+                                <option value="" <?= old('status') === '' ? 'selected' : '' ?>>Selecciona una decisión</option>
                                 <option value="approved" <?= old('status') === 'approved' ? 'selected' : '' ?>>Aprobar</option>
                                 <option value="rejected" <?= old('status') === 'rejected' ? 'selected' : '' ?>>Rechazar</option>
                             </select>
+                            <?php if (isset($errors['status'])): ?>
+                                <div class="invalid-feedback d-block" id="status-error"><?= e($errors['status']) ?></div>
+                            <?php endif; ?>
                         </div>
 
                         <div class="mb-3">
                             <label for="review_notes" class="form-label">Observación de revisión</label>
                             <textarea class="form-control <?= isset($errors['review_notes']) ? 'is-invalid' : '' ?>"
                                       id="review_notes" name="review_notes" rows="3" maxlength="500"
-                                      placeholder="Opcional. Puede explicar la decisión."><?= e(old('review_notes')) ?></textarea>
-                            <div class="form-text">Máximo 500 caracteres.</div>
+                                      placeholder="Opcional. Puede explicar la decisión."
+                                      aria-describedby="review_notes-help<?= isset($errors['review_notes']) ? ' review_notes-error' : '' ?>"
+                                      <?= isset($errors['review_notes']) ? 'aria-invalid="true"' : '' ?>><?= e(old('review_notes')) ?></textarea>
+                            <div class="form-text" id="review_notes-help">Máximo 500 caracteres.</div>
                             <?php if (isset($errors['review_notes'])): ?>
-                                <div class="invalid-feedback d-block"><?= e($errors['review_notes']) ?></div>
+                                <div class="invalid-feedback d-block" id="review_notes-error"><?= e($errors['review_notes']) ?></div>
                             <?php endif; ?>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100"
-                                data-confirm="¿Registrar la revisión? Esta acción no se puede deshacer.">
-                            <i class="bi bi-check2-circle"></i> Registrar revisión
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-check2-circle" aria-hidden="true"></i> Registrar revisión
                         </button>
                     </form>
                 <?php else: ?>

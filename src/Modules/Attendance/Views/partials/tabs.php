@@ -11,13 +11,13 @@ $tabs = [
     ['key' => 'report', 'label' => 'Reporte mensual', 'icon' => 'bi-file-earmark-bar-graph', 'href' => '/attendance/report'],
 ];
 ?>
-<ul class="nav nav-pills gap-2 mb-4">
+<ul class="nav nav-pills gap-2 mb-4 no-print" aria-label="Secciones de asistencia">
     <?php foreach ($tabs as $tab): ?>
         <li class="nav-item">
             <a class="nav-link <?= $activeTab === $tab['key'] ? 'active' : '' ?>"
                href="<?= e($tab['href']) ?>"
                <?= $activeTab === $tab['key'] ? 'aria-current="page"' : '' ?>>
-                <i class="bi <?= e($tab['icon']) ?>"></i>
+                <i class="bi <?= e($tab['icon']) ?>" aria-hidden="true"></i>
                 <?= e($tab['label']) ?>
             </a>
         </li>

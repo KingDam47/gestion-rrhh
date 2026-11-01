@@ -34,10 +34,10 @@ foreach ($report['departments'] as $department) {
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/attendance" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
         </a>
         <button type="button" class="btn btn-primary" data-print>
-            <i class="bi bi-printer"></i> Imprimir
+            <i class="bi bi-printer" aria-hidden="true"></i> Imprimir
         </button>
     </div>
 </div>
@@ -75,7 +75,7 @@ foreach ($report['departments'] as $department) {
             </div>
             <div class="col-12 col-lg-4 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-funnel"></i> Aplicar
+                    <i class="bi bi-funnel" aria-hidden="true"></i> Aplicar
                 </button>
                 <a href="/attendance/report" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -154,7 +154,7 @@ foreach ($report['departments'] as $department) {
 
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white">
-        <h2 class="h5 mb-0"><i class="bi bi-table text-primary"></i> Resumen por empleado</h2>
+        <h2 class="h5 mb-0"><i class="bi bi-table text-primary" aria-hidden="true"></i> Resumen por empleado</h2>
     </div>
     <?php if ($report['rows'] === []): ?>
         <div class="card-body py-4 text-center text-body-secondary">
@@ -162,7 +162,7 @@ foreach ($report['departments'] as $department) {
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-sm table-striped align-middle mb-0">
+            <table aria-label="Resumen de asistencia por empleado" class="table table-sm table-striped align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col" rowspan="2" class="align-middle">Empleado</th>
@@ -223,7 +223,7 @@ foreach ($report['departments'] as $department) {
 
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white">
-        <h2 class="h5 mb-0"><i class="bi bi-calendar2-week text-primary"></i> Solicitudes de permiso del mes</h2>
+        <h2 class="h5 mb-0"><i class="bi bi-calendar2-week text-primary" aria-hidden="true"></i> Solicitudes de permiso del mes</h2>
     </div>
     <?php if ($report['leave_rows'] === []): ?>
         <div class="card-body py-4 text-center text-body-secondary">
@@ -231,7 +231,7 @@ foreach ($report['departments'] as $department) {
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-sm align-middle mb-0">
+            <table aria-label="Solicitudes de permiso del mes" class="table table-sm align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Empleado</th>

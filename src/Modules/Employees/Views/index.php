@@ -25,10 +25,10 @@ $pageUrl = static fn (int $page): string => '/employees?' . http_build_query($ba
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/employees/report" class="btn btn-outline-secondary">
-            <i class="bi bi-printer"></i> Reporte
+            <i class="bi bi-printer" aria-hidden="true"></i> Reporte
         </a>
         <a href="/employees/create" class="btn btn-primary">
-            <i class="bi bi-person-plus"></i> Nuevo empleado
+            <i class="bi bi-person-plus" aria-hidden="true"></i> Nuevo empleado
         </a>
     </div>
 </div>
@@ -91,7 +91,7 @@ $pageUrl = static fn (int $page): string => '/employees?' . http_build_query($ba
             </div>
             <div class="col-12 col-lg-3 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Filtrar
+                    <i class="bi bi-search" aria-hidden="true"></i> Filtrar
                 </button>
                 <a href="/employees" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -102,7 +102,7 @@ $pageUrl = static fn (int $page): string => '/employees?' . http_build_query($ba
 <div class="card border-0 shadow-sm">
     <?php if ($pagination['items'] === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-search display-5 text-body-tertiary"></i>
+            <i class="bi bi-search display-5 text-body-tertiary" aria-hidden="true"></i>
             <h2 class="h5 mt-3">No hay empleados que coincidan</h2>
             <p class="text-body-secondary mb-4">Prueba con otros filtros o registra un empleado nuevo.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2">
@@ -112,7 +112,7 @@ $pageUrl = static fn (int $page): string => '/employees?' . http_build_query($ba
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Listado de empleados" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Empleado</th>
@@ -133,7 +133,7 @@ $pageUrl = static fn (int $page): string => '/employees?' . http_build_query($ba
                                 <?= e((string) $employee['last_name'] . ', ' . (string) $employee['first_name']) ?>
                             </a>
                             <div class="small text-body-secondary">
-                                <i class="bi bi-person-vcard"></i> <?= e((string) $employee['document']) ?>
+                                <i class="bi bi-person-vcard" aria-hidden="true"></i> <?= e((string) $employee['document']) ?>
                             </div>
                         </td>
                         <td>
@@ -162,11 +162,11 @@ $pageUrl = static fn (int $page): string => '/employees?' . http_build_query($ba
                             <div class="btn-group btn-group-sm" role="group" aria-label="Acciones del empleado">
                                 <a href="/employees/<?= (int) $employee['id'] ?>" class="btn btn-outline-secondary"
                                    title="Ver ficha" aria-label="Ver ficha">
-                                    <i class="bi bi-eye"></i>
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
                                 </a>
                                 <a href="/employees/<?= (int) $employee['id'] ?>/edit" class="btn btn-outline-secondary"
                                    title="Editar" aria-label="Editar">
-                                    <i class="bi bi-pencil"></i>
+                                    <i class="bi bi-pencil" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </td>

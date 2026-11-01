@@ -173,19 +173,52 @@ final class ApplicationRepository
         return (int) $this->database->connection()->lastInsertId();
     }
 
-    public function updateStatus(int $id, string $status, ?string $notes, ?int $userId): void
-    {
-        $statement = $this->database->connection()->prepare(
-            'UPDATE applications
-             SET status = :status, notes = :notes, updated_by = :updated_by
-             WHERE id = :id'
-        );
-        $statement->execute([
+    /**
+     * Actualiza solo si el estado sigue siendo el esperado (control optimista).
+     * Devuelve false si otro usuario cambió la postulación antes.
+     */
+    public function updateStatus(
+        int $id,
+        string $status,
+        ?string $notes,
+        ?int $userId,
+        ?string $expectedStatus = null
+    ): bool {
+        $sql = 'UPDATE applications
+                SET status = :status, notes = :notes, updated_by = :updated_by
+                WHERE id = :id';
+        $parameters = [
             'status' => $status,
             'notes' => $notes,
             'updated_by' => $userId,
             'id' => $id,
-        ]);
+        ];
+
+        if ($expectedStatus !== null) {
+            $sql .= ' AND status = :expected_status';
+            $parameters['expected_status'] = $expectedStatus;
+        }
+
+        $statement = $this->database->connection()->prepare($sql);
+        $statement->execute($parameters);
+
+        return $statement->rowCount() === 1;
+    }
+
+    /**
+     * Bloquea la fila para que dos altas concurrentes no creen dos empleados.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function findForUpdate(int $id): ?array
+    {
+        $statement = $this->database->connection()->prepare(
+            'SELECT * FROM applications WHERE id = :id FOR UPDATE'
+        );
+        $statement->execute(['id' => $id]);
+        $row = $statement->fetch();
+
+        return $row === false ? null : $row;
     }
 
     public function setEmployeeId(int $id, int $employeeId, ?int $userId): void

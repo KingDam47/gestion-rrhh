@@ -28,10 +28,10 @@ $statusClasses = ['present' => 'success', 'late' => 'warning', 'absent' => 'dang
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/attendance/report" class="btn btn-outline-secondary">
-            <i class="bi bi-printer"></i> Reporte mensual
+            <i class="bi bi-printer" aria-hidden="true"></i> Reporte mensual
         </a>
         <a href="/attendance/create" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Nuevo registro
+            <i class="bi bi-plus-lg" aria-hidden="true"></i> Nuevo registro
         </a>
     </div>
 </div>
@@ -109,7 +109,7 @@ $statusClasses = ['present' => 'success', 'late' => 'warning', 'absent' => 'dang
             </div>
             <div class="col-12 col-sm-6 col-lg-2 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Filtrar
+                    <i class="bi bi-search" aria-hidden="true"></i> Filtrar
                 </button>
                 <a href="/attendance" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -120,7 +120,7 @@ $statusClasses = ['present' => 'success', 'late' => 'warning', 'absent' => 'dang
 <div class="card border-0 shadow-sm">
     <?php if ($pagination['items'] === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-calendar-x display-5 text-body-tertiary"></i>
+            <i class="bi bi-calendar-x display-5 text-body-tertiary" aria-hidden="true"></i>
             <h2 class="h5 mt-3">No hay registros que coincidan</h2>
             <p class="text-body-secondary mb-4">Prueba con otros filtros o registra la asistencia de un empleado.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2">
@@ -130,7 +130,7 @@ $statusClasses = ['present' => 'success', 'late' => 'warning', 'absent' => 'dang
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Registros de asistencia" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Fecha</th>
@@ -184,7 +184,7 @@ $statusClasses = ['present' => 'success', 'late' => 'warning', 'absent' => 'dang
                         <td class="text-end">
                             <a href="/attendance/<?= (int) $record['id'] ?>/edit"
                                class="btn btn-sm btn-outline-secondary" title="Editar" aria-label="Editar registro">
-                                <i class="bi bi-pencil"></i>
+                                <i class="bi bi-pencil" aria-hidden="true"></i>
                             </a>
                         </td>
                     </tr>

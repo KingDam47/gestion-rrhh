@@ -31,7 +31,28 @@ final class Response
 
     public static function redirect(string $location, int $status = 302): self
     {
-        return new self('', $status, ['Location' => $location]);
+        return new self('', $status, ['Location' => self::safeLocation($location)]);
+    }
+
+    /**
+     * Solo se permiten rutas internas. Evita redirecciones abiertas si en el
+     * futuro algún parámetro de la petición llega a esta función.
+     */
+    private static function safeLocation(string $location): string
+    {
+        $location = trim($location);
+
+        if (
+            $location === ''
+            || $location[0] !== '/'
+            || str_starts_with($location, '//')
+            || str_contains($location, '\\')
+            || preg_match('/[\x00-\x1F\x7F]/', $location) === 1
+        ) {
+            return '/';
+        }
+
+        return $location;
     }
 
     public function send(): void
@@ -75,7 +96,8 @@ final class Response
         ];
 
         if ($this->isHttps()) {
-            $headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+            // Sin includeSubDomains: solo está confirmado el dominio ápice y www.
+            $headers['Strict-Transport-Security'] = 'max-age=31536000';
         }
 
         return $headers;

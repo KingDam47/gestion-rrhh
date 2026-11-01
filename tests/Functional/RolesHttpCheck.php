@@ -616,6 +616,18 @@ $resetToken = csrfToken($response->body);
 
 $response = $admin->post('/users/' . $tempId . '/password', [
     '_token' => $resetToken,
+    'password' => 'SoloLetrasSeguras',
+    'password_confirmation' => 'SoloLetrasSeguras',
+]);
+$t->status('restablecimiento sin número devuelve 422', $response, 422);
+$t->contains(
+    'restablecimiento aplica política de contraseña',
+    $response,
+    'La contraseña debe incluir al menos una letra y un número.'
+);
+
+$response = $admin->post('/users/' . $tempId . '/password', [
+    '_token' => $resetToken,
     'password' => 'ClaveNueva123',
     'password_confirmation' => 'ClaveNueva123',
 ]);
@@ -651,6 +663,19 @@ $response = $temp->post('/account/password', [
     'password_confirmation' => 'OtraClave123',
 ]);
 $t->status('confirmación distinta devuelve 422', $response, 422);
+
+$response = $temp->post('/account/password', [
+    '_token' => $ownToken,
+    'current_password' => 'ClaveNueva123',
+    'password' => 'SoloLetrasSeguras',
+    'password_confirmation' => 'SoloLetrasSeguras',
+]);
+$t->status('contraseña sin número devuelve 422', $response, 422);
+$t->contains(
+    'error de política de contraseña',
+    $response,
+    'La contraseña debe incluir al menos una letra y un número.'
+);
 
 $response = $temp->post('/account/password', [
     '_token' => $ownToken,
@@ -788,7 +813,11 @@ $t->status('RR. HH. degradado tampoco consulta auditoría', $response, 403);
 
 $response = $admin->get('/audit');
 $t->status('admin consulta auditoría', $response, 200);
-$t->same('auditoría muestra todos los registros', (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'), tableRows($response));
+$t->same(
+    'auditoría muestra la primera página de registros',
+    min(20, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs')),
+    tableRows($response)
+);
 $t->contains('auditoría muestra usuario creado', $response, 'Usuario creado');
 $t->contains('auditoría muestra usuario actualizado', $response, 'Usuario actualizado');
 $t->contains('auditoría muestra contraseña restablecida', $response, 'Contraseña restablecida');
@@ -835,7 +864,7 @@ foreach ($newAudits as $audit) {
     }
 
     foreach (array_keys($decoded) as $key) {
-        if (!in_array($key, ['status', 'role'], true)) {
+        if (!in_array($key, ['status', 'role', 'reason'], true)) {
             $metadataLimited = false;
             break 2;
         }
@@ -846,7 +875,7 @@ foreach ($newAudits as $audit) {
         break;
     }
 }
-$t->ok('auditorías nuevas solo guardan estado o rol', $metadataLimited);
+$t->ok('auditorías nuevas solo guardan estado, rol o motivo', $metadataLimited);
 
 // ---------------------------------------------------------------------------
 $t->section('CSRF, 404 y estado final');

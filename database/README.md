@@ -62,6 +62,11 @@ producción.
 - En una base existente, aplicar
   `migrations/202610292100_add_password_changed_at_to_users.sql` antes de desplegar
   el código que invalida sesiones por cambio de contraseña.
+- En una base existente, aplicar también
+  `migrations/202610311200_add_phase3_indexes.sql` (índices aditivos e
+  idempotentes).
+- `schema.sql` ya contiene la columna y los índices: una base nueva creada desde
+  el esquema no debe ejecutar estas migraciones.
 
 ## Reglas
 

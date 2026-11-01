@@ -26,11 +26,13 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- ---------------------------------------------------------------------------
 -- Usuarios
--- Hash bcrypt de la contraseña literal "password123" (coste 10).
+-- Hash bcrypt de la contraseña literal "password123" (coste 12, el valor por
+-- defecto de PASSWORD_DEFAULT en PHP 8.4). Debe coincidir con el coste de
+-- AuthService::TIMING_HASH para que los tiempos de login sean equivalentes.
 -- ---------------------------------------------------------------------------
 INSERT INTO users (id, name, email, password_hash, role, is_active, last_login_at, created_at, updated_at) VALUES
-(1, 'Administrador Demo', 'admin@gestion-rrhh.test', '$2y$10$Uj1LIQmReMzBbfTxfHISL.nceuPa2fCUudzmO.cdvh4e2eBIiDhl2', 'admin', 1, '2026-10-24 08:00:00', '2026-10-01 08:00:00', '2026-10-24 08:00:00'),
-(2, 'Ana López', 'rrhh@gestion-rrhh.test', '$2y$10$Uj1LIQmReMzBbfTxfHISL.nceuPa2fCUudzmO.cdvh4e2eBIiDhl2', 'hr', 1, '2026-10-24 08:05:00', '2026-10-01 08:00:00', '2026-10-24 08:05:00');
+(1, 'Administrador Demo', 'admin@gestion-rrhh.test', '$2y$12$R.jlxnGLG9ESis4kr7c.1eDQqVNQR/yuoJ32fC0T3UL3dHTadFOjm', 'admin', 1, '2026-10-24 08:00:00', '2026-10-01 08:00:00', '2026-10-24 08:00:00'),
+(2, 'Ana López', 'rrhh@gestion-rrhh.test', '$2y$12$R.jlxnGLG9ESis4kr7c.1eDQqVNQR/yuoJ32fC0T3UL3dHTadFOjm', 'hr', 1, '2026-10-24 08:05:00', '2026-10-01 08:00:00', '2026-10-24 08:05:00');
 
 -- ---------------------------------------------------------------------------
 -- Departamentos

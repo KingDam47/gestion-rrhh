@@ -14,7 +14,7 @@ final class CsrfMiddleware implements Middleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->isPost()) {
+        if (in_array($request->method(), ['GET', 'HEAD', 'OPTIONS'], true)) {
             return $next($request);
         }
 

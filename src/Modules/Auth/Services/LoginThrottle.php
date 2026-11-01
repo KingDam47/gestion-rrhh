@@ -12,8 +12,9 @@ use Closure;
  *
  * Usa archivos con bloqueo para no depender de una tabla adicional y para
  * funcionar igual en local y en InfinityFree. Si el almacenamiento falla, el
- * limitador deja pasar el intento (fail-open) y registra el problema: un fallo
- * de disco no debe dejar fuera a todos los usuarios.
+ * limitador deja pasar el intento (fail-open) y registra un error de nivel
+ * ALERTA en storage/logs: un fallo de disco no debe dejar fuera a todos los
+ * usuarios, pero debe ser visible para operación.
  */
 final class LoginThrottle
 {
@@ -78,6 +79,10 @@ final class LoginThrottle
         $handle = @fopen($path, 'c+b');
 
         if ($handle === false) {
+            Logger::error('ALERTA: no se pudo limpiar el contador de login.', [
+                'file' => basename($path),
+            ]);
+
             return;
         }
 
@@ -110,6 +115,10 @@ final class LoginThrottle
         $handle = @fopen($path, 'rb');
 
         if ($handle === false) {
+            Logger::error('ALERTA: no se pudo leer el limitador de login; se permite el intento (fail-open).', [
+                'file' => basename($path),
+            ]);
+
             return ['count' => 0, 'reset_at' => 0];
         }
 
@@ -134,7 +143,7 @@ final class LoginThrottle
         $handle = @fopen($path, 'c+b');
 
         if ($handle === false) {
-            Logger::warning('No se pudo abrir el almacén del limitador de login.', [
+            Logger::error('ALERTA: el limitador de login no pudo escribir; el intento se permite (fail-open).', [
                 'file' => basename($path),
             ]);
 
@@ -202,7 +211,7 @@ final class LoginThrottle
         }
 
         if (!@mkdir($this->directory, 0775, true) && !is_dir($this->directory)) {
-            Logger::warning('No se pudo crear el directorio del limitador de login.', [
+            Logger::error('ALERTA: no se pudo crear el directorio del limitador; el intento se permite (fail-open).', [
                 'directory' => $this->directory,
             ]);
         }

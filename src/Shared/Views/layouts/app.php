@@ -37,15 +37,18 @@ $isActive = static function (array $item) use ($currentPath): bool {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($title) ?> · <?= e($appName) ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"
+          integrity="sha384-XGjxtQfXaH2tnPFa9x+ruJTuLE3Aa6LhHSWRr1XeTyhezb4abCG4ccI5AkVDxqC+" crossorigin="anonymous">
     <link href="<?= e(asset('css/app.css')) ?>" rel="stylesheet">
 </head>
 <body class="bg-body-tertiary d-flex flex-column min-vh-100">
-<nav class="navbar navbar-expand-lg navbar-dark app-navbar">
+<a class="app-skip-link" href="#main-content">Saltar al contenido</a>
+<nav class="navbar navbar-expand-lg navbar-dark app-navbar" aria-label="Navegación principal">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="/dashboard">
-            <span class="brand-mark brand-mark--sm"><i class="bi bi-people-fill"></i></span>
+            <span class="brand-mark brand-mark--sm"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
             <span><?= e($appName) ?></span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation"
@@ -57,8 +60,9 @@ $isActive = static function (array $item) use ($currentPath): bool {
                 <?php foreach ($items as $item): ?>
                     <li class="nav-item">
                         <a class="nav-link <?= $isActive($item) ? 'active' : '' ?>"
-                           href="<?= e((string) $item['path']) ?>">
-                            <i class="bi <?= e((string) ($item['icon'] ?? '')) ?>"></i>
+                           href="<?= e((string) $item['path']) ?>"
+                           <?= $isActive($item) ? 'aria-current="page"' : '' ?>>
+                            <i class="bi <?= e((string) ($item['icon'] ?? '')) ?>" aria-hidden="true"></i>
                             <?= e((string) $item['label']) ?>
                         </a>
                     </li>
@@ -68,7 +72,7 @@ $isActive = static function (array $item) use ($currentPath): bool {
                 <div class="dropdown">
                     <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle"></i>
+                        <i class="bi bi-person-circle" aria-hidden="true"></i>
                         <?= e((string) $currentUser['name']) ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm">
@@ -77,14 +81,14 @@ $isActive = static function (array $item) use ($currentPath): bool {
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" href="/account/password">
-                                <i class="bi bi-key"></i> Mi cuenta
+                                <i class="bi bi-key" aria-hidden="true"></i> Mi cuenta
                             </a>
                         </li>
                         <li>
                             <form method="post" action="/logout" class="px-3 py-1">
                                 <?= csrf_field() ?>
                                 <button type="submit" class="btn btn-sm btn-link p-0 text-decoration-none">
-                                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i> Cerrar sesión
                                 </button>
                             </form>
                         </li>
@@ -95,7 +99,7 @@ $isActive = static function (array $item) use ($currentPath): bool {
     </div>
 </nav>
 
-<main class="flex-grow-1 py-4">
+<main class="flex-grow-1 py-4" id="main-content" tabindex="-1">
     <div class="container">
         <?php require __DIR__ . '/../partials/flash.php'; ?>
         <?= $content ?>
@@ -109,7 +113,8 @@ $isActive = static function (array $item) use ($currentPath): bool {
     </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="<?= e(asset('js/app.js')) ?>"></script>
 </body>
 </html>

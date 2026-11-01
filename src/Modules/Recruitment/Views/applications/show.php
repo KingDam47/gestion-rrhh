@@ -57,15 +57,15 @@ $actionClasses = [
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/applications" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
         </a>
         <?php if ($hasEmployee): ?>
             <a href="/employees/<?= (int) $application['employee_id'] ?>" class="btn btn-outline-success">
-                <i class="bi bi-person-badge"></i> Ver empleado
+                <i class="bi bi-person-badge" aria-hidden="true"></i> Ver empleado
             </a>
         <?php elseif ($isSelected): ?>
             <a href="/applications/<?= (int) $application['id'] ?>/hire" class="btn btn-success">
-                <i class="bi bi-person-plus"></i> Dar de alta como empleado
+                <i class="bi bi-person-plus" aria-hidden="true"></i> Dar de alta como empleado
             </a>
         <?php endif; ?>
     </div>
@@ -74,7 +74,7 @@ $actionClasses = [
 <?php if ($isSelected && !$hasEmployee): ?>
     <div class="alert alert-success d-flex flex-wrap justify-content-between align-items-center gap-2" role="alert">
         <div>
-            <i class="bi bi-check-circle"></i>
+            <i class="bi bi-check-circle" aria-hidden="true"></i>
             Candidato seleccionado. El alta de empleado no es automática: RR. HH. debe confirmar los datos.
         </div>
         <a href="/applications/<?= (int) $application['id'] ?>/hire" class="btn btn-sm btn-success">
@@ -85,7 +85,7 @@ $actionClasses = [
 
 <?php if ($isSelected && $hasEmployee): ?>
     <div class="alert alert-light border" role="note">
-        <i class="bi bi-person-check text-success"></i>
+        <i class="bi bi-person-check text-success" aria-hidden="true"></i>
         Esta postulación ya tiene un empleado asociado:
         <a href="/employees/<?= (int) $application['employee_id'] ?>" class="alert-link">
             <?= e((string) ($application['employee_name'] ?? 'Ver ficha del empleado')) ?>
@@ -100,12 +100,12 @@ $actionClasses = [
     <div class="col-12 col-lg-7">
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-diagram-3 text-primary"></i> Estado del proceso</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-diagram-3 text-primary" aria-hidden="true"></i> Estado del proceso</h2>
             </div>
             <div class="card-body">
                 <?php if ($isRejected): ?>
                     <div class="alert alert-danger mb-0" role="alert">
-                        <i class="bi bi-x-circle"></i>
+                        <i class="bi bi-x-circle" aria-hidden="true"></i>
                         La postulación fue rechazada. El proceso está cerrado y no se puede reabrir.
                         <?php if ($application['updated_at'] !== null): ?>
                             <div class="small mt-1">
@@ -126,7 +126,7 @@ $actionClasses = [
                             <li class="d-flex gap-3 <?= $key === 'selected' ? '' : 'mb-3' ?>">
                                 <span class="badge rounded-circle text-bg-<?= e($circleClass) ?> d-inline-flex align-items-center justify-content-center flex-shrink-0"
                                       style="width: 2.25rem; height: 2.25rem;">
-                                    <i class="bi <?= $isDone ? 'bi-check-lg' : e($step['icon']) ?>"></i>
+                                    <i class="bi <?= $isDone ? 'bi-check-lg' : e($step['icon']) ?>" aria-hidden="true"></i>
                                 </span>
                                 <div class="pt-1">
                                     <div class="<?= e($textClass) ?>">
@@ -150,12 +150,12 @@ $actionClasses = [
 
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-arrow-repeat text-primary"></i> Actualizar estado</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-arrow-repeat text-primary" aria-hidden="true"></i> Actualizar estado</h2>
             </div>
             <div class="card-body">
                 <?php if ($isFinal): ?>
                     <div class="alert alert-secondary mb-0" role="alert">
-                        <i class="bi bi-lock"></i>
+                        <i class="bi bi-lock" aria-hidden="true"></i>
                         <?= $isSelected ? 'La postulación está seleccionada' : 'La postulación está rechazada' ?>
                         y es un estado final. No admite más cambios.
                     </div>
@@ -188,7 +188,7 @@ $actionClasses = [
     <div class="col-12 col-lg-5">
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-person text-primary"></i> Candidato</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-person text-primary" aria-hidden="true"></i> Candidato</h2>
             </div>
             <div class="card-body">
                 <p class="fw-semibold mb-1">
@@ -197,14 +197,14 @@ $actionClasses = [
                     </a>
                 </p>
                 <p class="small mb-1">
-                    <i class="bi bi-envelope"></i>
+                    <i class="bi bi-envelope" aria-hidden="true"></i>
                     <a href="mailto:<?= e((string) $application['candidate_email']) ?>">
                         <?= e((string) $application['candidate_email']) ?>
                     </a>
                 </p>
                 <?php if ($application['candidate_phone'] !== null): ?>
                     <p class="small mb-0">
-                        <i class="bi bi-telephone"></i> <?= e((string) $application['candidate_phone']) ?>
+                        <i class="bi bi-telephone" aria-hidden="true"></i> <?= e((string) $application['candidate_phone']) ?>
                     </p>
                 <?php endif; ?>
             </div>
@@ -212,7 +212,7 @@ $actionClasses = [
 
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary"></i> Vacante</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary" aria-hidden="true"></i> Vacante</h2>
             </div>
             <div class="card-body">
                 <p class="fw-semibold mb-1">
@@ -242,7 +242,7 @@ $actionClasses = [
 
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-journal-text text-primary"></i> Observaciones</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-journal-text text-primary" aria-hidden="true"></i> Observaciones</h2>
             </div>
             <div class="card-body">
                 <?php if ($application['notes'] !== null): ?>

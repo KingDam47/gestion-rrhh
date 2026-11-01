@@ -13,8 +13,10 @@ declare(strict_types=1);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($title) ?> · <?= e($appName) ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"
+          integrity="sha384-XGjxtQfXaH2tnPFa9x+ruJTuLE3Aa6LhHSWRr1XeTyhezb4abCG4ccI5AkVDxqC+" crossorigin="anonymous">
     <link href="<?= e(asset('css/app.css')) ?>" rel="stylesheet">
 </head>
 <body class="app-guest">
@@ -23,7 +25,7 @@ declare(strict_types=1);
         <div class="row justify-content-center">
             <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
                 <div class="text-center mb-4">
-                    <span class="brand-mark"><i class="bi bi-people-fill"></i></span>
+                    <span class="brand-mark"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
                     <h1 class="h3 mt-3 mb-1"><?= e($appName) ?></h1>
                     <p class="text-body-secondary small mb-0">Sistema de Gestión Humana</p>
                 </div>
@@ -46,7 +48,8 @@ declare(strict_types=1);
     </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="<?= e(asset('js/app.js')) ?>"></script>
 </body>
 </html>

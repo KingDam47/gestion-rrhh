@@ -28,26 +28,26 @@ $isLastActiveAdmin = $isEdit
         </p>
     </div>
     <a href="/users" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Volver
+        <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
     </a>
 </div>
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
 <?php if ($isLastActiveAdmin): ?>
     <div class="alert alert-warning" role="alert">
-        <i class="bi bi-shield-exclamation"></i>
+        <i class="bi bi-shield-exclamation" aria-hidden="true"></i>
         Esta es la única cuenta de administrador activa. No se puede desactivar ni cambiar a RR. HH.
     </div>
 <?php endif; ?>
 
 <?php if ($isSelf): ?>
     <div class="alert alert-info" role="alert">
-        <i class="bi bi-person-check"></i>
+        <i class="bi bi-person-check" aria-hidden="true"></i>
         Estás editando tu propia cuenta. No puedes desactivarla. Si cambias tu rol y queda otro
         administrador activo, tu sesión se cerrará para aplicar los nuevos permisos.
     </div>
@@ -60,35 +60,35 @@ $isLastActiveAdmin = $isEdit
         <div class="col-12 col-xl-7">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white">
-                    <h2 class="h5 mb-0"><i class="bi bi-person-badge text-primary"></i> Datos de la cuenta</h2>
+                    <h2 class="h5 mb-0"><i class="bi bi-person-badge text-primary" aria-hidden="true"></i> Datos de la cuenta</h2>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="name" class="form-label">Nombre completo <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
+                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'name') ?>
                                id="name" name="name" maxlength="120"
                                value="<?= e(old('name', (string) ($user['name'] ?? ''))) ?>"
                                autocomplete="name" required>
                         <?php if (isset($errors['name'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['name']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('name') ?>"><?= e($errors['name']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>"
+                        <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'email') ?>
                                id="email" name="email" maxlength="190"
                                value="<?= e(old('email', (string) ($user['email'] ?? ''))) ?>"
                                autocomplete="email" required>
                         <div class="form-text">Se normaliza a minúsculas y no puede repetirse.</div>
                         <?php if (isset($errors['email'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['email']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('email') ?>"><?= e($errors['email']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
                         <label for="role" class="form-label">Rol <span class="text-danger">*</span></label>
-                        <select class="form-select <?= isset($errors['role']) ? 'is-invalid' : '' ?>"
+                        <select class="form-select <?= isset($errors['role']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'role') ?>
                                 id="role" name="role" required>
                             <option value="hr" <?= $role === 'hr' ? 'selected' : '' ?>
                                 <?= $isLastActiveAdmin ? 'disabled' : '' ?>>
@@ -99,7 +99,7 @@ $isLastActiveAdmin = $isEdit
                             </option>
                         </select>
                         <?php if (isset($errors['role'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['role']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('role') ?>"><?= e($errors['role']) ?></div>
                         <?php endif; ?>
                         <div class="form-text">
                             El administrador puede gestionar cuentas y consultar la auditoría; RR. HH. no.
@@ -114,17 +114,17 @@ $isLastActiveAdmin = $isEdit
                                 <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="password"
-                                           class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
+                                           class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'password') ?>
                                            id="password" name="password" minlength="10" maxlength="255"
                                            autocomplete="new-password" required>
                                     <button class="btn btn-outline-secondary" type="button"
                                             data-toggle-password="#password" aria-label="Mostrar contraseña">
-                                        <i class="bi bi-eye"></i>
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
                                     </button>
                                 </div>
                                 <div class="form-text">Mínimo 10 caracteres.</div>
                                 <?php if (isset($errors['password'])): ?>
-                                    <div class="invalid-feedback d-block"><?= e($errors['password']) ?></div>
+                                    <div class="invalid-feedback d-block" id="<?= field_error_id('password') ?>"><?= e($errors['password']) ?></div>
                                 <?php endif; ?>
                             </div>
 
@@ -134,17 +134,17 @@ $isLastActiveAdmin = $isEdit
                                 </label>
                                 <div class="input-group">
                                     <input type="password"
-                                           class="form-control <?= isset($errors['password_confirmation']) ? 'is-invalid' : '' ?>"
+                                           class="form-control <?= isset($errors['password_confirmation']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'password_confirmation') ?>
                                            id="password_confirmation" name="password_confirmation"
                                            minlength="10" maxlength="255" autocomplete="new-password" required>
                                     <button class="btn btn-outline-secondary" type="button"
                                             data-toggle-password="#password_confirmation"
                                             aria-label="Mostrar contraseña">
-                                        <i class="bi bi-eye"></i>
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
                                     </button>
                                 </div>
                                 <?php if (isset($errors['password_confirmation'])): ?>
-                                    <div class="invalid-feedback d-block"><?= e($errors['password_confirmation']) ?></div>
+                                    <div class="invalid-feedback d-block" id="<?= field_error_id('password_confirmation') ?>"><?= e($errors['password_confirmation']) ?></div>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -156,7 +156,7 @@ $isLastActiveAdmin = $isEdit
         <div class="col-12 col-xl-5">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white">
-                    <h2 class="h5 mb-0"><i class="bi bi-shield-lock text-primary"></i> Resumen de la cuenta</h2>
+                    <h2 class="h5 mb-0"><i class="bi bi-shield-lock text-primary" aria-hidden="true"></i> Resumen de la cuenta</h2>
                 </div>
                 <div class="card-body">
                     <?php if ($isEdit): ?>
@@ -195,7 +195,7 @@ $isLastActiveAdmin = $isEdit
                         </p>
 
                         <a href="/users/<?= (int) $user['id'] ?>/password" class="btn btn-outline-secondary w-100">
-                            <i class="bi bi-key"></i> Restablecer contraseña
+                            <i class="bi bi-key" aria-hidden="true"></i> Restablecer contraseña
                         </a>
                     <?php else: ?>
                         <p class="text-body-secondary small mb-3">
@@ -216,7 +216,7 @@ $isLastActiveAdmin = $isEdit
     <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
         <a href="/users" class="btn btn-outline-secondary">Cancelar</a>
         <button type="submit" class="btn btn-primary">
-            <i class="bi bi-check2"></i> <?= $isEdit ? 'Guardar cambios' : 'Crear usuario' ?>
+            <i class="bi bi-check2" aria-hidden="true"></i> <?= $isEdit ? 'Guardar cambios' : 'Crear usuario' ?>
         </button>
     </div>
 </form>

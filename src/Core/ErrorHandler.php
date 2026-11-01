@@ -54,7 +54,21 @@ final class ErrorHandler
                 http_response_code(500);
                 header('Content-Type: text/html; charset=UTF-8');
                 header('X-Content-Type-Options: nosniff');
+                header('X-Frame-Options: DENY');
+                header('Referrer-Policy: strict-origin-when-cross-origin');
+                header('Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()');
+                header("Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'");
                 header('Cache-Control: no-store, private');
+                header('Pragma: no-cache');
+
+                $https = $_SERVER['HTTPS'] ?? null;
+                $forwarded = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? null;
+                $isHttps = (is_string($https) && $https !== '' && mb_strtolower($https) !== 'off')
+                    || (is_string($forwarded) && mb_strtolower(trim(explode(',', $forwarded)[0])) === 'https');
+
+                if ($isHttps) {
+                    header('Strict-Transport-Security: max-age=31536000');
+                }
             }
 
             if ($debug) {

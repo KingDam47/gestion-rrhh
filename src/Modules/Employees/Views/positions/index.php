@@ -27,13 +27,13 @@ $canCreate = $formDepartments !== [];
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
 <?php if (!$canCreate): ?>
     <div class="alert alert-warning" role="alert">
-        <i class="bi bi-info-circle"></i> No hay departamentos activos.
+        <i class="bi bi-info-circle" aria-hidden="true"></i> No hay departamentos activos.
         <a href="/departments" class="alert-link">Crea o reactiva un departamento</a> antes de registrar cargos.
     </div>
 <?php endif; ?>
@@ -42,7 +42,7 @@ $canCreate = $formDepartments !== [];
     <div class="col-12 col-xl-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-plus-circle text-primary"></i> Nuevo cargo</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-plus-circle text-primary" aria-hidden="true"></i> Nuevo cargo</h2>
             </div>
             <div class="card-body">
                 <form method="post" action="/positions" novalidate>
@@ -50,7 +50,7 @@ $canCreate = $formDepartments !== [];
 
                     <div class="mb-3">
                         <label for="department_id" class="form-label">Departamento <span class="text-danger">*</span></label>
-                        <select class="form-select <?= isset($errors['department_id']) ? 'is-invalid' : '' ?>"
+                        <select class="form-select <?= isset($errors['department_id']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'department_id') ?>
                                 id="department_id" name="department_id" required>
                             <option value="">Selecciona un departamento</option>
                             <?php foreach ($formDepartments as $department): ?>
@@ -61,31 +61,31 @@ $canCreate = $formDepartments !== [];
                             <?php endforeach; ?>
                         </select>
                         <?php if (isset($errors['department_id'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['department_id']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('department_id') ?>"><?= e($errors['department_id']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Nombre del cargo <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
+                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'name') ?>
                                id="name" name="name" maxlength="120" value="<?= e(old('name')) ?>" required>
                         <?php if (isset($errors['name'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['name']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('name') ?>"><?= e($errors['name']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Descripción</label>
-                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>"
+                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'description') ?>
                                   id="description" name="description" rows="3"
                                   maxlength="1000"><?= e(old('description')) ?></textarea>
                         <?php if (isset($errors['description'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['description']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('description') ?>"><?= e($errors['description']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100" <?= $canCreate ? '' : 'disabled' ?>>
-                        <i class="bi bi-check2"></i> Crear cargo
+                        <i class="bi bi-check2" aria-hidden="true"></i> Crear cargo
                     </button>
                 </form>
             </div>
@@ -110,7 +110,7 @@ $canCreate = $formDepartments !== [];
                     </div>
                     <div class="col-12 col-sm-4 d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-funnel"></i> Filtrar
+                            <i class="bi bi-funnel" aria-hidden="true"></i> Filtrar
                         </button>
                         <a href="/positions" class="btn btn-outline-secondary">Limpiar</a>
                     </div>
@@ -121,7 +121,7 @@ $canCreate = $formDepartments !== [];
         <div class="card border-0 shadow-sm">
             <?php if ($positions === []): ?>
                 <div class="card-body py-5 text-center">
-                    <i class="bi bi-briefcase display-5 text-body-tertiary"></i>
+                    <i class="bi bi-briefcase display-5 text-body-tertiary" aria-hidden="true"></i>
                     <h2 class="h5 mt-3">No hay cargos para mostrar</h2>
                     <p class="text-body-secondary mb-0">
                         <?= $departmentFilter !== null
@@ -131,7 +131,7 @@ $canCreate = $formDepartments !== [];
                 </div>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table aria-label="Listado de cargos" class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                         <tr>
                             <th scope="col">Cargo</th>
@@ -176,7 +176,7 @@ $canCreate = $formDepartments !== [];
                                     <div class="d-inline-flex flex-wrap justify-content-end gap-1">
                                         <a href="/positions/<?= (int) $position['id'] ?>/edit"
                                            class="btn btn-sm btn-outline-secondary" title="Editar" aria-label="Editar">
-                                            <i class="bi bi-pencil"></i>
+                                            <i class="bi bi-pencil" aria-hidden="true"></i>
                                         </a>
                                         <form method="post"
                                               action="/positions/<?= (int) $position['id'] ?>/status"
@@ -187,8 +187,9 @@ $canCreate = $formDepartments !== [];
                                             <input type="hidden" name="status" value="<?= $isActive ? 'inactive' : 'active' ?>">
                                             <button type="submit"
                                                     class="btn btn-sm btn-outline-<?= $isActive ? 'danger' : 'success' ?>"
-                                                    title="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>">
-                                                <i class="bi <?= $isActive ? 'bi-toggle-on' : 'bi-toggle-off' ?>"></i>
+                                                    title="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>"
+                                                    aria-label="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>">
+                                                <i class="bi <?= $isActive ? 'bi-toggle-on' : 'bi-toggle-off' ?>" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     </div>

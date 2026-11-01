@@ -330,7 +330,7 @@ function dbRows(PDO $pdo, string $sql, array $parameters = []): array
  */
 function lastAudit(PDO $pdo): ?array
 {
-    return dbRow($pdo, 'SELECT * FROM audit_logs ORDER BY id DESC LIMIT 1');
+    return dbRow($pdo, "SELECT * FROM audit_logs WHERE action NOT LIKE 'auth.%' ORDER BY id DESC LIMIT 1");
 }
 
 function auditMetadata(?array $audit): array
@@ -361,7 +361,7 @@ if (date('Y-m') !== '2026-10') {
 if (
     (int) dbValue($pdo, 'SELECT COUNT(*) FROM attendance_records') !== 15
     || (int) dbValue($pdo, 'SELECT COUNT(*) FROM leave_requests') !== 4
-    || (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs') !== 5
+    || (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'") !== 5
 ) {
     fwrite(STDERR, "La base no está en el estado del seed demo. Restaura database/seed.sql antes de ejecutar la prueba.\n");
     exit(2);
@@ -376,7 +376,7 @@ $t->section('Estado inicial y acceso anónimo');
 
 $t->same('asistencias demo', 15, (int) dbValue($pdo, 'SELECT COUNT(*) FROM attendance_records'));
 $t->same('permisos demo', 4, (int) dbValue($pdo, 'SELECT COUNT(*) FROM leave_requests'));
-$t->same('auditorías demo', 5, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditorías demo', 5, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $anonymous->get('/attendance');
 $t->status('anónimo /attendance redirige', $response, 302);
@@ -639,7 +639,7 @@ $t->same('auditoría alta asistencia', 'attendance.created', $audit['action'] ??
 $t->same('auditoría alta asistencia entidad', 'attendance_record', $audit['entity_type'] ?? null);
 $t->same('auditoría alta asistencia id', $recordId, (int) ($audit['entity_id'] ?? 0));
 $t->same('auditoría alta asistencia metadata', ['status' => 'present'], auditMetadata($audit));
-$t->same('auditoría total tras alta', 6, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras alta', 6, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/attendance', [
     '_token' => $token,
@@ -820,7 +820,7 @@ $t->same('corrección guarda notas', '<script>alert("xss")</script>', $updated['
 $t->same('corrección editor', 1, (int) ($updated['updated_by'] ?? 0));
 $t->same('auditoría corrección', 'attendance.updated', lastAudit($pdo)['action'] ?? null);
 $t->same('auditoría corrección metadata', ['status' => 'late'], auditMetadata(lastAudit($pdo)));
-$t->same('auditoría total tras corrección', 8, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras corrección', 8, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/attendance?employee_id=1&date_from=2026-10-08&date_to=2026-10-08');
 $t->status('listado con nota XSS', $response, 200);
@@ -862,7 +862,7 @@ $response = $admin->post('/attendance/15', [
 ]);
 $t->status('corregir registro de Ana', $response, 302);
 $t->same('corrección Ana guarda salida', '17:10:00', (string) dbValue($pdo, 'SELECT check_out FROM attendance_records WHERE id = 15'));
-$t->same('auditoría total tras segunda corrección', 9, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras segunda corrección', 9, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 setEmployeeStatus($pdo, 5, 'inactive');
 $response = $admin->get('/attendance/15/edit');
@@ -881,7 +881,7 @@ $response = $admin->post('/attendance/15', [
 $t->status('corregir asistencia de empleado inactivo', $response, 302);
 $t->same('corrección inactiva guarda notas', 'Corrección con empleado inactivo.', (string) dbValue($pdo, 'SELECT notes FROM attendance_records WHERE id = 15'));
 $t->same('corrección inactiva conserva empleado', 5, (int) dbValue($pdo, 'SELECT employee_id FROM attendance_records WHERE id = 15'));
-$t->same('auditoría total tras corrección inactiva', 10, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras corrección inactiva', 10, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/attendance?employee_id=5');
 $t->status('listar asistencia de empleado inactivo', $response, 200);
@@ -927,7 +927,7 @@ $t->ok('permiso creado en base', $leave !== null);
 $t->same('permiso nace pendiente', 'pending', $leave['status'] ?? null);
 $t->ok('permiso sin revisor', $leave !== null && $leave['reviewed_by'] === null);
 $t->same('permiso creador', 1, (int) ($leave['created_by'] ?? 0));
-$t->same('auditoría no cambia al crear permiso', 10, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría no cambia al crear permiso', 10, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/leave-requests', [
     '_token' => $token,
@@ -1043,7 +1043,7 @@ $t->same('auditoría aprobación', 'leave.approved', $audit['action'] ?? null);
 $t->same('auditoría aprobación entidad', 'leave_request', $audit['entity_type'] ?? null);
 $t->same('auditoría aprobación id', 1, (int) ($audit['entity_id'] ?? 0));
 $t->same('auditoría aprobación metadata', ['status' => 'approved'], auditMetadata($audit));
-$t->same('auditoría total tras aprobación', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras aprobación', 11, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $reviewedAt = dbValue($pdo, 'SELECT reviewed_at FROM leave_requests WHERE id = 1');
 $response = $admin->post('/leave-requests/1/review', [
@@ -1055,7 +1055,7 @@ $t->status('revisión repetida redirige', $response, 302);
 $t->location('revisión repetida vuelve a ficha', $response, '/leave-requests/1');
 $t->same('revisión repetida no cambia estado', 'approved', (string) dbValue($pdo, 'SELECT status FROM leave_requests WHERE id = 1'));
 $t->same('revisión repetida no cambia fecha', $reviewedAt, dbValue($pdo, 'SELECT reviewed_at FROM leave_requests WHERE id = 1'));
-$t->same('revisión repetida no audita', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('revisión repetida no audita', 11, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/leave-requests/5/review', [
     '_token' => $token,
@@ -1066,7 +1066,7 @@ $t->status('rechazar solicitud pendiente', $response, 302);
 $t->same('solicitud rechazada en base', 'rejected', (string) dbValue($pdo, 'SELECT status FROM leave_requests WHERE id = 5'));
 $t->same('auditoría rechazo', 'leave.rejected', lastAudit($pdo)['action'] ?? null);
 $t->same('auditoría rechazo metadata', ['status' => 'rejected'], auditMetadata(lastAudit($pdo)));
-$t->same('auditoría total tras rechazo', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras rechazo', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/leave-requests/2/review', [
     '_token' => $token,
@@ -1075,7 +1075,7 @@ $response = $admin->post('/leave-requests/2/review', [
 ]);
 $t->status('revisar solicitud ya resuelta redirige', $response, 302);
 $t->same('solicitud ya resuelta conserva estado', 'approved', (string) dbValue($pdo, 'SELECT status FROM leave_requests WHERE id = 2'));
-$t->same('revisar solicitud resuelta no audita', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('revisar solicitud resuelta no audita', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/leave-requests/6/review', [
     '_token' => $token,
@@ -1084,7 +1084,7 @@ $response = $admin->post('/leave-requests/6/review', [
 ]);
 $t->status('decisión inválida redirige', $response, 302);
 $t->same('decisión inválida conserva pendiente', 'pending', (string) dbValue($pdo, 'SELECT status FROM leave_requests WHERE id = 6'));
-$t->same('decisión inválida no audita', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('decisión inválida no audita', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/leave-requests/6/review', [
     '_token' => $token,
@@ -1094,7 +1094,7 @@ $response = $admin->post('/leave-requests/6/review', [
 $t->status('observación de revisión demasiado larga', $response, 422);
 $t->contains('observación larga muestra error', $response, 'La observación de revisión no debe superar los 500 caracteres.');
 $t->same('observación larga conserva pendiente', 'pending', (string) dbValue($pdo, 'SELECT status FROM leave_requests WHERE id = 6'));
-$t->same('observación larga no audita', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('observación larga no audita', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 setEmployeeStatus($pdo, 2, 'inactive');
 $response = $admin->get('/leave-requests/6');
@@ -1110,7 +1110,7 @@ $response = $admin->post('/leave-requests/6/review', [
 $t->status('revisar solicitud de empleado inactivo', $response, 302);
 $t->same('solicitud inactiva aprobada', 'approved', (string) dbValue($pdo, 'SELECT status FROM leave_requests WHERE id = 6'));
 $t->same('auditoría aprobación inactiva', 'leave.approved', lastAudit($pdo)['action'] ?? null);
-$t->same('auditoría total tras aprobación inactiva', 13, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras aprobación inactiva', 13, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 setEmployeeStatus($pdo, 2, 'active');
 
 $response = $admin->post('/leave-requests/999/review', [
@@ -1183,9 +1183,9 @@ foreach (['/attendance', '/attendance/create', '/attendance/report', '/leave-req
 
 $t->same('total final asistencias', 17, (int) dbValue($pdo, 'SELECT COUNT(*) FROM attendance_records'));
 $t->same('total final permisos', 7, (int) dbValue($pdo, 'SELECT COUNT(*) FROM leave_requests'));
-$t->same('total final auditorías', 13, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('total final auditorías', 13, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
-$newAudits = dbRows($pdo, 'SELECT * FROM audit_logs WHERE id > 5 ORDER BY id');
+$newAudits = dbRows($pdo, "SELECT * FROM audit_logs WHERE id > 5 AND action NOT LIKE 'auth.%' ORDER BY id");
 $t->same('ocho auditorías nuevas', 8, count($newAudits));
 $expectedActions = [
     'attendance.created',

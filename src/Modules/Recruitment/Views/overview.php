@@ -29,10 +29,10 @@ $statusClasses = [
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/vacancies/create" class="btn btn-outline-secondary">
-            <i class="bi bi-briefcase"></i> Nueva vacante
+            <i class="bi bi-briefcase" aria-hidden="true"></i> Nueva vacante
         </a>
         <a href="/applications/create" class="btn btn-primary">
-            <i class="bi bi-diagram-3"></i> Nueva postulación
+            <i class="bi bi-diagram-3" aria-hidden="true"></i> Nueva postulación
         </a>
     </div>
 </div>
@@ -80,7 +80,7 @@ $statusClasses = [
     <div class="col-12 col-xl-7">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
-                <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary"></i> Vacantes abiertas</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary" aria-hidden="true"></i> Vacantes abiertas</h2>
                 <a href="/vacancies" class="btn btn-sm btn-outline-secondary">Ver todas</a>
             </div>
             <?php if ($openVacancies === []): ?>
@@ -97,7 +97,7 @@ $statusClasses = [
                                 <div>
                                     <div class="fw-semibold"><?= e((string) $vacancy['title']) ?></div>
                                     <div class="small text-body-secondary">
-                                        <i class="bi bi-diagram-3"></i> <?= e((string) $vacancy['department_name']) ?>
+                                        <i class="bi bi-diagram-3" aria-hidden="true"></i> <?= e((string) $vacancy['department_name']) ?>
                                         <?php if ($vacancy['position_name'] !== null): ?>
                                             · <?= e((string) $vacancy['position_name']) ?>
                                         <?php endif; ?>
@@ -118,7 +118,7 @@ $statusClasses = [
     <div class="col-12 col-xl-5">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
-                <h2 class="h5 mb-0"><i class="bi bi-person-check text-primary"></i> Seleccionados</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-person-check text-primary" aria-hidden="true"></i> Seleccionados</h2>
                 <a href="/applications?status=selected" class="btn btn-sm btn-outline-secondary">Ver todos</a>
             </div>
             <?php if ($selectedApplications === []): ?>
@@ -143,7 +143,7 @@ $statusClasses = [
                                 <?php if ($application['employee_id'] === null): ?>
                                     <a href="/applications/<?= (int) $application['id'] ?>/hire"
                                        class="btn btn-sm btn-success">
-                                        <i class="bi bi-person-plus"></i> Dar de alta
+                                        <i class="bi bi-person-plus" aria-hidden="true"></i> Dar de alta
                                     </a>
                                 <?php else: ?>
                                     <a href="/employees/<?= (int) $application['employee_id'] ?>"
@@ -160,6 +160,6 @@ $statusClasses = [
 
 <div class="mt-4">
     <a href="/candidates/create" class="btn btn-outline-secondary">
-        <i class="bi bi-person-plus"></i> Registrar candidato
+        <i class="bi bi-person-plus" aria-hidden="true"></i> Registrar candidato
     </a>
 </div>

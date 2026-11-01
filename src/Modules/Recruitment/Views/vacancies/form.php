@@ -30,19 +30,19 @@ $openingDate = old('opening_date', (string) ($vacancy['opening_date'] ?? date('Y
         </p>
     </div>
     <a href="<?= e($cancelUrl) ?>" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Volver
+        <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
     </a>
 </div>
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
 <?php if (!$hasActiveDepartment): ?>
     <div class="alert alert-warning" role="alert">
-        <i class="bi bi-info-circle"></i> No hay departamentos activos disponibles.
+        <i class="bi bi-info-circle" aria-hidden="true"></i> No hay departamentos activos disponibles.
         <a href="/departments" class="alert-link">Crea o reactiva un departamento</a> antes de registrar vacantes.
     </div>
 <?php endif; ?>
@@ -54,28 +54,28 @@ $openingDate = old('opening_date', (string) ($vacancy['opening_date'] ?? date('Y
         <div class="col-12 col-xl-7">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white">
-                    <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary"></i> Datos de la vacante</h2>
+                    <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary" aria-hidden="true"></i> Datos de la vacante</h2>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="title" class="form-label">Título <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control <?= isset($errors['title']) ? 'is-invalid' : '' ?>"
+                        <input type="text" class="form-control <?= isset($errors['title']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'title') ?>
                                id="title" name="title" maxlength="150"
                                value="<?= e(old('title', (string) ($vacancy['title'] ?? ''))) ?>"
                                placeholder="Ejemplo: Analista de recursos humanos" required>
                         <?php if (isset($errors['title'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['title']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('title') ?>"><?= e($errors['title']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-0">
                         <label for="description" class="form-label">Descripción</label>
-                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>"
+                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'description') ?>
                                   id="description" name="description" rows="7" maxlength="2000"
                                   placeholder="Funciones, requisitos y condiciones del puesto."><?= e(old('description', (string) ($vacancy['description'] ?? ''))) ?></textarea>
                         <div class="form-text">Opcional. No incluyas datos personales de candidatos.</div>
                         <?php if (isset($errors['description'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['description']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('description') ?>"><?= e($errors['description']) ?></div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -85,12 +85,12 @@ $openingDate = old('opening_date', (string) ($vacancy['opening_date'] ?? date('Y
         <div class="col-12 col-xl-5">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white">
-                    <h2 class="h5 mb-0"><i class="bi bi-calendar3 text-primary"></i> Clasificación y fechas</h2>
+                    <h2 class="h5 mb-0"><i class="bi bi-calendar3 text-primary" aria-hidden="true"></i> Clasificación y fechas</h2>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="department_id" class="form-label">Departamento <span class="text-danger">*</span></label>
-                        <select class="form-select <?= isset($errors['department_id']) ? 'is-invalid' : '' ?>"
+                        <select class="form-select <?= isset($errors['department_id']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'department_id') ?>
                                 id="department_id" name="department_id" data-employee-department required>
                             <option value="">Selecciona un departamento</option>
                             <?php foreach ($departments as $department): ?>
@@ -101,13 +101,13 @@ $openingDate = old('opening_date', (string) ($vacancy['opening_date'] ?? date('Y
                             <?php endforeach; ?>
                         </select>
                         <?php if (isset($errors['department_id'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['department_id']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('department_id') ?>"><?= e($errors['department_id']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
                         <label for="position_id" class="form-label">Cargo</label>
-                        <select class="form-select <?= isset($errors['position_id']) ? 'is-invalid' : '' ?>"
+                        <select class="form-select <?= isset($errors['position_id']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'position_id') ?>
                                 id="position_id" name="position_id" data-employee-position>
                             <option value="">Sin cargo</option>
                             <?php foreach ($positions as $position): ?>
@@ -121,28 +121,28 @@ $openingDate = old('opening_date', (string) ($vacancy['opening_date'] ?? date('Y
                         </select>
                         <div class="form-text">Solo se muestran los cargos del departamento seleccionado.</div>
                         <?php if (isset($errors['position_id'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['position_id']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('position_id') ?>"><?= e($errors['position_id']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
                         <label for="opening_date" class="form-label">Fecha de apertura <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control <?= isset($errors['opening_date']) ? 'is-invalid' : '' ?>"
+                        <input type="date" class="form-control <?= isset($errors['opening_date']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'opening_date') ?>
                                id="opening_date" name="opening_date"
                                value="<?= e($openingDate) ?>" required>
                         <?php if (isset($errors['opening_date'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['opening_date']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('opening_date') ?>"><?= e($errors['opening_date']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-0">
                         <label for="closing_date" class="form-label">Fecha de cierre</label>
-                        <input type="date" class="form-control <?= isset($errors['closing_date']) ? 'is-invalid' : '' ?>"
+                        <input type="date" class="form-control <?= isset($errors['closing_date']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'closing_date') ?>
                                id="closing_date" name="closing_date"
                                value="<?= e(old('closing_date', (string) ($vacancy['closing_date'] ?? ''))) ?>">
                         <div class="form-text">Opcional. No puede ser anterior a la apertura. El cierre manual fija la fecha real.</div>
                         <?php if (isset($errors['closing_date'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['closing_date']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('closing_date') ?>"><?= e($errors['closing_date']) ?></div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -153,7 +153,7 @@ $openingDate = old('opening_date', (string) ($vacancy['opening_date'] ?? date('Y
     <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
         <a href="<?= e($cancelUrl) ?>" class="btn btn-outline-secondary">Cancelar</a>
         <button type="submit" class="btn btn-primary" <?= $canSubmit ? '' : 'disabled' ?>>
-            <i class="bi bi-check2"></i> <?= $isEdit ? 'Guardar cambios' : 'Crear vacante' ?>
+            <i class="bi bi-check2" aria-hidden="true"></i> <?= $isEdit ? 'Guardar cambios' : 'Crear vacante' ?>
         </button>
     </div>
 </form>

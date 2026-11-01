@@ -9,8 +9,9 @@ actividades de Gestión Humana: **gestión de empleados**, **asistencia y permis
 >
 > **Estado:** Fundaciones, módulos 01 (Empleados), 02 (Asistencia y permisos),
 > 03 (Reclutamiento y selección), Dashboard y separación de roles `admin`/`hr`
-> implementados y verificados con PHP 8.4 y MariaDB 11.4. La interfaz se revisó en
-> escritorio y el Dashboard también en móvil.
+> implementados y verificados con PHP 8.4 y MariaDB 11.4. La Fase 3 de endurecimiento
+> (seguridad, base de datos, accesibilidad, impresión y manual) está completada en local
+> en la rama `fase-3`; el despliegue a producción queda pendiente de autorización.
 >
 > **Demo en vivo:** <https://evolvehr.cloud> (InfinityFree, PHP 8.4.27 y
 > MariaDB 11.4.13). El subdominio temporal `evolvehr.freehosting.dev` redirige con
@@ -119,6 +120,7 @@ La arquitectura y las reglas de dependencia están en
 | [06-deploy y dominio](docs/06-deploy-y-dominio.md) | XAMPP/Laragon, InfinityFree, dominio y backups |
 | [07-seguridad y privacidad](docs/07-seguridad-y-privacidad.md) | Sesiones, CSRF, RBAC y datos ficticios |
 | [08-modelo de datos](docs/08-modelo-de-datos.md) | Diagrama ER, tablas, estados y restricciones |
+| [09-manual de usuario](docs/09-manual-de-usuario.md) | Guía paso a paso por rol, impresión y problemas frecuentes |
 | [ADRs](docs/adr/README.md) | Decisiones de arquitectura |
 
 ## Principios de trabajo
@@ -288,3 +290,30 @@ PHP** sin errores de sintaxis y creación correcta del esquema en una base limpi
   11 empleados y 16 registros de auditoría;
 - backup previo de archivos y base guardado fuera del repositorio y restauración
   probada en una base temporal local.
+
+## Endurecimiento fase 3 (2026-10-31)
+
+Cambios en la rama `fase-3`, **aún no desplegados**:
+
+- auditoría de `auth.login`, `auth.login_failed` y `auth.login_blocked` sin PII;
+- verificación con hash ficticio para reducir diferencias de tiempo entre un correo
+  existente y uno inexistente; el hash y el seed usan coste 12, el valor por defecto
+  de `PASSWORD_DEFAULT` en PHP 8.4, y una prueba unitaria vigila esa coincidencia;
+- alertas de nivel error cuando el limitador de login falla abierto;
+- IP de cliente desde `REMOTE_ADDR`, con `TRUST_PROXY` opcional para proxy/CDN;
+- host canónico fijo en `.htaccess`, validación de redirecciones internas y HSTS sin
+  `includeSubDomains`;
+- CSRF en todos los métodos mutables y cabeceras de seguridad de respaldo en errores;
+- SRI en Bootstrap y Bootstrap Icons;
+- política de contraseña con letra y número;
+- migración idempotente `202610311200_add_phase3_indexes.sql` e índices nuevos;
+- control optimista de estado y bloqueo de fila en postulaciones;
+- comprobación transaccional de solapamientos de permisos;
+- accesibilidad: enlace de salto, foco visible, `aria-current`, errores asociados con
+  `aria-describedby`, etiquetas de tablas, iconos decorativos, paginación y estados
+  vacíos;
+- estilos de impresión y manual de usuario en `docs/09-manual-de-usuario.md`.
+
+Regresión local: **49/49 PHPUnit (137 aserciones)**, **29/29** seguridad, **187/187**
+roles, **304/304** asistencia, **535/535** reclutamiento, **108/108** Dashboard y lint
+sin errores. La base local se restaura con `database/seed.sql` al terminar.

@@ -331,7 +331,7 @@ if (
     || (int) dbValue($pdo, 'SELECT COUNT(*) FROM vacancies') !== 3
     || (int) dbValue($pdo, 'SELECT COUNT(*) FROM candidates') !== 5
     || (int) dbValue($pdo, 'SELECT COUNT(*) FROM applications') !== 6
-    || (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs') !== 5
+    || (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'") !== 5
 ) {
     fwrite(STDERR, "La base no está en el estado del seed demo. Restaura database/seed.sql antes de ejecutar la prueba.\n");
     exit(2);
@@ -448,7 +448,7 @@ $t->same(
     ['Administrador'],
     texts(xpath($response->body), '//span[contains(@class,"badge") and contains(@class,"fs-6")]')
 );
-$t->containsText('panel admin muestra fecha de corte', $response, 'Resumen de la operación al 26/10/2026.');
+$t->containsText('panel admin muestra fecha de corte', $response, 'Resumen de la operación al ' . date('d/m/Y') . '.');
 $t->same('panel admin título', ['Hola, Administrador Demo'], texts(xpath($response->body), '//h1'));
 $t->same(
     'panel admin etiquetas de indicadores',
@@ -619,7 +619,7 @@ $t->same('permisos sin cambios', 4, (int) dbValue($pdo, 'SELECT COUNT(*) FROM le
 $t->same('vacantes sin cambios', 3, (int) dbValue($pdo, 'SELECT COUNT(*) FROM vacancies'));
 $t->same('candidatos sin cambios', 5, (int) dbValue($pdo, 'SELECT COUNT(*) FROM candidates'));
 $t->same('postulaciones sin cambios', 6, (int) dbValue($pdo, 'SELECT COUNT(*) FROM applications'));
-$t->same('auditorías sin cambios', 5, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditorías sin cambios', 5, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/dashboard');
 $t->status('panel admin segunda lectura', $response, 200);

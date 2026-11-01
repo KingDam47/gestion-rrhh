@@ -78,7 +78,8 @@ $container->set(LoginThrottle::class, static fn (Container $c): LoginThrottle =>
 
 $container->set(AuthService::class, static fn (Container $c): AuthService => new AuthService(
     $c->get(UserRepository::class),
-    $c->get(LoginThrottle::class)
+    $c->get(LoginThrottle::class),
+    $c->get(AuditLogger::class)
 ));
 
 $container->set(UserLookup::class, static fn (Container $c): UserLookup => new UserLookupService(

@@ -18,23 +18,23 @@ $fullName = trim((string) $employee['first_name'] . ' ' . (string) $employee['la
             <span class="badge text-bg-<?= e($statusClass) ?>"><?= e(status_label((string) $employee['status'])) ?></span>
         </div>
         <p class="text-body-secondary mb-0">
-            <i class="bi bi-person-vcard"></i> <?= e((string) $employee['document']) ?>
+            <i class="bi bi-person-vcard" aria-hidden="true"></i> <?= e((string) $employee['document']) ?>
             · <?= e((string) $employee['department_name']) ?>
         </p>
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/employees" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
         </a>
         <a href="/employees/<?= (int) $employee['id'] ?>/edit" class="btn btn-primary">
-            <i class="bi bi-pencil"></i> Editar
+            <i class="bi bi-pencil" aria-hidden="true"></i> Editar
         </a>
     </div>
 </div>
 
 <?php if (!$departmentActive): ?>
     <div class="alert alert-warning" role="alert">
-        <i class="bi bi-exclamation-triangle"></i>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
         El departamento de este empleado está inactivo.
         <?php if (!$isActive): ?>
             Reactiva el departamento antes de reactivar al empleado.
@@ -45,7 +45,7 @@ $fullName = trim((string) $employee['first_name'] . ' ' . (string) $employee['la
 
 <?php if ($employee['position_name'] !== null && !$positionActive): ?>
     <div class="alert alert-warning" role="alert">
-        <i class="bi bi-exclamation-triangle"></i>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
         El cargo asignado está inactivo. El empleado conserva el historial; puedes asignarle otro cargo al editarlo.
     </div>
 <?php endif; ?>
@@ -54,14 +54,14 @@ $fullName = trim((string) $employee['first_name'] . ' ' . (string) $employee['la
     <div class="col-12 col-lg-7">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary"></i> Información laboral</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary" aria-hidden="true"></i> Información laboral</h2>
                 <?php if ($isActive): ?>
                     <form method="post" action="/employees/<?= (int) $employee['id'] ?>/status"
                           data-confirm="¿Desactivar a <?= e($fullName) ?>? Conservará todo su historial.">
                         <?= csrf_field() ?>
                         <input type="hidden" name="status" value="inactive">
                         <button type="submit" class="btn btn-sm btn-outline-danger">
-                            <i class="bi bi-person-dash"></i> Desactivar
+                            <i class="bi bi-person-dash" aria-hidden="true"></i> Desactivar
                         </button>
                     </form>
                 <?php else: ?>
@@ -71,7 +71,7 @@ $fullName = trim((string) $employee['first_name'] . ' ' . (string) $employee['la
                         <input type="hidden" name="status" value="active">
                         <button type="submit" class="btn btn-sm btn-outline-success"
                                 <?= $canReactivate ? '' : 'disabled title="Reactiva el departamento primero"' ?>>
-                            <i class="bi bi-person-check"></i> Reactivar
+                            <i class="bi bi-person-check" aria-hidden="true"></i> Reactivar
                         </button>
                     </form>
                 <?php endif; ?>
@@ -102,7 +102,7 @@ $fullName = trim((string) $employee['first_name'] . ' ' . (string) $employee['la
     <div class="col-12 col-lg-5">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-telephone text-primary"></i> Contacto y registro</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-telephone text-primary" aria-hidden="true"></i> Contacto y registro</h2>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
@@ -137,7 +137,7 @@ $fullName = trim((string) $employee['first_name'] . ' ' . (string) $employee['la
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
-                <h2 class="h5"><i class="bi bi-clock-history text-primary"></i> Historial</h2>
+                <h2 class="h5"><i class="bi bi-clock-history text-primary" aria-hidden="true"></i> Historial</h2>
                 <p class="text-body-secondary mb-0">
                     La asistencia, las tardanzas y las solicitudes de permiso se mostrarán en el módulo de
                     Asistencia y permisos. La desactivación no elimina ningún registro histórico.

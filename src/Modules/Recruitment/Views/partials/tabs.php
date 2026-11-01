@@ -18,7 +18,7 @@ $tabs = [
             <a class="nav-link <?= $activeTab === $tab['key'] ? 'active' : '' ?>"
                href="<?= e($tab['href']) ?>"
                <?= $activeTab === $tab['key'] ? 'aria-current="page"' : '' ?>>
-                <i class="bi <?= e($tab['icon']) ?>"></i>
+                <i class="bi <?= e($tab['icon']) ?>" aria-hidden="true"></i>
                 <?= e($tab['label']) ?>
             </a>
         </li>

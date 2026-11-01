@@ -32,7 +32,7 @@ $pageUrl = static fn (int $page): string => '/applications?' . http_build_query(
         <p class="text-body-secondary mb-0">Seguimiento de cada candidato dentro de su vacante.</p>
     </div>
     <a href="/applications/create" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> Nueva postulación
+        <i class="bi bi-plus-lg" aria-hidden="true"></i> Nueva postulación
     </a>
 </div>
 
@@ -106,7 +106,7 @@ $pageUrl = static fn (int $page): string => '/applications?' . http_build_query(
             </div>
             <div class="col-12 col-lg-3 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Filtrar
+                    <i class="bi bi-search" aria-hidden="true"></i> Filtrar
                 </button>
                 <a href="/applications" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -117,7 +117,7 @@ $pageUrl = static fn (int $page): string => '/applications?' . http_build_query(
 <div class="card border-0 shadow-sm">
     <?php if ($pagination['items'] === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-diagram-3 display-5 text-body-tertiary"></i>
+            <i class="bi bi-diagram-3 display-5 text-body-tertiary" aria-hidden="true"></i>
             <h2 class="h5 mt-3">No hay postulaciones que coincidan</h2>
             <p class="text-body-secondary mb-4">Prueba con otros filtros o registra una postulación nueva.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2">
@@ -127,7 +127,7 @@ $pageUrl = static fn (int $page): string => '/applications?' . http_build_query(
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Listado de postulaciones" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Candidato</th>
@@ -173,12 +173,12 @@ $pageUrl = static fn (int $page): string => '/applications?' . http_build_query(
                             <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de la postulación">
                                 <a href="/applications/<?= (int) $application['id'] ?>"
                                    class="btn btn-outline-secondary" title="Ver seguimiento" aria-label="Ver seguimiento">
-                                    <i class="bi bi-eye"></i>
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
                                 </a>
                                 <?php if ((string) $application['status'] === 'selected' && $application['employee_id'] === null): ?>
                                     <a href="/applications/<?= (int) $application['id'] ?>/hire"
                                        class="btn btn-outline-success" title="Dar de alta" aria-label="Dar de alta">
-                                        <i class="bi bi-person-plus"></i>
+                                        <i class="bi bi-person-plus" aria-hidden="true"></i>
                                     </a>
                                 <?php endif; ?>
                             </div>

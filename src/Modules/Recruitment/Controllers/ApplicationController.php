@@ -101,9 +101,11 @@ final class ApplicationController
         }
 
         if (!$result['changed']) {
-            $message = $result['reason'] === 'final'
-                ? 'La postulación está en estado final y no admite más cambios.'
-                : 'La postulación ya se encuentra en ese estado.';
+            $message = match ($result['reason']) {
+                'final' => 'La postulación está en estado final y no admite más cambios.',
+                'conflict' => 'Otro usuario cambió la postulación. Revisa el estado actual antes de continuar.',
+                default => 'La postulación ya se encuentra en ese estado.',
+            };
 
             Flash::info($message);
 

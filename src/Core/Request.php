@@ -68,9 +68,30 @@ final class Request
 
     public function ip(): string
     {
-        $value = $this->server['REMOTE_ADDR'] ?? null;
+        $remote = $this->server['REMOTE_ADDR'] ?? null;
+        $remote = is_string($remote) && $remote !== '' ? $remote : '0.0.0.0';
 
-        return is_string($value) && $value !== '' ? $value : '0.0.0.0';
+        if (!(bool) Config::get('app.trust_proxy', false)) {
+            return $remote;
+        }
+
+        foreach (['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR'] as $header) {
+            $value = $this->server[$header] ?? null;
+
+            if (!is_string($value) || $value === '') {
+                continue;
+            }
+
+            foreach (explode(',', $value) as $candidate) {
+                $candidate = trim($candidate);
+
+                if (filter_var($candidate, FILTER_VALIDATE_IP) !== false) {
+                    return $candidate;
+                }
+            }
+        }
+
+        return $remote;
     }
 
     private static function normalizePath(string $path): string

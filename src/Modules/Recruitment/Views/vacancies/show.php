@@ -35,20 +35,20 @@ $applicationCount = count($applications);
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/vacancies" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
         </a>
         <?php if ($isOpen): ?>
             <a href="/applications/create?vacancy_id=<?= (int) $vacancy['id'] ?>" class="btn btn-outline-primary">
-                <i class="bi bi-person-plus"></i> Postular candidato
+                <i class="bi bi-person-plus" aria-hidden="true"></i> Postular candidato
             </a>
             <a href="/vacancies/<?= (int) $vacancy['id'] ?>/edit" class="btn btn-primary">
-                <i class="bi bi-pencil"></i> Editar
+                <i class="bi bi-pencil" aria-hidden="true"></i> Editar
             </a>
             <form method="post" action="/vacancies/<?= (int) $vacancy['id'] ?>/close"
                   data-confirm="¿Cerrar esta vacante? No se podrá reabrir ni editar, y dejará de aceptar postulaciones.">
                 <?= csrf_field() ?>
                 <button type="submit" class="btn btn-outline-danger">
-                    <i class="bi bi-lock"></i> Cerrar vacante
+                    <i class="bi bi-lock" aria-hidden="true"></i> Cerrar vacante
                 </button>
             </form>
         <?php endif; ?>
@@ -57,7 +57,7 @@ $applicationCount = count($applications);
 
 <?php if (!$isOpen): ?>
     <div class="alert alert-secondary" role="alert">
-        <i class="bi bi-lock"></i>
+        <i class="bi bi-lock" aria-hidden="true"></i>
         Esta vacante está cerrada y no admite nuevas postulaciones. Su información y sus
         postulaciones se conservan para consulta.
     </div>
@@ -65,7 +65,7 @@ $applicationCount = count($applications);
 
 <?php if ((int) $vacancy['department_active'] !== 1): ?>
     <div class="alert alert-warning" role="alert">
-        <i class="bi bi-exclamation-triangle"></i>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
         El departamento de esta vacante está inactivo.
         <a href="/departments/<?= (int) $vacancy['department_id'] ?>/edit" class="alert-link">Revisar departamento</a>
     </div>
@@ -75,7 +75,7 @@ $applicationCount = count($applications);
     <div class="col-12 col-lg-7">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary"></i> Información de la vacante</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary" aria-hidden="true"></i> Información de la vacante</h2>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
@@ -110,14 +110,14 @@ $applicationCount = count($applications);
     <div class="col-12 col-lg-5">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
-                <h2 class="h5"><i class="bi bi-diagram-3 text-primary"></i> Seguimiento</h2>
+                <h2 class="h5"><i class="bi bi-diagram-3 text-primary" aria-hidden="true"></i> Seguimiento</h2>
                 <p class="text-body-secondary">
                     Cada postulación avanza por las etapas de evaluación. Al seleccionar un candidato
                     podrás iniciar el alta guiada como empleado.
                 </p>
                 <a href="/applications?vacancy_id=<?= (int) $vacancy['id'] ?>"
                    class="btn btn-outline-primary w-100">
-                    <i class="bi bi-list-check"></i> Ver postulaciones de esta vacante
+                    <i class="bi bi-list-check" aria-hidden="true"></i> Ver postulaciones de esta vacante
                 </a>
             </div>
         </div>
@@ -126,18 +126,18 @@ $applicationCount = count($applications);
 
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <h2 class="h5 mb-0"><i class="bi bi-people text-primary"></i> Postulaciones</h2>
+        <h2 class="h5 mb-0"><i class="bi bi-people text-primary" aria-hidden="true"></i> Postulaciones</h2>
         <?php if ($isOpen): ?>
             <a href="/applications/create?vacancy_id=<?= (int) $vacancy['id'] ?>"
                class="btn btn-sm btn-primary">
-                <i class="bi bi-plus-lg"></i> Nueva postulación
+                <i class="bi bi-plus-lg" aria-hidden="true"></i> Nueva postulación
             </a>
         <?php endif; ?>
     </div>
 
     <?php if ($applications === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-person-lines-fill display-5 text-body-tertiary"></i>
+            <i class="bi bi-person-lines-fill display-5 text-body-tertiary" aria-hidden="true"></i>
             <p class="text-body-secondary mt-3 mb-3">Todavía no hay candidatos postulados a esta vacante.</p>
             <?php if ($isOpen): ?>
                 <a href="/applications/create?vacancy_id=<?= (int) $vacancy['id'] ?>" class="btn btn-primary">
@@ -147,7 +147,7 @@ $applicationCount = count($applications);
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Postulaciones de la vacante" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Candidato</th>

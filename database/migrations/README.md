@@ -23,6 +23,14 @@ Ejemplo:
 - No incluir datos reales.
 - No borrar tablas o columnas sin backup y revisión.
 - Aplicar manualmente en InfinityFree desde phpMyAdmin.
+- Las migraciones nuevas deben ser idempotentes cuando sea posible: comprobar
+  `information_schema` antes de crear índices o columnas, para que puedan
+  repetirse sin error. Ejemplo: `202610311200_add_phase3_indexes.sql`.
+- `schema.sql` es la fuente para bases nuevas y ya incluye los cambios de las
+  migraciones. Por eso una base creada desde `schema.sql` no debe ejecutar las
+  migraciones antiguas; una base existente sí debe aplicarlas una sola vez.
+- Antes de desplegar, comparar `schema.sql` con la base real para detectar
+  diferencias de columnas o índices.
 
 ## Cabecera sugerida
 

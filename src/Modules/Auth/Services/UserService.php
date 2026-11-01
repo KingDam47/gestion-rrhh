@@ -252,6 +252,10 @@ final class UserService
             'password_confirmation' => ['required', 'same:password'],
         ]);
 
+        if (!isset($errors['password']) && ($policy = $this->passwordPolicyError($password)) !== null) {
+            $errors['password'] = $policy;
+        }
+
         if (!isset($errors['current_password']) && !password_verify($currentPassword, (string) $user['password_hash'])) {
             $errors['current_password'] = 'La contraseña actual no es correcta.';
         }
@@ -340,10 +344,29 @@ final class UserService
             ]
         );
 
-        return $validator->validate([
+        $errors = $validator->validate([
             'password' => ['required', 'min:10', 'max:255'],
             'password_confirmation' => ['required', 'same:password'],
         ]);
+
+        if (!isset($errors['password']) && ($policy = $this->passwordPolicyError($password)) !== null) {
+            $errors['password'] = $policy;
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Política mínima además de la longitud: al menos una letra y un número.
+     * No se bloquean las contraseñas demo existentes, solo las nuevas.
+     */
+    private function passwordPolicyError(string $password): ?string
+    {
+        if (preg_match('/\p{L}/u', $password) !== 1 || preg_match('/\d/', $password) !== 1) {
+            return 'La contraseña debe incluir al menos una letra y un número.';
+        }
+
+        return null;
     }
 
     /**

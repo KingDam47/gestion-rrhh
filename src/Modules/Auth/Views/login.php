@@ -36,7 +36,7 @@ declare(strict_types=1);
                    <?= isset($errors['password']) ? 'aria-invalid="true" aria-describedby="password-error"' : '' ?>>
             <button class="btn btn-outline-secondary" type="button" data-toggle-password="#password"
                     aria-label="Mostrar contraseña">
-                <i class="bi bi-eye"></i>
+                <i class="bi bi-eye" aria-hidden="true"></i>
             </button>
         </div>
         <?php if (isset($errors['password'])): ?>
@@ -46,7 +46,7 @@ declare(strict_types=1);
 
     <div class="d-grid">
         <button type="submit" class="btn btn-primary btn-lg">
-            <i class="bi bi-box-arrow-in-right"></i> Entrar
+            <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Entrar
         </button>
     </div>
 </form>

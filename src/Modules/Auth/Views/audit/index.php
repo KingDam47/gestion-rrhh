@@ -29,7 +29,7 @@ $pageUrl = static fn (int $page): string => '/audit?' . http_build_query($baseQu
 </div>
 
 <div class="alert alert-light border" role="note">
-    <i class="bi bi-shield-lock text-primary"></i>
+    <i class="bi bi-shield-lock text-primary" aria-hidden="true"></i>
     La auditoría guarda la acción, la entidad afectada, el usuario responsable y metadatos
     limitados a estado o rol. No almacena nombres, correos, contraseñas ni notas.
 </div>
@@ -67,7 +67,7 @@ $pageUrl = static fn (int $page): string => '/audit?' . http_build_query($baseQu
             </div>
             <div class="col-12 col-lg-2 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Filtrar
+                    <i class="bi bi-search" aria-hidden="true"></i> Filtrar
                 </button>
                 <a href="/audit" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -78,14 +78,14 @@ $pageUrl = static fn (int $page): string => '/audit?' . http_build_query($baseQu
 <div class="card border-0 shadow-sm">
     <?php if ($pagination['items'] === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-clipboard-x display-5 text-body-tertiary"></i>
+            <i class="bi bi-clipboard-x display-5 text-body-tertiary" aria-hidden="true"></i>
             <h2 class="h5 mt-3">No hay registros que coincidan</h2>
             <p class="text-body-secondary mb-4">Prueba con otros filtros o consulta el historial completo.</p>
             <a href="/audit" class="btn btn-outline-secondary">Limpiar filtros</a>
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Registro de auditoría" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Fecha</th>

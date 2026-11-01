@@ -6,6 +6,7 @@ namespace App\Modules\Attendance\Repositories;
 
 use App\Core\Database;
 use PDO;
+use Throwable;
 
 final class LeaveRequestRepository
 {
@@ -108,6 +109,52 @@ final class LeaveRequestRepository
         $statement->execute($data);
 
         return (int) $this->database->connection()->lastInsertId();
+    }
+
+    /**
+     * Crea la solicitud dentro de una transacción y vuelve a comprobar el
+     * solapamiento con la fila del empleado bloqueada. Devuelve null si otra
+     * petición concurrente ya creó una solicitud que se superpone.
+     *
+     * @param array{
+     *     employee_id: int,
+     *     leave_type: string,
+     *     start_date: string,
+     *     end_date: string,
+     *     reason: string,
+     *     created_by: int|null
+     * } $data
+     */
+    public function createIfNoOverlap(array $data): ?int
+    {
+        $pdo = $this->database->connection();
+        $pdo->beginTransaction();
+
+        try {
+            $lock = $pdo->prepare('SELECT id FROM employees WHERE id = :id FOR UPDATE');
+            $lock->execute(['id' => (int) $data['employee_id']]);
+
+            if ($this->overlapExists(
+                (int) $data['employee_id'],
+                (string) $data['start_date'],
+                (string) $data['end_date']
+            )) {
+                $pdo->rollBack();
+
+                return null;
+            }
+
+            $id = $this->create($data);
+            $pdo->commit();
+
+            return $id;
+        } catch (Throwable $exception) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+
+            throw $exception;
+        }
     }
 
     /**

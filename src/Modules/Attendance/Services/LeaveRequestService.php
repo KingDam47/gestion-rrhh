@@ -112,7 +112,13 @@ final class LeaveRequestService
         }
 
         try {
-            $id = $this->requests->create($data + ['created_by' => $userId]);
+            $id = $this->requests->createIfNoOverlap($data + ['created_by' => $userId]);
+
+            if ($id === null) {
+                throw new ValidationException([
+                    'start_date' => 'Ya existe una solicitud pendiente o aprobada que se superpone con ese período.',
+                ]);
+            }
         } catch (PDOException $exception) {
             throw $this->saveError($exception);
         }
@@ -125,6 +131,12 @@ final class LeaveRequestService
      */
     public function review(int $id, string $status, ?string $notes, ?int $userId): array
     {
+        if ($status === '') {
+            throw new ValidationException([
+                'status' => 'Selecciona aprobar o rechazar la solicitud.',
+            ]);
+        }
+
         if (!in_array($status, ['approved', 'rejected'], true)) {
             throw new BusinessRuleException('La decisión debe ser aprobar o rechazar la solicitud.');
         }

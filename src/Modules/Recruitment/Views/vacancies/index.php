@@ -25,7 +25,7 @@ $statusClass = static fn (string $status): string => $status === 'open' ? 'succe
         <p class="text-body-secondary mb-0">Publica y cierra las búsquedas activas de personal.</p>
     </div>
     <a href="/vacancies/create" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> Nueva vacante
+        <i class="bi bi-plus-lg" aria-hidden="true"></i> Nueva vacante
     </a>
 </div>
 
@@ -86,7 +86,7 @@ $statusClass = static fn (string $status): string => $status === 'open' ? 'succe
             </div>
             <div class="col-12 col-lg-3 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Filtrar
+                    <i class="bi bi-search" aria-hidden="true"></i> Filtrar
                 </button>
                 <a href="/vacancies" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -97,7 +97,7 @@ $statusClass = static fn (string $status): string => $status === 'open' ? 'succe
 <div class="card border-0 shadow-sm">
     <?php if ($pagination['items'] === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-briefcase display-5 text-body-tertiary"></i>
+            <i class="bi bi-briefcase display-5 text-body-tertiary" aria-hidden="true"></i>
             <h2 class="h5 mt-3">No hay vacantes que coincidan</h2>
             <p class="text-body-secondary mb-4">Prueba con otros filtros o crea una vacante nueva.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2">
@@ -107,7 +107,7 @@ $statusClass = static fn (string $status): string => $status === 'open' ? 'succe
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Listado de vacantes" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Vacante</th>
@@ -160,12 +160,12 @@ $statusClass = static fn (string $status): string => $status === 'open' ? 'succe
                             <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de la vacante">
                                 <a href="/vacancies/<?= (int) $vacancy['id'] ?>" class="btn btn-outline-secondary"
                                    title="Ver detalle" aria-label="Ver detalle">
-                                    <i class="bi bi-eye"></i>
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
                                 </a>
                                 <?php if ((string) $vacancy['status'] === 'open'): ?>
                                     <a href="/vacancies/<?= (int) $vacancy['id'] ?>/edit"
                                        class="btn btn-outline-secondary" title="Editar" aria-label="Editar">
-                                        <i class="bi bi-pencil"></i>
+                                        <i class="bi bi-pencil" aria-hidden="true"></i>
                                     </a>
                                 <?php endif; ?>
                             </div>

@@ -1,6 +1,6 @@
 # Traspaso de sesión — Gestión RR. HH.
 
-> **Fecha:** 29/10/2026
+> **Fecha:** 31/10/2026
 > **Sesión de OpenCode:** `ses_e76ab7c1effezSW5NDVJORsXS7`
 > **Proyecto:** `C:\Users\KingD\OneDrive\Desktop\gestion-rrhh`
 >
@@ -62,9 +62,19 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
   del runtime; se retiraron directorios vacíos, pruebas no usadas, caché, imágenes no
   usadas y APIs muertas. La documentación quedó alineada. `exceso/`, `vendor/`,
   `tests/`, `docs/`, `scripts/`, `.env` y la caché de PHPUnit no se despliegan.
-- **Regresión final completada:** lint de 143 archivos PHP sin errores, PHPUnit con
-  40 pruebas y 111 aserciones, y pruebas HTTP de Dashboard (108), Asistencia (304),
-  Reclutamiento (535) y Roles (183), todas correctas.
+- **Fase 3 (endurecimiento) completada en local, sin desplegar:** rama `fase-3` creada
+  desde `main` (`138fe17`). Auditorías de seguridad, base de datos y accesibilidad sin
+  hallazgos críticos ni altos. Se añadieron auditoría de login, ecualización de tiempos,
+  alertas del limitador, `TRUST_PROXY`, host canónico, SRI, CSRF para métodos mutables,
+  validación de redirecciones, política de contraseña, cabeceras de respaldo, migración
+  idempotente de índices, control optimista de estado, bloqueo de fila en el alta,
+  comprobación transaccional de solapamientos, accesibilidad, impresión y manual de
+  usuario.
+- **Regresión final de Fase 3 (2026-10-31):** lint sin errores, PHPUnit 49/49 (137
+  aserciones), Seguridad 29/29, Roles 187/187, Asistencia 304/304, Reclutamiento
+  535/535 y Dashboard 108/108. La base local se restauró con `database/seed.sql`.
+  El seed y `AuthService::TIMING_HASH` usan coste bcrypt 12 (valor por defecto de
+  `PASSWORD_DEFAULT` en PHP 8.4); `AuthTimingTest` verifica que sigan coincidiendo.
 - La base `gestion_rrhh` quedó restaurada con `database/seed.sql` al terminar la
   regresión: 2 usuarios activos, 10 empleados (8 activos), 5 departamentos, 7 cargos,
   15 registros de asistencia, 4 solicitudes de permiso, 3 vacantes (2 abiertas),
@@ -113,6 +123,29 @@ El objetivo de esta sesión es revisar el proyecto a fondo, no desplegar.
   3 usuarios, 11 empleados y 16 auditorías; las contraseñas demo no se cambiaron.
 - El script temporal de migración/backup se eliminó del hosting y se verificó que
   su URL devuelve 404.
+
+### 0.2 Fase 3 en local (31/10/2026)
+
+- Rama `fase-3` creada desde `main` en `138fe17`; los cambios están en el árbol de
+  trabajo y **no se han desplegado**.
+- Seguridad: auditoría de login sin PII, hash ficticio para igualar tiempos, alertas del
+  limitador, `TRUST_PROXY`, host canónico, validación de redirecciones, CSRF en todos los
+  métodos mutables, SRI, HSTS sin `includeSubDomains` y cabeceras de respaldo. El seed y
+  el hash ficticio usan coste bcrypt 12, coherente con `PASSWORD_DEFAULT` en PHP 8.4.
+- Base de datos: migración idempotente `202610311200_add_phase3_indexes.sql`, índices
+  `idx_leave_requests_overlap` e `idx_applications_applied_at`, control optimista de
+  estado en postulaciones, bloqueo de fila en el alta y comprobación transaccional de
+  solapamientos de permisos.
+- Accesibilidad y UX: enlace de salto, foco visible, `aria-current`, errores asociados
+  con `aria-describedby`, etiquetas de tablas, iconos decorativos, paginación accesible,
+  estados vacíos y estilos de impresión.
+- Documentación: roadmap, seguridad, README, este archivo y manual de usuario en
+  `docs/09-manual-de-usuario.md`.
+- Regresión: PHPUnit 49/49 (137 aserciones), Seguridad 29/29, Roles 187/187,
+  Asistencia 304/304, Reclutamiento 535/535, Dashboard 108/108 y lint sin errores.
+- **Siguiente acción:** revisar el diff, commit en `fase-3`, push y pedir autorización
+  expresa antes de desplegar a producción. La migración de índices debe aplicarse en
+  producción antes o junto con el código que la usa.
 
 ### 0.1 Revisión del proyecto (sesión del 29/10/2026)
 
@@ -353,19 +386,28 @@ Write-Output "PHP revisados: $($files.Count). Fallos: $failed"
   `users.password_changed_at`.
 - El login se limita por correo (5 fallos) y por IP (20 fallos) en una ventana de 15
   minutos. El contador vive en `storage/rate-limits/` y falla abierto si no se puede
-  escribir.
+  escribir, pero registra un error de nivel `ALERTA` en `storage/logs`.
 - Las respuestas dinámicas envían `Cache-Control: no-store, private`,
   `Permissions-Policy` y CSP con `frame-ancestors 'none'` y `object-src 'none'`.
-  HSTS se envía solo bajo HTTPS.
+  HSTS se envía solo bajo HTTPS y sin `includeSubDomains` mientras solo estén
+  confirmados el ápice y `www`.
+- La IP del cliente sale de `REMOTE_ADDR`. `TRUST_PROXY=true` habilita
+  `CF-Connecting-IP`/`X-Forwarded-For` solo detrás de un proxy de confianza.
 - `ErrorHandler` activa `log_errors` y registra errores fatales en
   `storage/logs/php-error.log` y en el log de la aplicación.
 - `EmployeeRepository::valueExists()` solo acepta `document` y `email`; cualquier otra
   columna lanza una excepción.
 - Ambos roles cambian su propia contraseña en `/account/password`; se exige la
   contraseña actual y que la nueva sea distinta.
-- La auditoría es solo para `admin`. Su metadata se limita a `status` y `role`, nunca
-  nombres, correos, contraseñas ni hashes. El MVP no registra automáticamente cada
-  login/logout ni los intentos fallidos.
+- La auditoría es solo para `admin`. Su metadata se limita a `status`, `role` y, en
+  eventos de autenticación, `reason`; nunca nombres, correos, contraseñas ni hashes.
+  Desde Fase 3 se registran `auth.login`, `auth.login_failed` y `auth.login_blocked`.
+- Las contraseñas nuevas exigen al menos 10 caracteres, una letra y un número. Las
+  cuentas demo existentes conservan `password123` por decisión del usuario.
+- Las postulaciones usan actualización optimista por estado; un conflicto se informa y
+  no sobrescribe el cambio de otro usuario. El alta bloquea la fila de la postulación.
+- Los permisos comprueban el solapamiento dentro de una transacción con la fila del
+  empleado bloqueada, además de la validación previa.
 - No hay borrado físico de empleados, departamentos ni cargos: solo activación y
   desactivación.
 - El documento se normaliza sin espacios y en mayúsculas.
@@ -439,9 +481,10 @@ Write-Output "PHP revisados: $($files.Count). Fallos: $failed"
   antes de compartir la URL fuera del círculo de la demo.
 - Instalar XAMPP o Laragon de forma permanente.
 - Revisar en móvil los módulos 01, 02 y 03.
-- Revisar accesibilidad (teclado, contraste, etiquetas) y estilos de impresión.
+- [x] Revisar accesibilidad (teclado, contraste, etiquetas) y estilos de impresión.
 - Confirmar formato de documento, fecha de salida, reporte mensual y reporte de
   Reclutamiento.
 - Decidir si el repositorio debe pasar de privado a público.
-- Comprar y conectar el dominio definitivo con HTTPS.
-- Completar manual de usuario, guion de demo y backup final.
+- [x] Comprar y conectar el dominio definitivo con HTTPS.
+- [x] Completar manual de usuario (`docs/09-manual-de-usuario.md`).
+- Completar guion de demo y backup final.

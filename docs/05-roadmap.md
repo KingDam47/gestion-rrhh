@@ -165,19 +165,35 @@ fue validado con el usuario.
 
 **Objetivo:** preparar la aplicación para la demostración final y el uso controlado.
 
-- [ ] Revisión de seguridad (sesiones, CSRF, XSS, SQL, permisos).
-- [ ] Pruebas de accesos denegados.
-- [ ] Validación de todas las reglas de negocio en servidor.
-- [ ] Backups de base de datos y archivos.
-- [ ] Prueba de restauración.
-- [ ] Revisión de consultas e índices.
-- [ ] Accesibilidad y navegación por teclado.
-- [ ] Estilos de impresión de reportes.
-- [ ] Mensajes de error y estados vacíos.
-- [ ] Documentación técnica actualizada.
-- [ ] Manual de usuario.
-- [ ] Datos demo coherentes.
+- [x] Revisión de seguridad (sesiones, CSRF, XSS, SQL, permisos).
+- [x] Pruebas de accesos denegados.
+- [x] Validación de todas las reglas de negocio en servidor.
+- [x] Backups de base de datos y archivos.
+- [x] Prueba de restauración.
+- [x] Revisión de consultas e índices.
+- [x] Accesibilidad y navegación por teclado.
+- [x] Estilos de impresión de reportes.
+- [x] Mensajes de error y estados vacíos.
+- [x] Documentación técnica actualizada.
+- [x] Manual de usuario.
+- [x] Datos demo coherentes.
 - [x] Prueba completa en InfinityFree con HTTPS.
+
+> **Fase 3 verificada en local el 2026-10-31 (rama `fase-3`):** auditoría de seguridad,
+> base de datos y accesibilidad sin hallazgos críticos ni altos. Se añadieron auditoría
+> de login, ecualización de tiempos, alertas del limitador, `TRUST_PROXY`, host canónico,
+> SRI, CSRF para todos los métodos mutables, validación de redirecciones, política de
+> contraseña y cabeceras de respaldo. El hash ficticio de tiempos y el seed usan coste
+> bcrypt 12, coherente con `PASSWORD_DEFAULT` en PHP 8.4, y una prueba unitaria vigila
+> esa coincidencia. En base de datos: migración idempotente de índices,
+> control optimista de estado en postulaciones, bloqueo de fila en el alta y
+> comprobación transaccional de solapamientos. En accesibilidad: enlace para saltar al
+> contenido, `aria-current`, foco visible, asociación de errores con `aria-describedby`,
+> etiquetas de tablas, iconos decorativos, paginación accesible y estilos de impresión.
+> Regresión: PHPUnit 49/49 (137 aserciones), Seguridad 29/29, Roles 187/187, Asistencia
+> 304/304, Reclutamiento 535/535, Dashboard 108/108 y lint de todos los PHP sin errores.
+> El manual de usuario está en `docs/09-manual-de-usuario.md`. El despliegue a producción
+> queda pendiente de autorización expresa.
 
 **Criterio de salida:** checklist de seguridad completo, backups probados y sin fallos
 críticos conocidos.
@@ -232,9 +248,10 @@ probarse antes de la fase final, no al último día.
 - No hay PHP ni MySQL instalados de forma permanente; se usan binarios portátiles.
   Instalar XAMPP o Laragon para el trabajo diario.
 - El esquema se probó en MariaDB 11.4 en local y en InfinityFree; todavía no en MySQL 8.
-- Sitio publicado en `https://evolvehr.freehosting.dev` con el subdominio temporal de
-  InfinityFree; falta comprar y conectar el dominio definitivo.
+- Sitio publicado en `https://evolvehr.cloud`; el subdominio temporal de InfinityFree
+  redirige con 301 al dominio definitivo.
 - El document root de InfinityFree es fijo (`htdocs`); el `.htaccess` raíz redirige a
-  `public/` y fuerza HTTPS.
-- El repositorio Git está inicializado, etiquetado como `v1.0.0` y publicado en GitHub
-  como repositorio privado.
+  `public/`, fuerza HTTPS y fija el host canónico.
+- El repositorio Git está publicado en GitHub como repositorio privado. Producción corre
+  la versión estable de Fase 2; los cambios de Fase 3 están en la rama `fase-3` hasta que
+  el usuario autorice el despliegue.

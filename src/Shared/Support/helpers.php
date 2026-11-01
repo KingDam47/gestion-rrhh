@@ -24,6 +24,26 @@ function old(string $key, string $default = ''): string
     return OldInput::get($key, $default);
 }
 
+/**
+ * Atributos ARIA para asociar un campo con su mensaje de error.
+ *
+ * @param array<string, string> $errors
+ */
+function field_aria(array $errors, string $field): string
+{
+    return isset($errors[$field])
+        ? 'aria-invalid="true" aria-describedby="' . e($field . '-error') . '"'
+        : '';
+}
+
+/**
+ * Id estable del mensaje de error de un campo.
+ */
+function field_error_id(string $field): string
+{
+    return $field . '-error';
+}
+
 function asset(string $path): string
 {
     return '/assets/' . ltrim($path, '/');
@@ -82,6 +102,9 @@ function audit_action_label(string $action): string
 {
     return match ($action) {
         'user.login' => 'Inicio de sesión',
+        'auth.login' => 'Inicio de sesión',
+        'auth.login_failed' => 'Intento de sesión fallido',
+        'auth.login_blocked' => 'Acceso bloqueado por intentos',
         'user.created' => 'Usuario creado',
         'user.updated' => 'Usuario actualizado',
         'user.activated' => 'Usuario reactivado',
@@ -112,6 +135,7 @@ function audit_entity_label(string $entityType): string
 {
     return match ($entityType) {
         'user' => 'Usuario',
+        'auth' => 'Autenticación',
         'employee' => 'Empleado',
         'department' => 'Departamento',
         'position' => 'Cargo',

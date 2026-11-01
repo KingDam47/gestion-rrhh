@@ -19,7 +19,7 @@ $pageUrl = static fn (int $page): string => '/candidates?' . http_build_query(
         <p class="text-body-secondary mb-0">Registro de las personas que participan en los procesos de selección.</p>
     </div>
     <a href="/candidates/create" class="btn btn-primary">
-        <i class="bi bi-person-plus"></i> Nuevo candidato
+        <i class="bi bi-person-plus" aria-hidden="true"></i> Nuevo candidato
     </a>
 </div>
 
@@ -61,7 +61,7 @@ $pageUrl = static fn (int $page): string => '/candidates?' . http_build_query(
             </div>
             <div class="col-12 col-lg-6 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Filtrar
+                    <i class="bi bi-search" aria-hidden="true"></i> Filtrar
                 </button>
                 <a href="/candidates" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -72,7 +72,7 @@ $pageUrl = static fn (int $page): string => '/candidates?' . http_build_query(
 <div class="card border-0 shadow-sm">
     <?php if ($pagination['items'] === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-person-lines-fill display-5 text-body-tertiary"></i>
+            <i class="bi bi-person-lines-fill display-5 text-body-tertiary" aria-hidden="true"></i>
             <h2 class="h5 mt-3">No hay candidatos que coincidan</h2>
             <p class="text-body-secondary mb-4">Prueba con otra búsqueda o registra un candidato nuevo.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2">
@@ -82,7 +82,7 @@ $pageUrl = static fn (int $page): string => '/candidates?' . http_build_query(
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Listado de candidatos" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Candidato</th>
@@ -119,11 +119,11 @@ $pageUrl = static fn (int $page): string => '/candidates?' . http_build_query(
                             <div class="btn-group btn-group-sm" role="group" aria-label="Acciones del candidato">
                                 <a href="/candidates/<?= (int) $candidate['id'] ?>" class="btn btn-outline-secondary"
                                    title="Ver ficha" aria-label="Ver ficha">
-                                    <i class="bi bi-eye"></i>
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
                                 </a>
                                 <a href="/candidates/<?= (int) $candidate['id'] ?>/edit"
                                    class="btn btn-outline-secondary" title="Editar" aria-label="Editar">
-                                    <i class="bi bi-pencil"></i>
+                                    <i class="bi bi-pencil" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </td>

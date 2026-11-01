@@ -23,19 +23,19 @@ $cancelUrl = $isEdit ? '/employees/' . (int) $employee['id'] : '/employees';
         </p>
     </div>
     <a href="<?= e($cancelUrl) ?>" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Volver
+        <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
     </a>
 </div>
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
 <?php if (!$canSubmit): ?>
     <div class="alert alert-warning" role="alert">
-        <i class="bi bi-info-circle"></i> No hay departamentos activos disponibles.
+        <i class="bi bi-info-circle" aria-hidden="true"></i> No hay departamentos activos disponibles.
         <a href="/departments" class="alert-link">Crea o reactiva un departamento</a> antes de registrar empleados.
     </div>
 <?php endif; ?>
@@ -47,76 +47,76 @@ $cancelUrl = $isEdit ? '/employees/' . (int) $employee['id'] : '/employees';
         <div class="col-12 col-xl-7">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white">
-                    <h2 class="h5 mb-0"><i class="bi bi-person text-primary"></i> Datos personales</h2>
+                    <h2 class="h5 mb-0"><i class="bi bi-person text-primary" aria-hidden="true"></i> Datos personales</h2>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
                             <label for="document" class="form-label">Documento <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control <?= isset($errors['document']) ? 'is-invalid' : '' ?>"
+                            <input type="text" class="form-control <?= isset($errors['document']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'document') ?>
                                    id="document" name="document" maxlength="30"
                                    value="<?= e(old('document', (string) ($employee['document'] ?? ''))) ?>"
                                    autocomplete="off" required>
                             <div class="form-text">Se guarda sin espacios y no puede repetirse.</div>
                             <?php if (isset($errors['document'])): ?>
-                                <div class="invalid-feedback d-block"><?= e($errors['document']) ?></div>
+                                <div class="invalid-feedback d-block" id="<?= field_error_id('document') ?>"><?= e($errors['document']) ?></div>
                             <?php endif; ?>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <label for="hire_date" class="form-label">Fecha de ingreso <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control <?= isset($errors['hire_date']) ? 'is-invalid' : '' ?>"
+                            <input type="date" class="form-control <?= isset($errors['hire_date']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'hire_date') ?>
                                    id="hire_date" name="hire_date"
                                    value="<?= e(old('hire_date', (string) ($employee['hire_date'] ?? ''))) ?>"
                                    required>
                             <?php if (isset($errors['hire_date'])): ?>
-                                <div class="invalid-feedback d-block"><?= e($errors['hire_date']) ?></div>
+                                <div class="invalid-feedback d-block" id="<?= field_error_id('hire_date') ?>"><?= e($errors['hire_date']) ?></div>
                             <?php endif; ?>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <label for="first_name" class="form-label">Nombres <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control <?= isset($errors['first_name']) ? 'is-invalid' : '' ?>"
+                            <input type="text" class="form-control <?= isset($errors['first_name']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'first_name') ?>
                                    id="first_name" name="first_name" maxlength="80"
                                    value="<?= e(old('first_name', (string) ($employee['first_name'] ?? ''))) ?>"
                                    autocomplete="given-name" required>
                             <?php if (isset($errors['first_name'])): ?>
-                                <div class="invalid-feedback d-block"><?= e($errors['first_name']) ?></div>
+                                <div class="invalid-feedback d-block" id="<?= field_error_id('first_name') ?>"><?= e($errors['first_name']) ?></div>
                             <?php endif; ?>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <label for="last_name" class="form-label">Apellidos <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control <?= isset($errors['last_name']) ? 'is-invalid' : '' ?>"
+                            <input type="text" class="form-control <?= isset($errors['last_name']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'last_name') ?>
                                    id="last_name" name="last_name" maxlength="80"
                                    value="<?= e(old('last_name', (string) ($employee['last_name'] ?? ''))) ?>"
                                    autocomplete="family-name" required>
                             <?php if (isset($errors['last_name'])): ?>
-                                <div class="invalid-feedback d-block"><?= e($errors['last_name']) ?></div>
+                                <div class="invalid-feedback d-block" id="<?= field_error_id('last_name') ?>"><?= e($errors['last_name']) ?></div>
                             <?php endif; ?>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <label for="email" class="form-label">Correo electrónico</label>
-                            <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>"
+                            <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'email') ?>
                                    id="email" name="email" maxlength="190"
                                    value="<?= e(old('email', (string) ($employee['email'] ?? ''))) ?>"
                                    autocomplete="email">
                             <div class="form-text">Opcional. Si se informa, debe ser único.</div>
                             <?php if (isset($errors['email'])): ?>
-                                <div class="invalid-feedback d-block"><?= e($errors['email']) ?></div>
+                                <div class="invalid-feedback d-block" id="<?= field_error_id('email') ?>"><?= e($errors['email']) ?></div>
                             <?php endif; ?>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <label for="phone" class="form-label">Teléfono</label>
-                            <input type="tel" class="form-control <?= isset($errors['phone']) ? 'is-invalid' : '' ?>"
+                            <input type="tel" class="form-control <?= isset($errors['phone']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'phone') ?>
                                    id="phone" name="phone" maxlength="30"
                                    value="<?= e(old('phone', (string) ($employee['phone'] ?? ''))) ?>"
                                    autocomplete="tel">
                             <div class="form-text">Opcional. Ejemplo: +1 555 0101.</div>
                             <?php if (isset($errors['phone'])): ?>
-                                <div class="invalid-feedback d-block"><?= e($errors['phone']) ?></div>
+                                <div class="invalid-feedback d-block" id="<?= field_error_id('phone') ?>"><?= e($errors['phone']) ?></div>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -127,12 +127,12 @@ $cancelUrl = $isEdit ? '/employees/' . (int) $employee['id'] : '/employees';
         <div class="col-12 col-xl-5">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white">
-                    <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary"></i> Datos laborales</h2>
+                    <h2 class="h5 mb-0"><i class="bi bi-briefcase text-primary" aria-hidden="true"></i> Datos laborales</h2>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="department_id" class="form-label">Departamento <span class="text-danger">*</span></label>
-                        <select class="form-select <?= isset($errors['department_id']) ? 'is-invalid' : '' ?>"
+                        <select class="form-select <?= isset($errors['department_id']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'department_id') ?>
                                 id="department_id" name="department_id" data-employee-department required>
                             <option value="">Selecciona un departamento</option>
                             <?php foreach ($departments as $department): ?>
@@ -144,13 +144,13 @@ $cancelUrl = $isEdit ? '/employees/' . (int) $employee['id'] : '/employees';
                             <?php endforeach; ?>
                         </select>
                         <?php if (isset($errors['department_id'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['department_id']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('department_id') ?>"><?= e($errors['department_id']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
                         <label for="position_id" class="form-label">Cargo</label>
-                        <select class="form-select <?= isset($errors['position_id']) ? 'is-invalid' : '' ?>"
+                        <select class="form-select <?= isset($errors['position_id']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'position_id') ?>
                                 id="position_id" name="position_id" data-employee-position>
                             <option value="">Sin cargo</option>
                             <?php foreach ($positions as $position): ?>
@@ -164,18 +164,18 @@ $cancelUrl = $isEdit ? '/employees/' . (int) $employee['id'] : '/employees';
                         </select>
                         <div class="form-text">Solo se muestran los cargos del departamento seleccionado.</div>
                         <?php if (isset($errors['position_id'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['position_id']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('position_id') ?>"><?= e($errors['position_id']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <?php if ($isEdit): ?>
                         <div class="alert alert-light border mb-0" role="note">
-                            <i class="bi bi-info-circle text-primary"></i>
+                            <i class="bi bi-info-circle text-primary" aria-hidden="true"></i>
                             El estado laboral se cambia desde la ficha del empleado.
                         </div>
                     <?php else: ?>
                         <div class="alert alert-light border mb-0" role="note">
-                            <i class="bi bi-info-circle text-primary"></i>
+                            <i class="bi bi-info-circle text-primary" aria-hidden="true"></i>
                             El empleado se crea como <strong>activo</strong>.
                         </div>
                     <?php endif; ?>
@@ -187,7 +187,7 @@ $cancelUrl = $isEdit ? '/employees/' . (int) $employee['id'] : '/employees';
     <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
         <a href="<?= e($cancelUrl) ?>" class="btn btn-outline-secondary">Cancelar</a>
         <button type="submit" class="btn btn-primary" <?= $canSubmit ? '' : 'disabled' ?>>
-            <i class="bi bi-check2"></i> <?= $isEdit ? 'Guardar cambios' : 'Registrar empleado' ?>
+            <i class="bi bi-check2" aria-hidden="true"></i> <?= $isEdit ? 'Guardar cambios' : 'Registrar empleado' ?>
         </button>
     </div>
 </form>

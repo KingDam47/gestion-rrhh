@@ -28,7 +28,7 @@ $activeDepartments = count(array_filter(
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
@@ -36,7 +36,7 @@ $activeDepartments = count(array_filter(
     <div class="col-12 col-xl-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-plus-circle text-primary"></i> Nuevo departamento</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-plus-circle text-primary" aria-hidden="true"></i> Nuevo departamento</h2>
             </div>
             <div class="card-body">
                 <form method="post" action="/departments" novalidate>
@@ -44,24 +44,24 @@ $activeDepartments = count(array_filter(
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Nombre <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
+                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'name') ?>
                                id="name" name="name" maxlength="100" value="<?= e(old('name')) ?>" required>
                         <?php if (isset($errors['name'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['name']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('name') ?>"><?= e($errors['name']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Descripción</label>
-                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>"
+                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'description') ?>
                                   id="description" name="description" rows="3" maxlength="1000"><?= e(old('description')) ?></textarea>
                         <?php if (isset($errors['description'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['description']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('description') ?>"><?= e($errors['description']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-check2"></i> Crear departamento
+                        <i class="bi bi-check2" aria-hidden="true"></i> Crear departamento
                     </button>
                 </form>
             </div>
@@ -72,13 +72,13 @@ $activeDepartments = count(array_filter(
         <div class="card border-0 shadow-sm">
             <?php if ($departments === []): ?>
                 <div class="card-body py-5 text-center">
-                    <i class="bi bi-diagram-3 display-5 text-body-tertiary"></i>
+                    <i class="bi bi-diagram-3 display-5 text-body-tertiary" aria-hidden="true"></i>
                     <h2 class="h5 mt-3">Todavía no hay departamentos</h2>
                     <p class="text-body-secondary mb-0">Crea el primero con el formulario de la izquierda.</p>
                 </div>
             <?php else: ?>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table aria-label="Listado de departamentos" class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                         <tr>
                             <th scope="col">Departamento</th>
@@ -122,7 +122,7 @@ $activeDepartments = count(array_filter(
                                     <div class="d-inline-flex flex-wrap justify-content-end gap-1">
                                         <a href="/departments/<?= (int) $department['id'] ?>/edit"
                                            class="btn btn-sm btn-outline-secondary" title="Editar" aria-label="Editar">
-                                            <i class="bi bi-pencil"></i>
+                                            <i class="bi bi-pencil" aria-hidden="true"></i>
                                         </a>
                                         <form method="post"
                                               action="/departments/<?= (int) $department['id'] ?>/status"
@@ -133,8 +133,9 @@ $activeDepartments = count(array_filter(
                                             <input type="hidden" name="status" value="<?= $isActive ? 'inactive' : 'active' ?>">
                                             <button type="submit"
                                                     class="btn btn-sm btn-outline-<?= $isActive ? 'danger' : 'success' ?>"
-                                                    title="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>">
-                                                <i class="bi <?= $isActive ? 'bi-toggle-on' : 'bi-toggle-off' ?>"></i>
+                                                    title="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>"
+                                                    aria-label="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>">
+                                                <i class="bi <?= $isActive ? 'bi-toggle-on' : 'bi-toggle-off' ?>" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     </div>

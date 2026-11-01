@@ -11,7 +11,7 @@ declare(strict_types=1);
     <h1 class="h3 mt-2"><?= e($title) ?></h1>
     <p class="text-body-secondary"><?= e($message) ?></p>
     <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
-        <a href="/dashboard" class="btn btn-primary"><i class="bi bi-house"></i> Ir al inicio</a>
-        <a href="/login" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-in-right"></i> Iniciar sesión</a>
+        <a href="/dashboard" class="btn btn-primary"><i class="bi bi-house" aria-hidden="true"></i> Ir al inicio</a>
+        <a href="/login" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Iniciar sesión</a>
     </div>
 </div>

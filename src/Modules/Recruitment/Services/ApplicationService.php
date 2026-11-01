@@ -244,7 +244,17 @@ final class ApplicationService
             ]);
         }
 
-        $this->applications->updateStatus($id, $newStatus, $data['notes'], $userId);
+        $updated = $this->applications->updateStatus(
+            $id,
+            $newStatus,
+            $data['notes'],
+            $userId,
+            $currentStatus
+        );
+
+        if (!$updated) {
+            return ['application' => $this->find($id), 'changed' => false, 'reason' => 'conflict'];
+        }
 
         return ['application' => $this->find($id), 'changed' => true, 'reason' => null];
     }
@@ -265,13 +275,19 @@ final class ApplicationService
      */
     public function hire(int $id, array $input, ?int $userId): array
     {
-        $application = $this->find($id);
-        $this->assertHireable($application);
-
         $pdo = $this->database->connection();
         $pdo->beginTransaction();
 
         try {
+            // Bloquea la postulación y vuelve a validar dentro de la transacción.
+            $application = $this->applications->findForUpdate($id);
+
+            if ($application === null) {
+                throw new NotFoundException('La postulación solicitada no existe.');
+            }
+
+            $this->assertHireable($application);
+
             $employee = $this->onboarding->create($input, $userId);
             $this->applications->setEmployeeId($id, (int) $employee['id'], $userId);
             $pdo->commit();

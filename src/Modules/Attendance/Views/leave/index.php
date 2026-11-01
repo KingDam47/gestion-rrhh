@@ -27,7 +27,7 @@ $statusClasses = ['pending' => 'warning', 'approved' => 'success', 'rejected' =>
         <p class="text-body-secondary mb-0">Solicitudes de vacaciones, permisos personales e incapacidades.</p>
     </div>
     <a href="/leave-requests/create" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> Nueva solicitud
+        <i class="bi bi-plus-lg" aria-hidden="true"></i> Nueva solicitud
     </a>
 </div>
 
@@ -104,7 +104,7 @@ $statusClasses = ['pending' => 'warning', 'approved' => 'success', 'rejected' =>
             </div>
             <div class="col-12 col-sm-6 col-lg-2 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Filtrar
+                    <i class="bi bi-search" aria-hidden="true"></i> Filtrar
                 </button>
                 <a href="/leave-requests" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -118,7 +118,7 @@ $statusClasses = ['pending' => 'warning', 'approved' => 'success', 'rejected' =>
 <div class="card border-0 shadow-sm">
     <?php if ($pagination['items'] === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-calendar2-x display-5 text-body-tertiary"></i>
+            <i class="bi bi-calendar2-x display-5 text-body-tertiary" aria-hidden="true"></i>
             <h2 class="h5 mt-3">No hay solicitudes que coincidan</h2>
             <p class="text-body-secondary mb-4">Prueba con otros filtros o registra una nueva solicitud.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2">
@@ -128,7 +128,7 @@ $statusClasses = ['pending' => 'warning', 'approved' => 'success', 'rejected' =>
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Solicitudes de permiso" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Empleado</th>
@@ -180,7 +180,7 @@ $statusClasses = ['pending' => 'warning', 'approved' => 'success', 'rejected' =>
                         <td class="text-end">
                             <a href="/leave-requests/<?= (int) $leave['id'] ?>"
                                class="btn btn-sm btn-outline-secondary" title="Ver solicitud" aria-label="Ver solicitud">
-                                <i class="bi bi-eye"></i>
+                                <i class="bi bi-eye" aria-hidden="true"></i>
                             </a>
                         </td>
                     </tr>

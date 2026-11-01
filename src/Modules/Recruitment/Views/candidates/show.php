@@ -21,18 +21,18 @@ $statusClasses = [
     <div>
         <h1 class="h3 mb-1"><?= e($fullName) ?></h1>
         <p class="text-body-secondary mb-0">
-            <i class="bi bi-envelope"></i> <?= e((string) $candidate['email']) ?>
+            <i class="bi bi-envelope" aria-hidden="true"></i> <?= e((string) $candidate['email']) ?>
             <?php if ($candidate['phone'] !== null): ?>
-                · <i class="bi bi-telephone"></i> <?= e((string) $candidate['phone']) ?>
+                · <i class="bi bi-telephone" aria-hidden="true"></i> <?= e((string) $candidate['phone']) ?>
             <?php endif; ?>
         </p>
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/candidates" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
         </a>
         <a href="/candidates/<?= (int) $candidate['id'] ?>/edit" class="btn btn-primary">
-            <i class="bi bi-pencil"></i> Editar
+            <i class="bi bi-pencil" aria-hidden="true"></i> Editar
         </a>
     </div>
 </div>
@@ -41,7 +41,7 @@ $statusClasses = [
     <div class="col-12 col-lg-7">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-person text-primary"></i> Datos del candidato</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-person text-primary" aria-hidden="true"></i> Datos del candidato</h2>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
@@ -78,7 +78,7 @@ $statusClasses = [
     <div class="col-12 col-lg-5">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
-                <h2 class="h5"><i class="bi bi-diagram-3 text-primary"></i> Postulaciones</h2>
+                <h2 class="h5"><i class="bi bi-diagram-3 text-primary" aria-hidden="true"></i> Postulaciones</h2>
                 <p class="display-6 fw-semibold mb-1"><?= count($applications) ?></p>
                 <p class="text-body-secondary">
                     El candidato puede postularse a más de una vacante. Solo se permite una
@@ -86,7 +86,7 @@ $statusClasses = [
                 </p>
                 <a href="/applications/create?candidate_id=<?= (int) $candidate['id'] ?>"
                    class="btn btn-outline-primary w-100">
-                    <i class="bi bi-plus-lg"></i> Nueva postulación
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Nueva postulación
                 </a>
             </div>
         </div>
@@ -95,19 +95,19 @@ $statusClasses = [
 
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white">
-        <h2 class="h5 mb-0"><i class="bi bi-list-check text-primary"></i> Historial de postulaciones</h2>
+        <h2 class="h5 mb-0"><i class="bi bi-list-check text-primary" aria-hidden="true"></i> Historial de postulaciones</h2>
     </div>
 
     <?php if ($applications === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-diagram-3 display-5 text-body-tertiary"></i>
+            <i class="bi bi-diagram-3 display-5 text-body-tertiary" aria-hidden="true"></i>
             <p class="text-body-secondary mt-3 mb-3">Este candidato aún no tiene postulaciones.</p>
             <a href="/applications/create?candidate_id=<?= (int) $candidate['id'] ?>"
                class="btn btn-primary">Registrar postulación</a>
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Postulaciones del candidato" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Vacante</th>

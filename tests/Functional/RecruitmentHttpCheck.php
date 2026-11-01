@@ -370,7 +370,7 @@ function dbExec(PDO $pdo, string $sql, array $parameters = []): void
  */
 function lastAudit(PDO $pdo): ?array
 {
-    return dbRow($pdo, 'SELECT * FROM audit_logs ORDER BY id DESC LIMIT 1');
+    return dbRow($pdo, "SELECT * FROM audit_logs WHERE action NOT LIKE 'auth.%' ORDER BY id DESC LIMIT 1");
 }
 
 function auditMetadata(?array $audit): array
@@ -484,7 +484,7 @@ if (
     || (int) dbValue($pdo, 'SELECT COUNT(*) FROM vacancies') !== 3
     || (int) dbValue($pdo, 'SELECT COUNT(*) FROM candidates') !== 5
     || (int) dbValue($pdo, 'SELECT COUNT(*) FROM applications') !== 6
-    || (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs') !== 5
+    || (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'") !== 5
 ) {
     fwrite(STDERR, "La base no está en el estado del seed demo. Restaura database/seed.sql antes de ejecutar la prueba.\n");
     exit(2);
@@ -501,7 +501,7 @@ $t->same('empleados demo', 10, (int) dbValue($pdo, 'SELECT COUNT(*) FROM employe
 $t->same('vacantes demo', 3, (int) dbValue($pdo, 'SELECT COUNT(*) FROM vacancies'));
 $t->same('candidatos demo', 5, (int) dbValue($pdo, 'SELECT COUNT(*) FROM candidates'));
 $t->same('postulaciones demo', 6, (int) dbValue($pdo, 'SELECT COUNT(*) FROM applications'));
-$t->same('auditorías demo', 5, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditorías demo', 5, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 foreach (['/recruitment', '/vacancies', '/vacancies/1', '/candidates', '/candidates/1', '/applications', '/applications/1'] as $page) {
     $response = $anonymous->get($page);
@@ -824,7 +824,7 @@ $t->same('vacante cierre propuesto', '2026-11-20', $vacancy['closing_date'] ?? n
 $t->same('vacante nace abierta', 'open', $vacancy['status'] ?? null);
 $t->same('vacante creador', 1, (int) ($vacancy['created_by'] ?? 0));
 $t->same('vacante editor inicial', 1, (int) ($vacancy['updated_by'] ?? 0));
-$t->same('crear vacante no audita', 5, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('crear vacante no audita', 5, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/vacancies/4', [
     '_token' => $token,
@@ -864,13 +864,13 @@ $t->same('auditoría cierre vacante', 'vacancy.closed', $audit['action'] ?? null
 $t->same('auditoría cierre entidad', 'vacancy', $audit['entity_type'] ?? null);
 $t->same('auditoría cierre id', 4, (int) ($audit['entity_id'] ?? 0));
 $t->same('auditoría cierre metadata', ['status' => 'closed'], auditMetadata($audit));
-$t->same('auditoría total tras cierre', 6, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras cierre', 6, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $closedAt = dbValue($pdo, 'SELECT closing_date FROM vacancies WHERE id = 4');
 $response = $admin->post('/vacancies/4/close', ['_token' => $token]);
 $t->status('cerrar vacante ya cerrada redirige', $response, 302);
 $t->same('segundo cierre no cambia fecha', $closedAt, dbValue($pdo, 'SELECT closing_date FROM vacancies WHERE id = 4'));
-$t->same('segundo cierre no audita', 6, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('segundo cierre no audita', 6, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/vacancies/4/edit');
 $t->status('editar vacante cerrada redirige', $response, 302);
@@ -887,7 +887,7 @@ $response = $admin->post('/vacancies/4', [
 ]);
 $t->status('actualizar vacante cerrada redirige', $response, 302);
 $t->same('vacante cerrada conserva título', 'Analista de Datos Senior', (string) dbValue($pdo, 'SELECT title FROM vacancies WHERE id = 4'));
-$t->same('vacante cerrada no audita', 6, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('vacante cerrada no audita', 6, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/vacancies/4');
 $t->status('detalle de vacante cerrada', $response, 200);
@@ -975,7 +975,7 @@ $t->same('candidato correo en minúsculas', 'ana.torres@example.test', $candidat
 $t->same('candidato teléfono normalizado', '+1 555 0202', $candidate['phone'] ?? null);
 $t->same('candidato observaciones', 'Candidata de prueba.', $candidate['notes'] ?? null);
 $t->same('candidato creador', 1, (int) ($candidate['created_by'] ?? 0));
-$t->same('crear candidato no audita', 6, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('crear candidato no audita', 6, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/candidates', [
     '_token' => $token,
@@ -1215,7 +1215,7 @@ $t->same('auditoría alta postulación', 'application.created', $audit['action']
 $t->same('auditoría alta postulación entidad', 'application', $audit['entity_type'] ?? null);
 $t->same('auditoría alta postulación id', 7, (int) ($audit['entity_id'] ?? 0));
 $t->same('auditoría alta postulación metadata', ['status' => 'received'], auditMetadata($audit));
-$t->same('auditoría total tras alta postulación', 7, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras alta postulación', 7, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications', [
     '_token' => $token,
@@ -1284,7 +1284,7 @@ $response = $admin->post('/applications/7/status', [
 $t->status('salto de recibida a seleccionada redirige', $response, 302);
 $t->location('salto inválido vuelve al detalle', $response, '/applications/7');
 $t->same('salto inválido conserva estado', 'received', (string) dbValue($pdo, 'SELECT status FROM applications WHERE id = 7'));
-$t->same('salto inválido no audita', 7, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('salto inválido no audita', 7, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications/7/status', [
     '_token' => $token,
@@ -1297,7 +1297,7 @@ $t->same('postulación guarda observación', 'Pasa a evaluación.', (string) dbV
 $audit = lastAudit($pdo);
 $t->same('auditoría cambio a evaluación', 'application.status_changed', $audit['action'] ?? null);
 $t->same('auditoría cambio a evaluación metadata', ['status' => 'screening'], auditMetadata($audit));
-$t->same('auditoría total tras evaluación', 8, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras evaluación', 8, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications/7/status', [
     '_token' => $token,
@@ -1306,7 +1306,7 @@ $response = $admin->post('/applications/7/status', [
 ]);
 $t->status('repetir estado actual redirige', $response, 302);
 $t->same('repetir estado no cambia observación', 'Pasa a evaluación.', (string) dbValue($pdo, 'SELECT notes FROM applications WHERE id = 7'));
-$t->same('repetir estado no audita', 8, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('repetir estado no audita', 8, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications/7/status', [
     '_token' => $token,
@@ -1315,7 +1315,7 @@ $response = $admin->post('/applications/7/status', [
 ]);
 $t->status('salto de evaluación a seleccionada redirige', $response, 302);
 $t->same('salto desde evaluación conserva estado', 'screening', (string) dbValue($pdo, 'SELECT status FROM applications WHERE id = 7'));
-$t->same('salto desde evaluación no audita', 8, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('salto desde evaluación no audita', 8, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications/7/status', [
     '_token' => $token,
@@ -1325,7 +1325,7 @@ $response = $admin->post('/applications/7/status', [
 $t->status('evaluación a entrevista', $response, 302);
 $t->same('postulación pasa a entrevista', 'interview', (string) dbValue($pdo, 'SELECT status FROM applications WHERE id = 7'));
 $t->same('auditoría cambio a entrevista', ['status' => 'interview'], auditMetadata(lastAudit($pdo)));
-$t->same('auditoría total tras entrevista', 9, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras entrevista', 9, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications/7/status', [
     '_token' => $token,
@@ -1337,7 +1337,7 @@ $t->same('postulación pasa a seleccionada', 'selected', (string) dbValue($pdo, 
 $t->same('postulación seleccionada sin empleado', null, dbValue($pdo, 'SELECT employee_id FROM applications WHERE id = 7'));
 $t->same('postulación guarda observación HTML', '<script>alert("app")</script>', (string) dbValue($pdo, 'SELECT notes FROM applications WHERE id = 7'));
 $t->same('auditoría cambio a seleccionada', ['status' => 'selected'], auditMetadata(lastAudit($pdo)));
-$t->same('auditoría total tras selección', 10, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras selección', 10, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/applications/7');
 $t->status('detalle postulación seleccionada', $response, 200);
@@ -1352,7 +1352,7 @@ $response = $admin->post('/applications/7/status', [
 ]);
 $t->status('seleccionada a rechazada redirige', $response, 302);
 $t->same('seleccionada es final', 'selected', (string) dbValue($pdo, 'SELECT status FROM applications WHERE id = 7'));
-$t->same('cambio sobre final no audita', 10, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('cambio sobre final no audita', 10, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications/1/status', [
     '_token' => $token,
@@ -1362,7 +1362,7 @@ $response = $admin->post('/applications/1/status', [
 $t->status('recibida a rechazada', $response, 302);
 $t->same('postulación 1 rechazada', 'rejected', (string) dbValue($pdo, 'SELECT status FROM applications WHERE id = 1'));
 $t->same('auditoría rechazo postulación', ['status' => 'rejected'], auditMetadata(lastAudit($pdo)));
-$t->same('auditoría total tras rechazo', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras rechazo', 11, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications/1/status', [
     '_token' => $token,
@@ -1371,7 +1371,7 @@ $response = $admin->post('/applications/1/status', [
 ]);
 $t->status('rechazada a evaluación redirige', $response, 302);
 $t->same('rechazada es final', 'rejected', (string) dbValue($pdo, 'SELECT status FROM applications WHERE id = 1'));
-$t->same('reapertura no audita', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('reapertura no audita', 11, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->post('/applications/5/status', [
     '_token' => $token,
@@ -1380,7 +1380,7 @@ $response = $admin->post('/applications/5/status', [
 ]);
 $t->status('estado de postulación inválido redirige', $response, 302);
 $t->same('estado inválido conserva recibida', 'received', (string) dbValue($pdo, 'SELECT status FROM applications WHERE id = 5'));
-$t->same('estado inválido no audita', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('estado inválido no audita', 11, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/applications?status=selected');
 $t->status('seleccionadas antes del alta', $response, 200);
@@ -1457,7 +1457,7 @@ setPositionStatus($pdo, 7, 'active');
 
 $t->same('fallos de alta no crean empleados', 10, (int) dbValue($pdo, 'SELECT COUNT(*) FROM employees'));
 $t->same('fallos de alta no vinculan postulación', null, dbValue($pdo, 'SELECT employee_id FROM applications WHERE id = 7'));
-$t->same('fallos de alta no auditan', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('fallos de alta no auditan', 11, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = hirePost($admin, $token, 7, ['document' => ' rrhh-9001 ']);
 $t->status('alta guiada válida', $response, 302);
@@ -1482,7 +1482,7 @@ $t->same('auditoría alta guiada', 'application.hired', $audit['action'] ?? null
 $t->same('auditoría alta guiada entidad', 'application', $audit['entity_type'] ?? null);
 $t->same('auditoría alta guiada id', 7, (int) ($audit['entity_id'] ?? 0));
 $t->same('auditoría alta guiada metadata', ['status' => 'selected'], auditMetadata($audit));
-$t->same('auditoría total tras alta guiada', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('auditoría total tras alta guiada', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/employees/11');
 $t->status('ficha del empleado creado', $response, 200);
@@ -1503,12 +1503,12 @@ $t->location('repetir alta vuelve al detalle', $response, '/applications/7');
 $response = hirePost($admin, $token, 7);
 $t->status('repetir alta por POST redirige', $response, 302);
 $t->same('repetir alta no crea empleado', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM employees'));
-$t->same('repetir alta no audita', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('repetir alta no audita', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = hirePost($admin, $token, 1);
 $t->status('alta de postulación no seleccionada redirige', $response, 302);
 $t->same('alta no seleccionada no crea empleado', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM employees'));
-$t->same('alta no seleccionada no audita', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('alta no seleccionada no audita', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/applications');
 $t->status('listado tras alta guiada', $response, 200);
@@ -1659,12 +1659,12 @@ $response = $hr->post('/candidates/6', [
 ]);
 $t->status('RR. HH. edita candidata', $response, 302);
 $t->same('RR. HH. queda como editor', 2, (int) dbValue($pdo, 'SELECT updated_by FROM candidates WHERE id = 6'));
-$t->same('edición de RR. HH. no audita', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('edición de RR. HH. no audita', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 // ---------------------------------------------------------------------------
 $t->section('Auditoría final y estado de la base');
 
-$newAudits = dbRows($pdo, 'SELECT * FROM audit_logs WHERE id > 5 ORDER BY id');
+$newAudits = dbRows($pdo, "SELECT * FROM audit_logs WHERE id > 5 AND action NOT LIKE 'auth.%' ORDER BY id");
 $t->same('siete auditorías nuevas', 7, count($newAudits));
 $expectedActions = [
     'vacancy.closed',
@@ -1705,7 +1705,7 @@ $t->same('total final empleados', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM 
 $t->same('total final vacantes', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM vacancies'));
 $t->same('total final candidatos', 11, (int) dbValue($pdo, 'SELECT COUNT(*) FROM candidates'));
 $t->same('total final postulaciones', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM applications'));
-$t->same('total final auditorías', 12, (int) dbValue($pdo, 'SELECT COUNT(*) FROM audit_logs'));
+$t->same('total final auditorías', 12, (int) dbValue($pdo, "SELECT COUNT(*) FROM audit_logs WHERE action NOT LIKE 'auth.%'"));
 
 $response = $admin->get('/recruitment');
 $t->status('resumen final', $response, 200);

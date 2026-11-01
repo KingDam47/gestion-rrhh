@@ -31,7 +31,7 @@ $monthQuery = rawurlencode((string) $summary['month']);
                             Empleados activos
                         </a>
                     </p>
-                    <span class="text-primary fs-5"><i class="bi bi-people"></i></span>
+                    <span class="text-primary fs-5"><i class="bi bi-people" aria-hidden="true"></i></span>
                 </div>
                 <p class="display-6 fw-semibold mb-1"><?= (int) $summary['employees']['active'] ?></p>
                 <p class="small text-body-secondary mb-0">
@@ -52,7 +52,7 @@ $monthQuery = rawurlencode((string) $summary['month']);
                             Asistencia de <?= e((string) $summary['month_label']) ?>
                         </a>
                     </p>
-                    <span class="text-success fs-5"><i class="bi bi-calendar-check"></i></span>
+                    <span class="text-success fs-5"><i class="bi bi-calendar-check" aria-hidden="true"></i></span>
                 </div>
                 <p class="display-6 fw-semibold mb-1"><?= (int) $attendanceMonth['total'] ?></p>
                 <p class="small text-body-secondary mb-0">
@@ -74,7 +74,7 @@ $monthQuery = rawurlencode((string) $summary['month']);
                             Permisos pendientes
                         </a>
                     </p>
-                    <span class="text-warning-emphasis fs-5"><i class="bi bi-calendar2-week"></i></span>
+                    <span class="text-warning-emphasis fs-5"><i class="bi bi-calendar2-week" aria-hidden="true"></i></span>
                 </div>
                 <p class="display-6 fw-semibold mb-1"><?= (int) $summary['leaves']['pending'] ?></p>
                 <p class="small text-body-secondary mb-0">
@@ -96,7 +96,7 @@ $monthQuery = rawurlencode((string) $summary['month']);
                             Vacantes abiertas
                         </a>
                     </p>
-                    <span class="text-primary fs-5"><i class="bi bi-briefcase"></i></span>
+                    <span class="text-primary fs-5"><i class="bi bi-briefcase" aria-hidden="true"></i></span>
                 </div>
                 <p class="display-6 fw-semibold mb-1"><?= (int) $summary['vacancies']['open'] ?></p>
                 <p class="small text-body-secondary mb-0">
@@ -112,7 +112,7 @@ $monthQuery = rawurlencode((string) $summary['month']);
     <div class="col-12 col-xl-7">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
-                <h2 class="h5 mb-0"><i class="bi bi-diagram-3 text-primary"></i> Reclutamiento</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-diagram-3 text-primary" aria-hidden="true"></i> Reclutamiento</h2>
                 <a href="/applications" class="btn btn-sm btn-outline-secondary">Ver postulaciones</a>
             </div>
             <div class="card-body">
@@ -161,13 +161,13 @@ $monthQuery = rawurlencode((string) $summary['month']);
 
                 <div class="d-flex flex-wrap gap-2 mt-4">
                     <a href="/vacancies" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-briefcase"></i> Vacantes
+                        <i class="bi bi-briefcase" aria-hidden="true"></i> Vacantes
                     </a>
                     <a href="/candidates" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-person-lines-fill"></i> Candidatos
+                        <i class="bi bi-person-lines-fill" aria-hidden="true"></i> Candidatos
                     </a>
                     <a href="/applications?status=selected" class="btn btn-sm btn-success">
-                        <i class="bi bi-person-check"></i> Ver seleccionadas
+                        <i class="bi bi-person-check" aria-hidden="true"></i> Ver seleccionadas
                     </a>
                 </div>
             </div>
@@ -177,37 +177,37 @@ $monthQuery = rawurlencode((string) $summary['month']);
     <div class="col-12 col-xl-5">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-lightning-charge text-primary"></i> Accesos rápidos</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-lightning-charge text-primary" aria-hidden="true"></i> Accesos rápidos</h2>
             </div>
             <div class="list-group list-group-flush">
                 <a href="/employees/create"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-person-plus text-primary"></i> Registrar empleado</span>
-                    <i class="bi bi-chevron-right small text-body-secondary"></i>
+                    <span><i class="bi bi-person-plus text-primary" aria-hidden="true"></i> Registrar empleado</span>
+                    <i class="bi bi-chevron-right small text-body-secondary" aria-hidden="true"></i>
                 </a>
                 <a href="/attendance/create"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-calendar-plus text-success"></i> Registrar asistencia</span>
-                    <i class="bi bi-chevron-right small text-body-secondary"></i>
+                    <span><i class="bi bi-calendar-plus text-success" aria-hidden="true"></i> Registrar asistencia</span>
+                    <i class="bi bi-chevron-right small text-body-secondary" aria-hidden="true"></i>
                 </a>
                 <a href="/leave-requests/create"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-calendar2-plus text-warning-emphasis"></i> Crear solicitud de permiso</span>
-                    <i class="bi bi-chevron-right small text-body-secondary"></i>
+                    <span><i class="bi bi-calendar2-plus text-warning-emphasis" aria-hidden="true"></i> Crear solicitud de permiso</span>
+                    <i class="bi bi-chevron-right small text-body-secondary" aria-hidden="true"></i>
                 </a>
                 <a href="/leave-requests?status=pending"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-clipboard-check text-warning-emphasis"></i> Revisar permisos pendientes</span>
+                    <span><i class="bi bi-clipboard-check text-warning-emphasis" aria-hidden="true"></i> Revisar permisos pendientes</span>
                     <span class="badge rounded-pill text-bg-warning"><?= (int) $summary['leaves']['pending'] ?></span>
                 </a>
                 <a href="/vacancies/create"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-briefcase text-primary"></i> Crear vacante</span>
-                    <i class="bi bi-chevron-right small text-body-secondary"></i>
+                    <span><i class="bi bi-briefcase text-primary" aria-hidden="true"></i> Crear vacante</span>
+                    <i class="bi bi-chevron-right small text-body-secondary" aria-hidden="true"></i>
                 </a>
                 <a href="/applications?status=selected"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-person-check text-success"></i> Ver candidatos seleccionados</span>
+                    <span><i class="bi bi-person-check text-success" aria-hidden="true"></i> Ver candidatos seleccionados</span>
                     <span class="badge rounded-pill text-bg-success"><?= (int) $applications['selected'] ?></span>
                 </a>
             </div>

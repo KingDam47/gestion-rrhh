@@ -25,13 +25,13 @@ $pageUrl = static fn (int $page): string => '/users?' . http_build_query($baseQu
         </p>
     </div>
     <a href="/users/create" class="btn btn-primary">
-        <i class="bi bi-person-plus"></i> Nuevo usuario
+        <i class="bi bi-person-plus" aria-hidden="true"></i> Nuevo usuario
     </a>
 </div>
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
@@ -97,7 +97,7 @@ $pageUrl = static fn (int $page): string => '/users?' . http_build_query($baseQu
             </div>
             <div class="col-12 col-lg-3 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Filtrar
+                    <i class="bi bi-search" aria-hidden="true"></i> Filtrar
                 </button>
                 <a href="/users" class="btn btn-outline-secondary">Limpiar</a>
             </div>
@@ -108,7 +108,7 @@ $pageUrl = static fn (int $page): string => '/users?' . http_build_query($baseQu
 <div class="card border-0 shadow-sm">
     <?php if ($pagination['items'] === []): ?>
         <div class="card-body py-5 text-center">
-            <i class="bi bi-person-badge display-5 text-body-tertiary"></i>
+            <i class="bi bi-person-badge display-5 text-body-tertiary" aria-hidden="true"></i>
             <h2 class="h5 mt-3">No hay usuarios que coincidan</h2>
             <p class="text-body-secondary mb-4">Prueba con otros filtros o crea una cuenta nueva.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2">
@@ -118,7 +118,7 @@ $pageUrl = static fn (int $page): string => '/users?' . http_build_query($baseQu
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table aria-label="Listado de usuarios" class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">Usuario</th>
@@ -167,12 +167,12 @@ $pageUrl = static fn (int $page): string => '/users?' . http_build_query($baseQu
                             <div class="d-inline-flex flex-wrap justify-content-end gap-1">
                                 <a href="/users/<?= (int) $user['id'] ?>/edit"
                                    class="btn btn-sm btn-outline-secondary" title="Editar" aria-label="Editar">
-                                    <i class="bi bi-pencil"></i>
+                                    <i class="bi bi-pencil" aria-hidden="true"></i>
                                 </a>
                                 <a href="/users/<?= (int) $user['id'] ?>/password"
                                    class="btn btn-sm btn-outline-secondary" title="Restablecer contraseña"
                                    aria-label="Restablecer contraseña">
-                                    <i class="bi bi-key"></i>
+                                    <i class="bi bi-key" aria-hidden="true"></i>
                                 </a>
                                 <?php if ($canToggle): ?>
                                     <form method="post" action="/users/<?= (int) $user['id'] ?>/status"
@@ -183,16 +183,20 @@ $pageUrl = static fn (int $page): string => '/users?' . http_build_query($baseQu
                                         <input type="hidden" name="status" value="<?= $isActive ? 'inactive' : 'active' ?>">
                                         <button type="submit"
                                                 class="btn btn-sm btn-outline-<?= $isActive ? 'danger' : 'success' ?>"
-                                                title="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>">
-                                            <i class="bi <?= $isActive ? 'bi-toggle-on' : 'bi-toggle-off' ?>"></i>
+                                                title="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>"
+                                                aria-label="<?= $isActive ? 'Desactivar' : 'Reactivar' ?>">
+                                            <i class="bi <?= $isActive ? 'bi-toggle-on' : 'bi-toggle-off' ?>" aria-hidden="true"></i>
                                         </button>
                                     </form>
                                 <?php else: ?>
                                     <button type="button" class="btn btn-sm btn-outline-secondary" disabled
+                                            aria-label="<?= $isSelf
+                                                ? 'No puedes desactivar tu propia cuenta.'
+                                                : 'No puedes desactivar al último administrador activo.' ?>"
                                             title="<?= $isSelf
                                                 ? 'No puedes desactivar tu propia cuenta.'
                                                 : 'No puedes desactivar al último administrador activo.' ?>">
-                                        <i class="bi bi-lock"></i>
+                                        <i class="bi bi-lock" aria-hidden="true"></i>
                                     </button>
                                 <?php endif; ?>
                             </div>
@@ -212,15 +216,26 @@ $pageUrl = static fn (int $page): string => '/users?' . http_build_query($baseQu
                 <nav aria-label="Paginación de usuarios">
                     <ul class="pagination pagination-sm mb-0">
                         <li class="page-item <?= (int) $pagination['page'] <= 1 ? 'disabled' : '' ?>">
-                            <a class="page-link" href="<?= e($pageUrl((int) $pagination['page'] - 1)) ?>">Anterior</a>
+                            <a class="page-link"
+                               href="<?= e($pageUrl(max(1, (int) $pagination['page'] - 1))) ?>"
+                               <?= (int) $pagination['page'] <= 1 ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
+                                Anterior
+                            </a>
                         </li>
                         <?php for ($page = 1; $page <= (int) $pagination['pages']; $page++): ?>
                             <li class="page-item <?= $page === (int) $pagination['page'] ? 'active' : '' ?>">
-                                <a class="page-link" href="<?= e($pageUrl($page)) ?>"><?= $page ?></a>
+                                <a class="page-link" href="<?= e($pageUrl($page)) ?>"
+                                   <?= $page === (int) $pagination['page'] ? 'aria-current="page"' : '' ?>>
+                                    <?= $page ?>
+                                </a>
                             </li>
                         <?php endfor; ?>
                         <li class="page-item <?= (int) $pagination['page'] >= (int) $pagination['pages'] ? 'disabled' : '' ?>">
-                            <a class="page-link" href="<?= e($pageUrl((int) $pagination['page'] + 1)) ?>">Siguiente</a>
+                            <a class="page-link"
+                               href="<?= e($pageUrl(min((int) $pagination['pages'], (int) $pagination['page'] + 1))) ?>"
+                               <?= (int) $pagination['page'] >= (int) $pagination['pages'] ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
+                                Siguiente
+                            </a>
                         </li>
                     </ul>
                 </nav>

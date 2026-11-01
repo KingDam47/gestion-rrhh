@@ -20,13 +20,13 @@ $isActive = (int) $department['is_active'] === 1;
         <p class="text-body-secondary mb-0">Edita el nombre o la descripción del departamento.</p>
     </div>
     <a href="/departments" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Volver
+        <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
     </a>
 </div>
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
@@ -39,28 +39,28 @@ $isActive = (int) $department['is_active'] === 1;
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Nombre <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
+                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'name') ?>
                                id="name" name="name" maxlength="100"
                                value="<?= e(old('name', (string) $department['name'])) ?>" required>
                         <?php if (isset($errors['name'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['name']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('name') ?>"><?= e($errors['name']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="mb-4">
                         <label for="description" class="form-label">Descripción</label>
-                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>"
+                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'description') ?>
                                   id="description" name="description" rows="5"
                                   maxlength="1000"><?= e(old('description', (string) ($department['description'] ?? ''))) ?></textarea>
                         <?php if (isset($errors['description'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['description']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('description') ?>"><?= e($errors['description']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="d-flex flex-wrap justify-content-end gap-2">
                         <a href="/departments" class="btn btn-outline-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check2"></i> Guardar cambios
+                            <i class="bi bi-check2" aria-hidden="true"></i> Guardar cambios
                         </button>
                     </div>
                 </form>
@@ -71,7 +71,7 @@ $isActive = (int) $department['is_active'] === 1;
     <div class="col-12 col-lg-5">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-info-circle text-primary"></i> Resumen</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-info-circle text-primary" aria-hidden="true"></i> Resumen</h2>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">

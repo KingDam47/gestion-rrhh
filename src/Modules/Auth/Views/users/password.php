@@ -17,17 +17,17 @@ $isActive = (int) $user['is_active'] === 1;
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a href="/users/<?= (int) $user['id'] ?>/edit" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver
+            <i class="bi bi-arrow-left" aria-hidden="true"></i> Volver
         </a>
         <a href="/users" class="btn btn-outline-secondary">
-            <i class="bi bi-person-badge"></i> Usuarios
+            <i class="bi bi-person-badge" aria-hidden="true"></i> Usuarios
         </a>
     </div>
 </div>
 
 <?php if ($generalError !== null): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> <?= e($generalError) ?>
+        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> <?= e($generalError) ?>
     </div>
 <?php endif; ?>
 
@@ -35,7 +35,7 @@ $isActive = (int) $user['is_active'] === 1;
     <div class="col-12 col-xl-7">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-key text-primary"></i> Nueva contraseña</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-key text-primary" aria-hidden="true"></i> Nueva contraseña</h2>
             </div>
             <div class="card-body">
                 <form method="post" action="/users/<?= (int) $user['id'] ?>/password" novalidate>
@@ -47,17 +47,17 @@ $isActive = (int) $user['is_active'] === 1;
                         </label>
                         <div class="input-group">
                             <input type="password"
-                                   class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
+                                   class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'password') ?>
                                    id="password" name="password" minlength="10" maxlength="255"
                                    autocomplete="new-password" required autofocus>
                             <button class="btn btn-outline-secondary" type="button"
                                     data-toggle-password="#password" aria-label="Mostrar contraseña">
-                                <i class="bi bi-eye"></i>
+                                <i class="bi bi-eye" aria-hidden="true"></i>
                             </button>
                         </div>
                         <div class="form-text">Mínimo 10 caracteres.</div>
                         <?php if (isset($errors['password'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['password']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('password') ?>"><?= e($errors['password']) ?></div>
                         <?php endif; ?>
                     </div>
 
@@ -67,23 +67,23 @@ $isActive = (int) $user['is_active'] === 1;
                         </label>
                         <div class="input-group">
                             <input type="password"
-                                   class="form-control <?= isset($errors['password_confirmation']) ? 'is-invalid' : '' ?>"
+                                   class="form-control <?= isset($errors['password_confirmation']) ? 'is-invalid' : '' ?>" <?= field_aria($errors, 'password_confirmation') ?>
                                    id="password_confirmation" name="password_confirmation"
                                    minlength="10" maxlength="255" autocomplete="new-password" required>
                             <button class="btn btn-outline-secondary" type="button"
                                     data-toggle-password="#password_confirmation" aria-label="Mostrar contraseña">
-                                <i class="bi bi-eye"></i>
+                                <i class="bi bi-eye" aria-hidden="true"></i>
                             </button>
                         </div>
                         <?php if (isset($errors['password_confirmation'])): ?>
-                            <div class="invalid-feedback d-block"><?= e($errors['password_confirmation']) ?></div>
+                            <div class="invalid-feedback d-block" id="<?= field_error_id('password_confirmation') ?>"><?= e($errors['password_confirmation']) ?></div>
                         <?php endif; ?>
                     </div>
 
                     <div class="d-flex flex-wrap justify-content-end gap-2">
                         <a href="/users/<?= (int) $user['id'] ?>/edit" class="btn btn-outline-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-shield-check"></i> Guardar contraseña
+                            <i class="bi bi-shield-check" aria-hidden="true"></i> Guardar contraseña
                         </button>
                     </div>
                 </form>
@@ -94,7 +94,7 @@ $isActive = (int) $user['is_active'] === 1;
     <div class="col-12 col-xl-5">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
-                <h2 class="h5 mb-0"><i class="bi bi-person-badge text-primary"></i> Cuenta</h2>
+                <h2 class="h5 mb-0"><i class="bi bi-person-badge text-primary" aria-hidden="true"></i> Cuenta</h2>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">

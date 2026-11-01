@@ -148,6 +148,7 @@ CREATE TABLE IF NOT EXISTS leave_requests (
     KEY idx_leave_requests_employee (employee_id),
     KEY idx_leave_requests_status (status),
     KEY idx_leave_requests_dates (start_date, end_date),
+    KEY idx_leave_requests_overlap (employee_id, status, start_date, end_date),
     CONSTRAINT fk_leave_requests_employee
         FOREIGN KEY (employee_id) REFERENCES employees (id)
         ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -236,6 +237,7 @@ CREATE TABLE IF NOT EXISTS applications (
     KEY idx_applications_vacancy (vacancy_id),
     KEY idx_applications_status (status),
     KEY idx_applications_employee (employee_id),
+    KEY idx_applications_applied_at (applied_at, id),
     CONSTRAINT fk_applications_candidate
         FOREIGN KEY (candidate_id) REFERENCES candidates (id)
         ON UPDATE CASCADE ON DELETE RESTRICT,
